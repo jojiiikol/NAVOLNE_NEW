@@ -76,7 +76,6 @@ class ProjectConfirmAnswer(models.Model):
     confirmed = models.BooleanField(null=False)
     answer_time = models.DateTimeField(auto_now_add=True)
 
-
 class ProjectChangeRequest(models.Model):
     project = models.ForeignKey(Project, on_delete=models.PROTECT, related_name='change_requests_project')
     name = models.CharField(max_length=27)

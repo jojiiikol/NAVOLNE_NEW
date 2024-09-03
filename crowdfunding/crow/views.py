@@ -16,7 +16,6 @@ from crow.serializers.listings_serializer import *
 from .utils import send_message_verification_email, check_token_timelife
 
 
-# TODO: Продумать логику на подтверждение проектов --> Сериалайзер и вью --> Логика обновления проекта + логика на просмотр
 # TODO: Убрать возможность отправки PUT/PATCH/DELETE запросов на проекты --> Методы удалены
 # TODO: Убрать возможность отправки PUT/PATCH/DELETE запросов на юзеров ---> Методы удалены
 # TODO: Продумать что делать с методами изменения профиля
@@ -96,17 +95,29 @@ class ProjectViewSet(mixins.ListModelMixin,
         return Response({"project": serializer_data.data}, status=status.HTTP_200_OK)
 
     # Подтверждение проекта
-    @extend_schema(summary="Подтверждение проекта ---не доделано---",
-                   request=ConfirmProjectSerializer,
+    @extend_schema(summary="Подтверждение проекта",
+                   description="Необходимо для админов. Подтверждение/отклонение новых проектов",
+                   request=ProjectConfirmAnswerSerializer,
                    )
     @action(methods=['POST'], detail=True)
     def confirm_project(self, request, *args, **kwargs):
         project = self.get_object()
         serializer = ProjectConfirmAnswerSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
+            serializer.update_project(project=project)
             serializer.save(project=project)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @extend_schema(summary="Просмотр ответа админов на подтверждение/отклонение проекта",
+                   description="Необходимо для юзеров, для того чтобы посмотреть на ответ админа на свой новый проект",
+                   )
+    @action(methods=['GET'], detail=True)
+    def see_admin_response(self, request, *args, **kwargs):
+        project = self.get_object()
+        answer = ProjectConfirmAnswer.objects.filter(project=project).order_by('-answer_time')
+        serializer = ProjectConfirmAnswerSerializer(answer, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class ProjectChangeRequestViewSet(mixins.ListModelMixin,
@@ -146,6 +157,16 @@ class ProjectChangeRequestViewSet(mixins.ListModelMixin,
         self.queryset = ProjectChangeRequest.objects.filter(user=request.user)
         serializer = AnswerChangeProjectRequestSerializer(self.queryset, many=True, context={'request': request})
         return Response({"requests": serializer.data}, status=status.HTTP_200_OK)
+
+    @extend_schema(summary="Просмотр ответа админов на твою заявку",
+                   description="Необходимо для юзеров, для того чтобы посмотреть на ответ админа на свою заявку",
+                   )
+    @action(methods=['GET'], detail=True)
+    def see_admin_response(self, request, *args, **kwargs):
+        change_request = self.get_object()
+        answer = AnswerProjectChangeRequest.objects.filter(change_request=change_request).order_by('-answer_date')
+        serializer = AnswerChangeProjectRequestSerializer(answer, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class ProfileViewSet(mixins.ListModelMixin,
@@ -315,6 +336,16 @@ class ProfileChangeRequestViewSet(mixins.ListModelMixin,
                 serializer_data.update_profile(profile_request.profile, profile_request)
             return Response(serializer_data.data, status=status.HTTP_200_OK)
         return Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @extend_schema(summary="Просмотр ответа админов на твою заявку",
+                   description="Необходимо для юзеров, для того чтобы посмотреть на ответ админа на свою заявку",
+                   )
+    @action(methods=['GET'], detail=True)
+    def see_admin_response(self, request, *args, **kwargs):
+        change_request = self.get_object()
+        answer = AnswerProfileChangeRequest.objects.filter(profile=change_request).order_by('-answer_date')
+        serializer = AnswerChangeProjectRequestSerializer(answer, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 # Служебное вью для просмотра id всех категорий

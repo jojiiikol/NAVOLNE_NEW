@@ -104,8 +104,13 @@ class ProjectConfirmAnswerSerializer(serializers.ModelSerializer):
     confirmed = serializers.BooleanField(required=True)
     answer_time = serializers.DateTimeField(default=timezone.now())
 
-
-
+    def update_project(self, project):
+        project.confirmed = self.validated_data['confirmed']
+        project.save()
+    # def to_representation(self, instance):
+    #     representation = super().to_representation(instance)
+    #     representation['project'] = ProjectSerializer((instance.project), context={"request": self.context.get('request')}).data
+    #     return representation
 
 
 class ConfirmProjectSerializer(serializers.ModelSerializer):
