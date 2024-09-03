@@ -1,0 +1,252 @@
+{
+  "projects": {
+    "all_projects": [
+      {
+        "pk": 3,
+        "name": "Кроссовки",
+        "description": "Иновационая модель кроссовок. No China",
+        "image_url": "/media/project/unnamed.jpg",
+        "need_money": 78000.0,
+        "collected_money": 70000.0,
+        "category": [
+          "Технологии"
+        ],
+        "url": "http://127.0.0.1:8000/projects/info/krossovki?format=json"
+      },
+      {
+        "pk": 2,
+        "name": "Складной стул",
+        "description": "Инновационный стульчик для детей",
+        "image_url": "/media/projects/no_image.jpg",
+        "need_money": 38000.0,
+        "collected_money": 30000.0,
+        "category": [
+          "Мебель"
+        ],
+        "url": "http://127.0.0.1:8000/projects/info/skladnoj-stul?format=json"
+      },
+      {
+        "pk": 1,
+        "name": "Ботаника",
+        "description": "Новое руководство по выращиванию растений",
+        "image_url": "/media/projects/no_image.jpg",
+        "need_money": 56000.0,
+        "collected_money": 0.0,
+        "category": [
+          "Растения"
+        ],
+        "url": "http://127.0.0.1:8000/projects/info/botanika?format=json"
+      },
+      {
+        "pk": 4,
+        "name": "Влал",
+        "description": "Бобоу жесть мастер мира, директор НВГУ",
+        "image_url": "/media/projects/no_image.jpg",
+        "need_money": 999999.0,
+        "collected_money": 10000.0,
+        "category": [
+          "Растения"
+        ],
+        "url": "http://127.0.0.1:8000/projects/info/vlal?format=json"
+      },
+      {
+        "pk": 6,
+        "name": "Новость",
+        "description": "Самые свежие новости о несвежей шаурме на районе 1 микрорайона",
+        "image_url": "/media/projects/no_image.jpg",
+        "need_money": 123.0,
+        "collected_money": 56894.0,
+        "category": [
+          "Растения"
+        ],
+        "url": "http://127.0.0.1:8000/projects/info/novost?format=json"
+      },
+      {
+        "pk": 7,
+        "name": "Станция Влад Бобов",
+        "description": "не умная станция для вашего дома",
+        "image_url": "/media/projects/no_image.jpg",
+        "need_money": 1999.0,
+        "collected_money": 0.0,
+        "category": [
+          "Мебель"
+        ],
+        "url": "http://127.0.0.1:8000/projects/info/stantsiya-vlad-bobov?format=json"
+      },
+      {
+        "pk": 9,
+        "name": "test",
+        "description": "test",
+        "image_url": "/media/projects/no_image.jpg",
+        "need_money": 10.0,
+        "collected_money": 5.0,
+        "category": [
+          "Мебель"
+        ],
+        "url": "http://127.0.0.1:8000/projects/info/test?format=json"
+      },
+      {
+        "pk": 10,
+        "name": "Бойцовский клуб на цоколе 4",
+        "description": "Нужно не знать о нем",
+        "image_url": "/media/projects/no_image.jpg",
+        "need_money": 1000000.0,
+        "collected_money": 0.0,
+        "category": [
+          "Одежда"
+        ],
+        "url": "http://127.0.0.1:8000/projects/info/bojtsovskij-klub-na-tsokole-4-korpusa?format=json"
+      },
+      {
+        "pk": 11,
+        "name": "Концерт Кишлака",
+        "description": "Не скидывайтесь, его все равно запретят",
+        "image_url": "/media/projects/no_image.jpg",
+        "need_money": 720.0,
+        "collected_money": 15000.0,
+        "category": [
+          "Мебель",
+          "Технологии",
+          "Растения"
+        ],
+        "url": "http://127.0.0.1:8000/projects/info/kontsert-kishlaka-v-nizhnevartovske?format=json"
+      },
+      {
+        "pk": 8,
+        "name": "Червоточина",
+        "description": " мы едем на ВФМ, а вы нет - сосите лохи!!",
+        "image_url": "/media/projects/no_image.jpg",
+        "need_money": 700.0,
+        "collected_money": 15.0,
+        "category": [
+          "Мебель"
+        ],
+        "url": "http://127.0.0.1:8000/projects/info/chervotochina?format=json"
+      }
+    ],
+    "order_projects": [
+      {
+        "pk": 8,
+        "name": "Червоточина",
+        "description": "вообще жесть, лютая тварь съела какашку и получился чебурашка. Вот это да! Вы видели такое? Я такого не видел, а влал бобоу видел. А еще мы едем на ВФМ, а вы нет - сосите лохи!! Мы будем видеть девочек(надеюсь красивых) и будем на печоске лежать со снегом вместе, даржась за руки",
+        "image_url": "/media/projects/no_image.jpg",
+        "need_money": 700.0,
+        "collected_money": 15.0,
+        "category": [
+          "Мебель"
+        ],
+        "url": "http://127.0.0.1:8000/projects/info/chervotochina?format=json"
+      },
+      {
+        "pk": 9,
+        "name": "test",
+        "description": "test",
+        "image_url": "/media/projects/no_image.jpg",
+        "need_money": 0.0,
+        "collected_money": 5.0,
+        "category": [
+          "Мебель"
+        ],
+        "url": "http://127.0.0.1:8000/projects/info/test?format=json"
+      },
+      {
+        "pk": 10,
+        "name": "Бойцовский клуб на цоколе 4 корпуса",
+        "description": "Нужно не знать о нем",
+        "image_url": "/media/projects/no_image.jpg",
+        "need_money": 1000000.0,
+        "collected_money": 0.0,
+        "category": [
+          "Одежда"
+        ],
+        "url": "http://127.0.0.1:8000/projects/info/bojtsovskij-klub-na-tsokole-4-korpusa?format=json"
+      },
+      {
+        "pk": 11,
+        "name": "Концерт Кишлака",
+        "description": "Не скидывайтесь, его все равно запретят",
+        "image_url": "/media/projects/no_image.jpg",
+        "need_money": 720.0,
+        "collected_money": 15000.0,
+        "category": [
+          "Мебель",
+          "Технологии",
+          "Растения"
+        ],
+        "url": "http://127.0.0.1:8000/projects/info/kontsert-kishlaka-v-nizhnevartovske?format=json"
+      },
+      {
+        "pk": 4,
+        "name": "Влал",
+        "description": "Бобоу жесть мастер мира, директор НВГУ",
+        "image_url": "/media/projects/no_image.jpg",
+        "need_money": 999999.0,
+        "collected_money": 1.0,
+        "category": [
+          "Растения"
+        ],
+        "url": "http://127.0.0.1:8000/projects/info/vlal?format=json"
+      },
+      {
+        "pk": 6,
+        "name": "Новость",
+        "description": "Самые свежие новости о несвежей шаурме на районе 1 микрорайона",
+        "image_url": "/media/projects/no_image.jpg",
+        "need_money": 123.0,
+        "collected_money": 56894.0,
+        "category": [
+          "Растения"
+        ],
+        "url": "http://127.0.0.1:8000/projects/info/novost?format=json"
+      },
+      {
+        "pk": 7,
+        "name": "Станция Влад Бобов",
+        "description": "не умная станция для вашего дома",
+        "image_url": "/media/projects/no_image.jpg",
+        "need_money": 1999.0,
+        "collected_money": 0.0,
+        "category": [
+          "Мебель"
+        ],
+        "url": "http://127.0.0.1:8000/projects/info/stantsiya-vlad-bobov?format=json"
+      },
+      {
+        "pk": 2,
+        "name": "Складной стул",
+        "description": "Инновационный стульчик для детей",
+        "image_url": "/media/projects/no_image.jpg",
+        "need_money": 38000.0,
+        "collected_money": 150.0,
+        "category": [
+          "Мебель"
+        ],
+        "url": "http://127.0.0.1:8000/projects/info/skladnoj-stul?format=json"
+      },
+      {
+        "pk": 1,
+        "name": "Ботаника",
+        "description": "Новое руководство по выращиванию растений",
+        "image_url": "/media/projects/no_image.jpg",
+        "need_money": 56000.0,
+        "collected_money": 0.0,
+        "category": [
+          "Растения"
+        ],
+        "url": "http://127.0.0.1:8000/projects/info/botanika?format=json"
+      },
+      {
+        "pk": 3,
+        "name": "Кроссовки",
+        "description": "Иновационая модель кроссовок. No China",
+        "image_url": "/media/project/unnamed.jpg",
+        "need_money": 78000.0,
+        "collected_money": 0.0,
+        "category": [
+          "Технологии"
+        ],
+        "url": "http://127.0.0.1:8000/projects/info/krossovki?format=json"
+      }
+    ]
+  }
+}

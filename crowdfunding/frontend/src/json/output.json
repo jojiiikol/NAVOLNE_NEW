@@ -1,0 +1,27 @@
+{
+  "username": "jojiiikol",
+  "first_name": "Александр",
+  "about": "Вообще чувак чувачок чувачельский",
+  "last_name": "Пятигорец",
+  "sex": "М",
+  "company": "НВГУ",
+  "document": "123321",
+  "projects": [
+    {
+      "name": "Графитовый карандаш",
+      "url": "http://localhost:8000/projects/info/grafitovyij-karandash"
+    },
+    {
+      "name": "Поддержка местного зоопарка",
+      "url": "http://localhost:8000/projects/info/podderzhka-mestnogo-zooparka"
+    },
+    {
+      "name": "Станция Влал Бобоу",
+      "url": "http://localhost:8000/projects/info/stantsiya-vlal-bobou"
+    },
+    {
+      "name": "Поддержка вязания спицами в ХМАО",
+      "url": "http://localhost:8000/projects/info/podderzhka-vyazaniya-spitsami-v-hmao"
+    }
+  ]
+}
