@@ -8,7 +8,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-import crow.serializers.project_serializer
+
 from .paginators import AllProjectsPaginator
 from crow.serializers.project_serializer import *
 from crow.serializers.profile_serializer import *
@@ -16,7 +16,7 @@ from crow.serializers.listings_serializer import *
 from .utils import send_message_verification_email, check_token_timelife
 
 
-# TODO: Продумать лоогику на подтверждение проектов
+# TODO: Продумать логику на подтверждение проектов --> Сериалайзер и вью --> Логика обновления проекта + логика на просмотр
 # TODO: Убрать возможность отправки PUT/PATCH/DELETE запросов на проекты --> Методы удалены
 # TODO: Убрать возможность отправки PUT/PATCH/DELETE запросов на юзеров ---> Методы удалены
 # TODO: Продумать что делать с методами изменения профиля
@@ -30,7 +30,7 @@ class ProjectViewSet(mixins.ListModelMixin,
                      mixins.CreateModelMixin,
                      viewsets.GenericViewSet):
     queryset = Project.objects.all()
-    serializer_class = crow.serializers.project_serializer.ProjectSerializer
+    serializer_class = ProjectSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     search_fields = ['name']
     filterset_fields = ['category']
@@ -99,12 +99,12 @@ class ProjectViewSet(mixins.ListModelMixin,
     @extend_schema(summary="Подтверждение проекта ---не доделано---",
                    request=ConfirmProjectSerializer,
                    )
-    @action(methods=['PATCH'], detail=True)
+    @action(methods=['POST'], detail=True)
     def confirm_project(self, request, *args, **kwargs):
         project = self.get_object()
-        serializer = ConfirmProjectSerializer(project, data=request.data, context={'request': request})
+        serializer = ProjectConfirmAnswerSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(project=project)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

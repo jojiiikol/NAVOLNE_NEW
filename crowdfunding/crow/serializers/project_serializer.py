@@ -14,7 +14,7 @@ from rest_framework.validators import UniqueValidator
 from django.core.mail import send_mail
 
 from crow.models import Project, Category, Transaction, ProjectChangeRequest, User, VerificationToken, \
-    ResetPasswordToken, ProfileChangeRequest, AnswerProjectChangeRequest
+    ResetPasswordToken, ProfileChangeRequest, AnswerProjectChangeRequest, ProjectConfirmAnswer
 from crow.serializers.listings_serializer import CategoryListing, SkillListing, GroupSerializerForAdditionalView
 from crow.serializers.profile_serializer import UserSerializer
 from crow.utils import send_message_verification_email
@@ -93,6 +93,19 @@ class ProjectSerializerCreate(serializers.ModelSerializer):
         if attrs['need_money'] < attrs['collected_money']:
             raise serializers.ValidationError({"need_money": "Собранная сумма превышает необходимую"})
         return attrs
+
+class ProjectConfirmAnswerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProjectConfirmAnswer
+        fields = ['user', 'answer', 'confirmed', 'answer_time']
+
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    answer = serializers.CharField(required=False, max_length=1000)
+    confirmed = serializers.BooleanField(required=True)
+    answer_time = serializers.DateTimeField(default=timezone.now())
+
+
+
 
 
 class ConfirmProjectSerializer(serializers.ModelSerializer):

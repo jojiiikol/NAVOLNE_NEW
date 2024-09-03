@@ -49,4 +49,9 @@ class AnswerProfileChangeRequestAdmin(admin.ModelAdmin):
 class AnswerProjectChangeRequestAdmin(admin.ModelAdmin):
     pass
 
+@admin.register(ProjectConfirmAnswer)
+class ProjectConfirmAnswerAdmin(admin.ModelAdmin):
+    pass
+
+
 
