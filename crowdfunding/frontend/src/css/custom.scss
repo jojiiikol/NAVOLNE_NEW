@@ -1,19 +1,15 @@
-/* === Import Bootstrap functions and variables === */
 @import "bootstrap/scss/functions";
 @import "/node_modules/bootstrap/scss/variables";
 @import "/node_modules/bootstrap/scss/variables-dark";
-/*--------------------------------------------------------------------*/
-/* Change theme-colors */
+
 $theme-colors: (
                 primary: #0E7580,
-                secondary: #3b3c3e,
+                secondary: #a8b0c0,
                 success: #1e6111,
                 info:  #64c3d2,
                 warning: #f5e74a,
-                danger: #820410
+                danger: #ad0919,
+								primarylight: #4ff5ef
                 );
         
-/*--------------------------------------------------------------------*/
-/* === Bootstrap Main SCSS === */
 @import "bootstrap/scss/bootstrap";
-/*--------------------------------------------------------------------*/

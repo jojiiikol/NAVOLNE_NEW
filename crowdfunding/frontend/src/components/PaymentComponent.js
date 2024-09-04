@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Container, Image, Row, Col, Button } from 'react-bootstrap'
 import ProgressBar from './progress-bar.component';
 
-const ProjectPage = () => {
+const PaymentPage = () => {
 
 	const { slug } = useParams();
 	const [data, setData] = useState(null);
@@ -79,4 +79,4 @@ const ProjectPage = () => {
 
 }
 
-export default ProjectPage;
+export default PaymentPage;

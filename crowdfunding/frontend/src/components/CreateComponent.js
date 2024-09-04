@@ -1,8 +1,7 @@
-import React, { Component, useState, useCallback, useEffect, handleChange, handleSubmit } from 'react'
-import { Container, Row, Col, InputGroup, ToggleButtonGroup, ToggleButton, FormControl } from 'react-bootstrap'
+import React, { Component } from 'react'
+import { Container, Row, Col, InputGroup } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
-import header from './header';
 
 
 export default class Create extends Component {
@@ -17,7 +16,7 @@ export default class Create extends Component {
 			collected_money: '',
 			start_date: '',
 			end_date: '',
-			category: [1],
+			category: [],
 			image: '',
 			info_cat: [],
 			cat_meow: false,
@@ -55,46 +54,53 @@ export default class Create extends Component {
 		formData.append('collected_money', collected_money);
 		formData.append('start_date', start_date);
 		formData.append('end_date', end_date);
-		for (let i = 0; i < category.length; i++) {
-			formData.append('category', category[i]);
-		}
+		category.forEach(cat => formData.append('category', cat));
 		formData.append('image', event.target.image.files[0]);
-		console.log(formData.get('category'));
+
 		for (var pair of formData.entries()) {
 			console.log(pair[0] + ', ' + pair[1]);
 		}
+		this.setState({ errorFlag: false });
 		fetch('http://localhost:8000/projects/create', {
 			method: 'POST',
 			headers: {
+				//'Content-Type': 'application/json',
 				'Authorization': 'Bearer ' + accessToken
 			},
 			body: formData
 		})
-			.then(response => response.json())
-			.then(data => { this.setState({ errorMessage: data }); })
-			.catch(error => {
 
-				console.error(error);
+			.then(response => response.json())
+			.then(data => {
+				this.setState({ errorMessage: data });
+				console.log(data);
+				if (data.name == name) {
+					window.location.href = '/profile/' + localStorage.getItem('user');
+				}
 			})
-		console.log(this.state.errorMessage);
+			.catch(error => {
+				console.error(error);
+
+			})
+
 	};
 
 	onChange(e) {
-		// current array of options
+
 		const category = this.state.category
 		console.log(e.target.name)
 		let index
 		if (e.target.checked) {
-			// add the numerical value of the checkbox to options array
+
 			category.push(Number(e.target.name))
 		} else {
-			// or remove the value from the unchecked checkbox from the array
+
 			index = category.indexOf(Number(e.target.name))
 			category.splice(index, 1)
 		}
-		// update the state with the new array of options
+
 		this.setState({ category: category })
-		//console.log(category);
+
 	};
 	render() {
 
@@ -168,39 +174,16 @@ export default class Create extends Component {
 
 							<Form.Group className="mb-3" >
 								<Form.Label>Выберите категории</Form.Label>
-
-
-
 								{this.state.info_cat.length === 0 ?
 									<div> No data for collection </div> :
 									this.state.info_cat.map((cat) => (
 										<div key={cat.id}>
-											{/* <ToggleButton
-												id={cat.id}
-												type="checkbox"
-												variant="primary"
-												name={cat.id}
-												value={cat.id}
-												checked={this.state.category.length === null ?
-													false :
-													this.state.category.some(selCat => selCat.id === this.state.category.id)
-												}
-												onChange={
-													this.onChange.bind(this)
-												}
-											>
-												{cat.name}
-												{cat.id}
-												{this.state.category}
-											</ToggleButton> */}
+
 											<Form.Check type='checkbox' name={cat.id} onChange={this.onChange.bind(this)} label={cat.name} />
 										</div>
 
 									))
 								}
-
-
-
 								{this.state.errorMessage && <Form.Text className="text-danger"> {this.state.errorMessage.category} </Form.Text>}
 							</Form.Group>
 
@@ -211,14 +194,8 @@ export default class Create extends Component {
 							</Form.Group>
 
 							<Form.Group className="mb-3" controlId="formBasicCheckbox" style={{ display: 'flex' }}>
-
-
 								<Form.Label>Нажимая на кнопку «Создать, я соглашаюсь с <a href="https://vk.com/lastimperatorr">политикой по обработке персональных данных</a></Form.Label>
 							</Form.Group>
-
-
-
-
 							<Button variant="primary" type="submit">
 								Создать
 							</Button>

@@ -66,6 +66,7 @@ const PaginationComponent = () => {
 							category = {item.category}
 							small_description = {item.small_description}
 							views = {item.views}
+							image = {item.image}
 							/>
 					</Col>
 				))}

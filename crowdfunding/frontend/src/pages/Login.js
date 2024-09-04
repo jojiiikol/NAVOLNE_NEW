@@ -1,12 +1,7 @@
-import React, { Component} from 'react'
+import React, { Component } from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
-
-
-
-
-
 export default class Login extends Component {
 	constructor(props) {
 		super(props);
@@ -17,10 +12,10 @@ export default class Login extends Component {
 		};
 	}
 	componentDidMount() {
-		if (localStorage.getItem('accessToken')!=='undefined' && localStorage.getItem('accessToken') ) {
-			window.location.href =`/profile/${localStorage.getItem('user')}`;
-    }
-  }
+		if (localStorage.getItem('accessToken') !== 'undefined' && localStorage.getItem('accessToken')) {
+			window.location.href = `/profile/${localStorage.getItem('user')}`;
+		}
+	}
 	handleChange = event => {
 		const { name, value } = event.target;
 		this.setState({ [name]: value });
@@ -45,28 +40,27 @@ export default class Login extends Component {
 				localStorage.setItem('refreshToken', data.refresh);
 				localStorage.setItem('user', username);
 				this.setState({ errorMessage: data });
-				if (localStorage.getItem('accessToken')!=='undefined') {
-					window.location.href =`/profile/${localStorage.getItem('user')}`;
-					
-			}
-			
+				if (localStorage.getItem('accessToken') !== 'undefined') {
+					window.location.href = `/profile/${localStorage.getItem('user')}`;
+				}
+
 			})
 			.catch(error => {
 				console.error(error);
 			})
 
-	
-			 
+
+
 	};
 
 	render() {
 		return (
 			<Container style={{ marginTop: '60px' }}>
-			
+
 				<h1 style={{ marginBottom: '0.5em', fontWeight: 'bold', fontSize: '55px' }}>
 					Вход
 				</h1>
-				
+
 				<Row xs={1} md={2} className='g-4'>
 					<Col>
 						<Form onSubmit={this.handleSubmit}>
@@ -84,11 +78,11 @@ export default class Login extends Component {
 
 
 							<Form.Group className="mb-3" controlId="formBasicPassword">
-							{this.state.errorMessage && <Form.Text className="text-danger"> {this.state.errorMessage.detail} </Form.Text>}
+								{this.state.errorMessage && <Form.Text className="text-danger"> {this.state.errorMessage.detail} </Form.Text>}
 							</Form.Group>
-							
+
 							<Form.Group className="mb-3" controlId="formBasicPassword">
-							{this.state.access && <Form.Text className="text-danger"> {this.state.access}</Form.Text>}
+								{this.state.access && <Form.Text className="text-danger"> {this.state.access}</Form.Text>}
 							</Form.Group>
 
 							<Button variant="primary" type="submit">

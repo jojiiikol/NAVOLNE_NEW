@@ -1,39 +1,36 @@
 video {
-  position: relative;
-  height: auto;
-  width: 100%;
+    position: relative;
+    height: auto;
+    width: 100%;
 }
 
 .video-h1-center {
-font-size: 170px;
-font-weight: 900;
-position: absolute;
-left: 50%;
-top: 30%;
-transform: translate(-50%, -50%);
-color: white;
+    font-size: 170px;
+    font-weight: 900;
+    position: absolute;
+    left: 50%;
+    top: 30%;
+    transform: translate(-50%, -50%);
+    color: white;
 }
 
 .video-h2-center {
-	font-size: 70px;
-	font-weight: 500;
-	position: absolute;
-	left: 50%;
-	top: 41%;
-	transform: translate(-50%, -50%);
-	color: white;
-	}
-	.video-h3-center {
-		width: 900px;
-		text-align: center;
-		font-size: 40px;
-		font-weight: 300;
-		position: absolute;
-		left: 50%;
-	top: 55%;
-	transform: translate(-50%, -50%);
-		color: white;
-		}
-		
-		
-		
+    font-size: 70px;
+    font-weight: 500;
+    position: absolute;
+    left: 50%;
+    top: 41%;
+    transform: translate(-50%, -50%);
+    color: white;
+}
+.video-h3-center {
+    width: 900px;
+    text-align: center;
+    font-size: 40px;
+    font-weight: 300;
+    position: absolute;
+    left: 50%;
+    top: 55%;
+    transform: translate(-50%, -50%);
+    color: white;
+}

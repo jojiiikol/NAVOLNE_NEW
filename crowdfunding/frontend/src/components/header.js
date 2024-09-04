@@ -46,7 +46,7 @@ export default class header extends Component {
 								className='d-inline-block align-top'
 								alt='Logo'
 							/> NA VOLNE
-
+						
 						</Navbar.Brand>
 						<Navbar.Toggle aria-controls="responsive-navbar-nav" />
 						<Navbar.Collapse id="responsive-navbar-nav">
