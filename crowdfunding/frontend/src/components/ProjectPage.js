@@ -24,7 +24,7 @@ const ProjectPage = () => {
 
             if (accessToken != undefined) {
                 const response = await fetch(
-                    `http://localhost:8000/projects/info/${slug}`,
+                    `http://localhost:8000/projects/${slug}/`,
                     {
                         headers: {
                             'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ const ProjectPage = () => {
                 console.log(data);
             } else {
                 const response = await fetch(
-                    `http://localhost:8000/projects/info/${slug}`,
+                    `http://localhost:8000/projects/${slug}/`,
                     {
                         headers: {
                             'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ const ProjectPage = () => {
                             color: 'white',
                         }}
                     >
-                        {data.project.name}
+                        {data.name}
                     </p>
 
                     <p
@@ -93,7 +93,7 @@ const ProjectPage = () => {
                             color: 'white',
                         }}
                     >
-                        {data.project.small_description}
+                        {data.small_description}
                     </p>
                     <Button
                         size="lg"
@@ -113,10 +113,10 @@ const ProjectPage = () => {
 
                     <Row className="g-4 mt-1">
                         <Col sm={7}>
-                            {/* <p className='mb-0 mt-0 fw-bold ' style={{ fontSize: '60px', }}>{data.project.name}</p>
-						<p className='mt-0 mb-0 fs-5 text-secondary  '>{data.project.small_description}</p> */}
+                            {/* <p className='mb-0 mt-0 fw-bold ' style={{ fontSize: '60px', }}>{data.name}</p>
+						<p className='mt-0 mb-0 fs-5 text-secondary  '>{data.small_description}</p> */}
                             <div className="d-flex mt-0 mb-2">
-                                {data.project.category.map(
+                                {data.category.map(
                                     (category, index) => (
                                         <div
                                             className="badge bg-secondary text-wrap ms-1 mb-1"
@@ -131,12 +131,12 @@ const ProjectPage = () => {
                             <ProgressBar
                                 bgcolor={'#0d6efd'}
                                 completed={Math.round(
-                                    (data.project.collected_money /
-                                        data.project.need_money) *
+                                    (data.collected_money /
+                                        data.need_money) *
                                         100
                                 )}
-                                completed_money={data.project.collected_money}
-                                need_money={data.project.need_money}
+                                completed_money={data.collected_money}
+                                need_money={data.need_money}
                             />
                             {/* {!data.is_owner &&
 							<Button size='lg' className='mt-3' href="#">Поддержать проект</Button>
@@ -151,11 +151,11 @@ const ProjectPage = () => {
                                 }}
                             >
                                 <ContactCard
-                                    email={data.project.user.email}
-                                    first_name={data.project.user.first_name}
-                                    last_name={data.project.user.last_name}
-                                    username={data.project.user.username}
-                                    image={data.project.user.image}
+                                    email={data.user.email}
+                                    first_name={data.user.first_name}
+                                    last_name={data.user.last_name}
+                                    username={data.user.username}
+                                    image={data.user.image}
                                     slug={slug}
                                 ></ContactCard>
                             </div>
@@ -191,16 +191,16 @@ const ProjectPage = () => {
                             style={{ textAlign: 'justify ' }}
                             sm={7}
                         >
-                            {data.project.description}
-                            {data.project.description}
-                            {data.project.description}
-                            {data.project.description}
-                            {data.project.description}
-                            {data.project.description}
-                            {data.project.description}
-                            {data.project.description}
-                            {data.project.description}
-                            {data.project.description}
+                            {data.description}
+                            {data.description}
+                            {data.description}
+                            {data.description}
+                            {data.description}
+                            {data.description}
+                            {data.description}
+                            {data.description}
+                            {data.description}
+                            {data.description}
                         </Col>
                     </Row>
                     <span className="fs-5 "></span>

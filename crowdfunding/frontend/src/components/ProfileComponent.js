@@ -36,7 +36,7 @@ const ProfileComponent = () => {
             const accessToken = localStorage.getItem('accessToken');
             if (localStorage.getItem('accessToken')) {
                 const response = await fetch(
-                    'http://localhost:8000/profile/' + profilename,
+                    'http://localhost:8000/profiles/' + profilename+'/',
                     {
                         headers: {
                             'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ const ProfileComponent = () => {
             }
             if (!localStorage.getItem('accessToken')) {
                 const response = await fetch(
-                    'http://localhost:8000/profile/' + profilename,
+                    'http://localhost:8000/profiles/' + profilename+'/',
                     {
                         headers: {
                             'Content-Type': 'application/json',
@@ -73,12 +73,12 @@ const ProfileComponent = () => {
                             <Image
                                 style={{ width: '350px', objectFit: 'cover' }}
                                 className="me-5"
-                                src={data.user_info.image}
+                                src={data.image}
                                 rounded
                             />
-                            {data.user_info.skill.length !== 0 && (
+                            {data.skill.length !== 0 && (
                                 <div className="d-flex ">
-                                    {data.user_info.skill.map(
+                                    {data.skill.map(
                                         (skill, index) => (
                                             <h5>
                                                 <Badge
@@ -102,7 +102,7 @@ const ProfileComponent = () => {
                                 </p>
                                 <p className="fs-5 fw-normal text-normal mt-1">
                                     {' '}
-                                    {data.user_info.total_money_sent}
+                                    {data.total_money_sent}
                                 </p>
                             </div>
                             {data.is_owner && (
@@ -115,7 +115,7 @@ const ProfileComponent = () => {
                                     </p>
                                     <p className="fs-5 fw-normal text-normal ">
                                         {' '}
-                                        {data.user_info.money}
+                                        {data.money}
                                     </p>
                                 </div>
                             )}
@@ -142,7 +142,7 @@ const ProfileComponent = () => {
                                             show={true}
                                             onHide={closeModal}
                                             username={profilename}
-                                            skills_base={data.user_info.skill}
+                                            skills_base={data.skill}
                                         />
                                     )}
                                     <Button variant="primary" href="/create">
@@ -153,24 +153,24 @@ const ProfileComponent = () => {
                         </div>
                         <div>
                             <p className="fs-1 fw-bold mb-0">
-                                {data.user_info.first_name}{' '}
-                                {data.user_info.last_name}
+                                {data.first_name}{' '}
+                                {data.last_name}
                             </p>
                             <p className="fs-5 fw-normal text-secondary">
-                                Автор присоединился {data.user_info.date_joined}
+                                Автор присоединился {data.date_joined}
                             </p>
-                            {data.user_info.about && (
+                            {data.about && (
                                 <div>
                                     <p className="fs-5 fw-normal text-secondary">
                                         О себе:{' '}
                                     </p>
                                     <p className="fs-5 fw-normal ">
-                                        {data.user_info.about}
+                                        {data.about}
                                     </p>
                                 </div>
                             )}
 
-                            {!data.user_info.about && (
+                            {!data.about && (
                                 <div>
                                     <p className="fs-5 fw-normal text-secondary">
                                         О себе:{' '}
@@ -182,18 +182,18 @@ const ProfileComponent = () => {
                                 </div>
                             )}
 
-                            {data.user_info.sex && (
+                            {data.sex && (
                                 <div className="d-flex">
                                     <p className="fs-5 fw-normal text-secondary">
                                         Пол:{' '}
                                     </p>
                                     <p className="fs-5 fw-normal ms-1">
-                                        {data.user_info.sex}
+                                        {data.sex}
                                     </p>
                                 </div>
                             )}
 
-                            {!data.user_info.sex && (
+                            {!data.sex && (
                                 <div className="d-flex">
                                     <p className="fs-5 fw-normal text-secondary">
                                         Пол:{' '}
@@ -204,12 +204,12 @@ const ProfileComponent = () => {
                                 </div>
                             )}
 
-                            {data.user_info.groups.length !== 0 && (
+                            {data.groups.length !== 0 && (
                                 <div className="d-flex">
                                     <p className="fs-5 fw-normal text-secondary">
                                         Группы:{' '}
                                     </p>
-                                    {data.user_info.groups.map(
+                                    {data.groups.map(
                                         (skill, index) => (
                                             <div
                                                 className="badge bg-secondary text-wrap ms-1 mb-3"
@@ -220,7 +220,7 @@ const ProfileComponent = () => {
                                             </div>
                                         )
                                     )}
-                                    {/* <p className='fs-5 fw-normal text-normal ms-1'>{data.user_info.skill.join(", ")}</p> */}
+                                    {/* <p className='fs-5 fw-normal text-normal ms-1'>{data.skill.join(", ")}</p> */}
                                 </div>
                             )}
 
@@ -230,7 +230,7 @@ const ProfileComponent = () => {
                                         День рождения:{' '}
                                     </p>
                                     <p className="fs-5 fw-normal ms-1">
-                                        {data.user_info.birthday}
+                                        {data.birthday}
                                     </p>
                                 </div>
                             )}
@@ -241,7 +241,7 @@ const ProfileComponent = () => {
                                         Компания:{' '}
                                     </p>
                                     <p className="fs-5 fw-normal ms-1">
-                                        {data.user_info.company}
+                                        {data.company}
                                     </p>
                                 </div>
                             )}
@@ -252,7 +252,7 @@ const ProfileComponent = () => {
                                         ЕГРЮЛ:{' '}
                                     </p>
                                     <p className="fs-5 fw-normal ms-1">
-                                        {data.user_info.document}
+                                        {data.document}
                                     </p>
                                 </div>
                             )}
@@ -262,7 +262,7 @@ const ProfileComponent = () => {
                                         Паспорт:{' '}
                                     </p>
                                     <p className="fs-5 fw-normal ms-1">
-                                        {data.user_info.passport}
+                                        {data.passport}
                                     </p>
                                 </div>
                             )}
@@ -275,7 +275,7 @@ const ProfileComponent = () => {
                         </p>
 
                         <ListGroup>
-                            {data.user_info.projects.length === 0 && (
+                            {data.projects.length === 0 && (
                                 <div>
                                     <div
                                         style={{
@@ -294,9 +294,9 @@ const ProfileComponent = () => {
                                         ></dotlottie-player>
                                         <div className="ms-5">
                                             <p className="fs-3 fw-normal  ">
-                                                У {data.user_info.first_name}{' '}
+                                                У {data.first_name}{' '}
                                                 еще нет проектов... Не будь как{' '}
-                                                {data.user_info.first_name},
+                                                {data.first_name},
                                                 скорее нажимай на кнопку{' '}
                                             </p>
                                             <div
@@ -318,8 +318,8 @@ const ProfileComponent = () => {
                                 </div>
                             )}
 
-                            {data.user_info.projects.length !== 0 &&
-                                data.user_info.projects.map((project) => (
+                            {data.projects.length !== 0 &&
+                                data.projects.map((project) => (
                                     <ListGroupItem
                                         href={`/projects/${project.slug}`}
                                         key={project.url}

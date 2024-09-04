@@ -12,7 +12,7 @@ const PaginationComponent = () => {
 	const [nextPage, setNextPage] = useState(null);
 	const [prevPage, setPrevPage] = useState(null);
 	useEffect(() => {
-		fetchData('http://localhost:8000/projects/all');
+		fetchData('http://localhost:8000/projects/');
 	}, []);
 
 	const fetchData = (url) => {

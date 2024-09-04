@@ -15,9 +15,10 @@ class Home extends Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:8000/') // замените на URL вашего DRF API и ID проекта
+        fetch('http://localhost:8000/projects/') // замените на URL вашего DRF API и ID проекта
             .then((response) => response.json())
-            .then((data) => this.setState({ project: data }));
+            .then((data) => {this.setState({ project: data.results })});
+           
     }
 
     render() {
@@ -79,7 +80,7 @@ class Home extends Component {
                     </div>
 
                     <Row xs={2} md={3} className="g-4">
-                        {project.projects.all_projects.map((project) => (
+                        {project.map((project) => (
                             <Col>
                                 <MyCard
                                     key={project.pk}
