@@ -15,7 +15,7 @@ const MyCard = (props) => {
     } = props;
     return (
         <div>
-            <Link to={`/projects/${slug}`} className="text-decoration-none ">
+            <a href={`/projects/${slug}`} className="text-decoration-none ">
                 <Card
                     className="border-0 rounded-5 shadow"
                     style={{ backgroundColor: '#FFFFFF' }}
@@ -67,7 +67,7 @@ const MyCard = (props) => {
                         </div>
                     </Card.Body>
                 </Card>
-            </Link>
+            </a>
         </div>
     );
 };

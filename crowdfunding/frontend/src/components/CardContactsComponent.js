@@ -15,9 +15,9 @@ const ContactCard = (props) => {
 						<ListGroup.Item className=''>
 							<span className='text-secondary fs-5'>СОЗДАТЕЛЬ </span>
 							<div className='mt-2 d-flex justify-content-between'>
-								<Link to={`/profile/${username}`}>
+								<a href={`/profile/${username}`}>
 								<Image src={image} roundedCircle style={{ width: '80px', height: '80px' }} className='border border-primary border-3 shadow-sm' href={`/profile/${username}`}></Image>
-								</Link>
+								</a>
 							
 								<div>
 
