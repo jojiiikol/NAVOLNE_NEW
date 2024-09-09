@@ -15,11 +15,13 @@ from crow.serializers.profile_serializer import *
 from crow.serializers.listings_serializer import *
 from .utils import send_message_verification_email, check_token_timelife
 
-
+# TODO: Посмотреть связку if serializer_data['confirmed']
 # TODO: Убрать возможность отправки PUT/PATCH/DELETE запросов на проекты --> Методы удалены
 # TODO: Убрать возможность отправки PUT/PATCH/DELETE запросов на юзеров ---> Методы удалены
+# TODO: Добавить возможность юзерам смотреть на свою заявку на измененеие профиля
 # TODO: Продумать что делать с методами изменения профиля
 # TODO: Пермишины
+# TODO: Показать как показываюстя проекты у владельца и не у владельца в профиле
 # TODO: Пермишины для неподтвержденных юзеров/проектов
 # TODO: Просмотреть валидаторы на изменение профиля
 # TODO: Система просмотров
@@ -44,6 +46,8 @@ class ProjectViewSet(mixins.ListModelMixin,
     def list(self, request, *args, **kwargs):
         self.queryset = Project.objects.filter(confirmed=True)
         return super().list(request, *args, **kwargs)
+
+
 
     # Создание проекта
     @extend_schema(summary="Создание проекта",
@@ -144,7 +148,7 @@ class ProjectChangeRequestViewSet(mixins.ListModelMixin,
         serializer_data = serializer(data=request.data, context={'request': request})
         if serializer_data.is_valid():
             serializer_data.save(change_request=self.get_object())
-            if serializer_data['confirmed']:
+            if serializer_data['confirmed'].value:
                 serializer_data.update_project(self.get_object())
             return Response(serializer_data.data, status=status.HTTP_200_OK)
         else:
@@ -155,8 +159,8 @@ class ProjectChangeRequestViewSet(mixins.ListModelMixin,
     @action(methods=['GET'], detail=False)
     def show_request(self, request, *args, **kwargs):
         self.queryset = ProjectChangeRequest.objects.filter(user=request.user)
-        serializer = AnswerChangeProjectRequestSerializer(self.queryset, many=True, context={'request': request})
-        return Response({"requests": serializer.data}, status=status.HTTP_200_OK)
+        serializer = ChangeProjectRequestSerializer(self.queryset, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @extend_schema(summary="Просмотр ответа админов на твою заявку",
                    description="Необходимо для юзеров, для того чтобы посмотреть на ответ админа на свою заявку",
@@ -186,7 +190,9 @@ class ProfileViewSet(mixins.ListModelMixin,
     def retrieve(self, request, *args, **kwargs):
         if (self.kwargs['username'] == self.request.user.username) or (self.request.user.is_staff):
             self.serializer_class = AdditionalUserSerializerForOwner
-        self.serializer_class = AdditionalUserSerializerForOther
+        else:
+            self.serializer_class = AdditionalUserSerializerForOther
+        print(self.serializer_class)
         return super().retrieve(request, *args, **kwargs)
 
     @extend_schema(summary="Регистрация",
@@ -344,7 +350,7 @@ class ProfileChangeRequestViewSet(mixins.ListModelMixin,
     def see_admin_response(self, request, *args, **kwargs):
         change_request = self.get_object()
         answer = AnswerProfileChangeRequest.objects.filter(profile=change_request).order_by('-answer_date')
-        serializer = AnswerChangeProjectRequestSerializer(answer, many=True, context={'request': request})
+        serializer = AnswerChangeProfileSerializer(answer, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 

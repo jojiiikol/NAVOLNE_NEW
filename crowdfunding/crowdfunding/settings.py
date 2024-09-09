@@ -86,7 +86,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'crow',
         'USER': 'postgres',
-        'PASSWORD': '123',
+        'PASSWORD': '205896',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -197,6 +197,11 @@ SIMPLE_JWT = {
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
 )
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+                        ]
+CORS_ALLOW_ALL_ORIGINS = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.yandex.ru'  # SMTP server host

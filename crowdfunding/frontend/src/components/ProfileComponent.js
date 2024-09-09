@@ -75,6 +75,7 @@ const ProfileComponent = () => {
                                 className="me-5"
                                 src={data.image}
                                 rounded
+
                             />
                             {data.skill.length !== 0 && (
                                 <div className="d-flex ">
@@ -209,17 +210,14 @@ const ProfileComponent = () => {
                                     <p className="fs-5 fw-normal text-secondary">
                                         Группы:{' '}
                                     </p>
-                                    {data.groups.map(
-                                        (skill, index) => (
+
                                             <div
                                                 className="badge bg-secondary text-wrap ms-1 mb-3"
                                                 style={{ width: '8rem' }}
-                                                key={index}
                                             >
-                                                {skill}
+                                                {data.groups.name}
                                             </div>
-                                        )
-                                    )}
+
                                     {/* <p className='fs-5 fw-normal text-normal ms-1'>{data.skill.join(", ")}</p> */}
                                 </div>
                             )}

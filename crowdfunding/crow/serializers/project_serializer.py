@@ -35,12 +35,17 @@ class ProjectSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
     views = serializers.IntegerField(read_only=True)
     change_url = serializers.SerializerMethodField()
+    is_owner = serializers.SerializerMethodField()
 
     class Meta:
         model = Project
         fields = (
-            'user', 'name', 'small_description', 'description', 'slug', 'need_money', 'collected_money', 'start_date',
-            'end_date', 'category', 'image', 'confirmed', 'url', 'views', 'payment_url', 'change_url')
+            'pk', 'slug', 'user', 'name', 'small_description', 'description', 'slug', 'need_money', 'collected_money', 'start_date',
+            'end_date', 'category', 'image', 'confirmed', 'url', 'views', 'payment_url', 'change_url', 'is_owner')
+
+    def get_is_owner(self, obj):
+        if obj.user.username == self.context.get('request').user.username:
+            return True
 
     def get_payment_url(self, obj):
         return reverse('project-payment', kwargs={'slug': obj.slug}, request=self.context['request'])
@@ -213,7 +218,7 @@ class ChangeProjectRequestSerializer(serializers.ModelSerializer):
     description = serializers.CharField(required=False, max_length=1000,
                                         help_text="Описание проекта. Максимум - 1000 символов")
     need_money = serializers.IntegerField(required=False, help_text="Необходимая сумма сбора")
-    end_date = serializers.DateField(required=False, help_text="Собранная сумма")
+    end_date = serializers.DateField(required=False, help_text="Дата окончания")
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), many=True, required=False,
                                                   help_text="Категории проекта")
     image = serializers.ImageField(required=False)
@@ -225,7 +230,7 @@ class ChangeProjectRequestSerializer(serializers.ModelSerializer):
     project_url = serializers.SerializerMethodField()
     url = serializers.SerializerMethodField()
 
-    def validate(self, attrs):
+    def validate_end_date(self, attrs):
         if self.context['project'].start_date >= attrs['end_date']:
             raise serializers.ValidationError({"end_date": "Дата окончания не может быть раннее даты старта проекта"})
         return attrs
@@ -248,7 +253,7 @@ class AdditionalUserSerializerForOwner(serializers.ModelSerializer):
         fields = (
             'username', 'image', 'first_name', 'last_name', 'birthday', 'about', 'skill', 'sex', 'company', 'passport',
             'document', 'money', 'total_money_sent', 'confirmed', 'category', 'date_joined', 'projects', 'groups',
-            'confirmed')
+            'confirmed', 'email_verified', 'is_owner')
 
     username = serializers.CharField(read_only=True)
     image = serializers.ImageField(required=False)
@@ -261,6 +266,12 @@ class AdditionalUserSerializerForOwner(serializers.ModelSerializer):
     category = CategoryListing(many=True, required=False)
     groups = GroupSerializerForAdditionalView(many=True, required=False)
     sex = serializers.CharField(max_length=1, required=False)
+    email_verified = serializers.BooleanField(read_only=True)
+    is_owner = serializers.SerializerMethodField()
+
+    def get_is_owner(self, obj):
+        if self.context.get('request').user.username == obj.username:
+            return True
 
     def validate_sex(self, values):
         if values not in ['М', 'Ж']:

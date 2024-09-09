@@ -192,15 +192,7 @@ const ProjectPage = () => {
                             sm={7}
                         >
                             {data.description}
-                            {data.description}
-                            {data.description}
-                            {data.description}
-                            {data.description}
-                            {data.description}
-                            {data.description}
-                            {data.description}
-                            {data.description}
-                            {data.description}
+
                         </Col>
                     </Row>
                     <span className="fs-5 "></span>

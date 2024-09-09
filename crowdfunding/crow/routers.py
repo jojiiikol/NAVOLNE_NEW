@@ -4,8 +4,8 @@ from .views import ProjectViewSet, ProjectChangeRequestViewSet, ProfileViewSet, 
 projects_router = routers.SimpleRouter()
 projects_router.register(r'projects', ProjectViewSet)
 
-change_request_router = routers.SimpleRouter()
-change_request_router.register(r'change_requests', ProjectChangeRequestViewSet)
+project_change_request_router = routers.SimpleRouter()
+project_change_request_router.register(r'project_change_requests', ProjectChangeRequestViewSet)
 
 profile_router = routers.SimpleRouter()
 profile_router.register(r'profiles', ProfileViewSet)

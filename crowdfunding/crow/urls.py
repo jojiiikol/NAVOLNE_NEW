@@ -3,7 +3,7 @@ from django.urls import path
 from django.conf.urls.static import static
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 
-from .routers import profile_router, projects_router, change_request_router, profile_change_requests_router
+from .routers import profile_router, projects_router, project_change_request_router, profile_change_requests_router
 from rest_framework_simplejwt.views import TokenVerifyView, TokenRefreshView, TokenObtainPairView
 
 
@@ -19,5 +19,5 @@ urlpatterns = [
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + projects_router.urls + change_request_router.urls + profile_router.urls + profile_change_requests_router.urls
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + projects_router.urls + project_change_request_router.urls + profile_router.urls + profile_change_requests_router.urls
 
