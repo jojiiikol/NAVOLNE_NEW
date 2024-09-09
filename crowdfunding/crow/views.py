@@ -8,18 +8,13 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-
 from .paginators import AllProjectsPaginator
 from crow.serializers.project_serializer import *
 from crow.serializers.profile_serializer import *
 from crow.serializers.listings_serializer import *
 from .utils import send_message_verification_email, check_token_timelife
 
-# TODO: Посмотреть связку if serializer_data['confirmed']
-# TODO: Убрать возможность отправки PUT/PATCH/DELETE запросов на проекты --> Методы удалены
-# TODO: Убрать возможность отправки PUT/PATCH/DELETE запросов на юзеров ---> Методы удалены
-# TODO: Добавить возможность юзерам смотреть на свою заявку на измененеие профиля
-# TODO: Продумать что делать с методами изменения профиля
+
 # TODO: Пермишины
 # TODO: Показать как показываюстя проекты у владельца и не у владельца в профиле
 # TODO: Пермишины для неподтвержденных юзеров/проектов
@@ -46,8 +41,6 @@ class ProjectViewSet(mixins.ListModelMixin,
     def list(self, request, *args, **kwargs):
         self.queryset = Project.objects.filter(confirmed=True)
         return super().list(request, *args, **kwargs)
-
-
 
     # Создание проекта
     @extend_schema(summary="Создание проекта",
@@ -139,6 +132,16 @@ class ProjectChangeRequestViewSet(mixins.ListModelMixin,
     # Покащать список заявок на изменение проекта
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
+
+    @extend_schema(summary="Удаление заявки на изменение проекта",
+                   description="Удаление возможно только в том случае, если он не содержит ответов от администратора")
+    def destroy(self, request, *args, **kwargs):
+        try:
+            AnswerProjectChangeRequest.objects.get(change_request=self.get_object())
+        except ObjectDoesNotExist:
+            return super().destroy(request, *args, **kwargs)
+        return Response({"data": "Нельзя удалить этот объект, так как он содержит ответы от администраторов"},
+                        status=status.HTTP_200_OK)
 
     # Подтвердить/отклонить изменение проекта. При подтверждении перезаписывается запись проекта
     @extend_schema(summary="Метод для подтверждения/отклонения изменения проектов",
@@ -325,6 +328,16 @@ class ProfileChangeRequestViewSet(mixins.ListModelMixin,
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
+    @extend_schema(summary="Удаление заявки на изменение профиля",
+                   description="Удаление возможно только в том случае, если он не содержит ответов от администратора")
+    def destroy(self, request, *args, **kwargs):
+        try:
+            AnswerProjectChangeRequest.objects.get(change_request=self.get_object())
+        except ObjectDoesNotExist:
+            return super().destroy(request, *args, **kwargs)
+        return Response({"data": "Нельзя удалить этот объект, так как он содержит ответы от администраторов"},
+                        status=status.HTTP_200_OK)
+
     @extend_schema(summary="Посмотреть заявку на изменение профиля")
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
@@ -338,7 +351,7 @@ class ProfileChangeRequestViewSet(mixins.ListModelMixin,
         serializer_data = AnswerChangeProfileSerializer(data=request.data, context={'request': request})
         if serializer_data.is_valid():
             serializer_data.save(profile=profile_request)
-            if serializer_data['confirmed']:
+            if serializer_data['confirmed'].value:
                 serializer_data.update_profile(profile_request.profile, profile_request)
             return Response(serializer_data.data, status=status.HTTP_200_OK)
         return Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
