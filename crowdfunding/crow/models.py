@@ -1,3 +1,4 @@
+import profile
 import uuid
 
 from django.db import models
@@ -117,6 +118,16 @@ class ProfileChangeRequest(models.Model):
     description_for_change = models.CharField(max_length=2048, null=True)
     user = models.ForeignKey(User, on_delete=models.PROTECT, null=False, related_name='change_profile_user')
     create_date = models.DateField(null=True, auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.profile.username}"
+
+class ProfileConfirmAnswer(models.Model):
+    profile = models.ForeignKey(User, on_delete=models.CASCADE, related_name='confirm_profile_answer')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='confirm_profile_admin')
+    answer = models.CharField(null=True, max_length=1000)
+    confirmed = models.BooleanField(null=False)
+    answer_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.profile.username}"

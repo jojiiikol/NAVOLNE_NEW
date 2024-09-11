@@ -8,7 +8,8 @@ from drf_spectacular.utils import extend_schema_serializer
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 from rest_framework.validators import UniqueValidator
-from crow.models import User, ResetPasswordToken, ProfileChangeRequest, Skill, Category, AnswerProfileChangeRequest
+from crow.models import User, ResetPasswordToken, ProfileChangeRequest, Skill, Category, AnswerProfileChangeRequest, \
+    ProfileConfirmAnswer
 import datetime
 from crowdfunding.settings import EMAIL_HOST_USER
 
@@ -75,17 +76,31 @@ class ResetPasswordSerializer(serializers.ModelSerializer):
 
 class ConfirmUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ('confirmed',)
+        model = ProfileConfirmAnswer
+        fields = ('user', 'answer', 'confirmed', 'answer_time')
 
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    answer = serializers.CharField(required=False, max_length=1000)
     confirmed = serializers.BooleanField(required=True)
+    answer_time = serializers.DateTimeField(default=timezone.now())
 
-    def update(self, instance, validated_data):
-        user = instance
-        user.confirmed = validated_data['confirmed']
-        user.save()
-        return instance
+    def update_profile(self, profile):
+        profile.confirmed = self.validated_data['confirmed']
+        profile.save()
 
+# class ProjectConfirmAnswerSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = ProjectConfirmAnswer
+#         fields = ['user', 'answer', 'confirmed', 'answer_time']
+#
+#     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+#     answer = serializers.CharField(required=False, max_length=1000)
+#     confirmed = serializers.BooleanField(required=True)
+#     answer_time = serializers.DateTimeField(default=timezone.now())
+#
+#     def update_project(self, project):
+#         project.confirmed = self.validated_data['confirmed']
+#         project.save()
 
 class AnswerChangeProfileSerializer(serializers.ModelSerializer):
     class Meta:

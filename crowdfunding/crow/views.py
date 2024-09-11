@@ -8,12 +8,12 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from .models import ProfileConfirmAnswer
 from .paginators import AllProjectsPaginator
 from crow.serializers.project_serializer import *
 from crow.serializers.profile_serializer import *
 from crow.serializers.listings_serializer import *
 from .utils import send_message_verification_email, check_token_timelife
-
 
 # TODO: Пермишины
 # TODO: Показать как показываюстя проекты у владельца и не у владельца в профиле
@@ -94,12 +94,12 @@ class ProjectViewSet(mixins.ListModelMixin,
     # Подтверждение проекта
     @extend_schema(summary="Подтверждение проекта",
                    description="Необходимо для админов. Подтверждение/отклонение новых проектов",
-                   request=ProjectConfirmAnswerSerializer,
+                   request=ProjectConfirmSerializer,
                    )
     @action(methods=['POST'], detail=True)
     def confirm_project(self, request, *args, **kwargs):
         project = self.get_object()
-        serializer = ProjectConfirmAnswerSerializer(data=request.data, context={'request': request})
+        serializer = ProjectConfirmSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.update_project(project=project)
             serializer.save(project=project)
@@ -110,10 +110,10 @@ class ProjectViewSet(mixins.ListModelMixin,
                    description="Необходимо для юзеров, для того чтобы посмотреть на ответ админа на свой новый проект",
                    )
     @action(methods=['GET'], detail=True)
-    def see_admin_response(self, request, *args, **kwargs):
+    def see_confirm_status(self, request, *args, **kwargs):
         project = self.get_object()
         answer = ProjectConfirmAnswer.objects.filter(project=project).order_by('-answer_time')
-        serializer = ProjectConfirmAnswerSerializer(answer, many=True, context={'request': request})
+        serializer = ProjectConfirmSerializer(answer, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -272,11 +272,22 @@ class ProfileViewSet(mixins.ListModelMixin,
     @action(methods=['PATCH'], detail=True)
     def confirm_user(self, request, *args, **kwargs):
         user = self.get_object()
-        serializer = ConfirmUserSerializer(user, data=request.data, context={'request': request})
+        serializer = ConfirmUserSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(profile=user)
+            serializer.update_profile(user)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @extend_schema(summary="Просмотреть ответы админов на подтверждение своего акквунта",
+                   description="Юзеры с помощью этого эндпоинта могут посмотреть ответы админов на подтверждение профиля",
+                   request=ConfirmUserSerializer)
+    @action(methods=['GET'], detail=True)
+    def see_confirm_status(self, request, *args, **kwargs):
+        profile = self.get_object()
+        answer = ProfileConfirmAnswer.objects.filter(profile=profile).order_by('-answer_time')
+        serializer = ProjectConfirmSerializer(answer, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class EmailVerification(APIView):

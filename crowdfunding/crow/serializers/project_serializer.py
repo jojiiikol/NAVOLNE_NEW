@@ -99,7 +99,7 @@ class ProjectSerializerCreate(serializers.ModelSerializer):
             raise serializers.ValidationError({"need_money": "Собранная сумма превышает необходимую"})
         return attrs
 
-class ProjectConfirmAnswerSerializer(serializers.ModelSerializer):
+class ProjectConfirmSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectConfirmAnswer
         fields = ['user', 'answer', 'confirmed', 'answer_time']
