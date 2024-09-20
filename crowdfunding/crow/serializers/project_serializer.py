@@ -36,12 +36,13 @@ class ProjectSerializer(serializers.ModelSerializer):
     views = serializers.IntegerField(read_only=True)
     change_url = serializers.SerializerMethodField()
     is_owner = serializers.SerializerMethodField()
+    confirm_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Project
         fields = (
             'pk', 'slug', 'user', 'name', 'small_description', 'description', 'slug', 'need_money', 'collected_money', 'start_date',
-            'end_date', 'category', 'image', 'confirmed', 'url', 'views', 'payment_url', 'change_url', 'is_owner')
+            'end_date', 'category', 'image', 'confirmed', 'url', 'views', 'payment_url', 'change_url', 'is_owner', 'confirm_url')
 
     def get_is_owner(self, obj):
         if obj.user.username == self.context.get('request').user.username:
@@ -55,6 +56,9 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     def get_change_url(self, obj):
         return reverse('project-change-request', kwargs={'slug': obj.slug}, request=self.context['request'])
+
+    def get_confirm_url(self, obj):
+        return reverse('project-confirm-project', kwargs={'slug': obj.slug}, request=self.context['request'])
 
 
 class ProjectSerializerCreate(serializers.ModelSerializer):
@@ -253,7 +257,7 @@ class AdditionalUserSerializerForOwner(serializers.ModelSerializer):
         fields = (
             'username', 'image', 'first_name', 'last_name', 'birthday', 'about', 'skill', 'sex', 'company', 'passport',
             'document', 'money', 'total_money_sent', 'confirmed', 'category', 'date_joined', 'projects', 'groups',
-            'confirmed', 'email_verified', 'is_owner')
+            'email_verified', 'is_owner')
 
     username = serializers.CharField(read_only=True)
     image = serializers.ImageField(required=False)
@@ -272,6 +276,7 @@ class AdditionalUserSerializerForOwner(serializers.ModelSerializer):
     def get_is_owner(self, obj):
         if self.context.get('request').user.username == obj.username:
             return True
+
 
     def validate_sex(self, values):
         if values not in ['М', 'Ж']:
@@ -315,6 +320,12 @@ class AdditionalUserSerializerForOther(serializers.ModelSerializer):
     groups = GroupSerializerForAdditionalView(many=True, required=False)
     date_joined = serializers.DateTimeField(format='%d.%m.%Y', read_only=True)
 
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        projects = Project.objects.filter(user=instance, confirmed=True)
+        print(projects)
+        representation['projects'] = ProjectSerializer(projects, many=True, context={'request': self.context.get('request')}).data
+        return representation
 
 class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -348,6 +359,11 @@ class RegistrationSerializer(serializers.ModelSerializer):
     def validate_last_name(self, values):
         if not values.isalpha():
             raise serializers.ValidationError('Фамилия должна состоять только из букв')
+        return values
+
+    def validate_groups(self, values):
+        if len(values) == 0:
+            raise serializers.ValidationError('Выберите группу')
         return values
 
     def validate(self, attrs):

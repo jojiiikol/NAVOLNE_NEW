@@ -4,18 +4,22 @@ from drf_spectacular.utils import extend_schema
 from rest_framework import status, viewsets, filters, mixins
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.permissions import AllowAny
+
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import ProfileConfirmAnswer
 from .paginators import AllProjectsPaginator
 from crow.serializers.project_serializer import *
 from crow.serializers.profile_serializer import *
 from crow.serializers.listings_serializer import *
+from .permissions import get_project_view_permissions, \
+    get_project_change_request_view_permissions, get_profile_view_permissions, \
+    get_profile_change_request_view_permissions
 from .utils import send_message_verification_email, check_token_timelife
 
-# TODO: Пермишины
+
+# TODO: Пермишины - РАЗОБРАТЬСЯ С IsOwner, ПОЛЯ ЮЗЕР/ПРОФИЛЬ, ЛИБО САМ ОБЪЕКТ
+# TODO: Пермишины - протестить, поменять доку
 # TODO: Показать как показываюстя проекты у владельца и не у владельца в профиле
 # TODO: Пермишины для неподтвержденных юзеров/проектов
 # TODO: Просмотреть валидаторы на изменение профиля
@@ -32,6 +36,10 @@ class ProjectViewSet(mixins.ListModelMixin,
     filterset_fields = ['category']
     lookup_field = 'slug'
     pagination_class = AllProjectsPaginator
+
+    def get_permissions(self):
+        return get_project_view_permissions(self)
+
 
     # Просмотр подтвержденных проектов
     @extend_schema(
@@ -128,6 +136,9 @@ class ProjectChangeRequestViewSet(mixins.ListModelMixin,
     # filter_backends = [DjangoFilterBackend]
     # filterset_fields = ['confirmed', ]
 
+    def get_permissions(self):
+        return get_project_change_request_view_permissions(self)
+
     @extend_schema(summary="Показать заявки на изменение проектов")
     # Покащать список заявок на изменение проекта
     def list(self, request, *args, **kwargs):
@@ -184,6 +195,9 @@ class ProfileViewSet(mixins.ListModelMixin,
     serializer_class = UserSerializer
     lookup_field = 'username'
 
+    def get_permissions(self):
+        return get_profile_view_permissions(self)
+
     @extend_schema(summary="Список всех юзеров")
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
@@ -191,11 +205,11 @@ class ProfileViewSet(mixins.ListModelMixin,
     @extend_schema(summary="Просмотр профиля юзера",
                    description="Вся информация о профиле доступна только админу и владельцу")
     def retrieve(self, request, *args, **kwargs):
-        if (self.kwargs['username'] == self.request.user.username) or (self.request.user.is_staff):
+        if (self.get_object() == self.request.user) or (self.request.user.is_staff):
             self.serializer_class = AdditionalUserSerializerForOwner
         else:
             self.serializer_class = AdditionalUserSerializerForOther
-        print(self.serializer_class)
+        print(self.request.user)
         return super().retrieve(request, *args, **kwargs)
 
     @extend_schema(summary="Регистрация",
@@ -330,6 +344,9 @@ class ProfileChangeRequestViewSet(mixins.ListModelMixin,
     queryset = ProfileChangeRequest.objects.all()
     serializer_class = ChangeProfileRequestSerializer
 
+    def get_permissions(self):
+        return get_profile_change_request_view_permissions(self)
+
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context['request'] = self.request
@@ -351,6 +368,7 @@ class ProfileChangeRequestViewSet(mixins.ListModelMixin,
 
     @extend_schema(summary="Посмотреть заявку на изменение профиля")
     def retrieve(self, request, *args, **kwargs):
+        print("fdsf")
         return super().retrieve(request, *args, **kwargs)
 
     @extend_schema(summary="Ответ на заявку изменения профиля юзера",
@@ -377,11 +395,15 @@ class ProfileChangeRequestViewSet(mixins.ListModelMixin,
         serializer = AnswerChangeProfileSerializer(answer, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @action(methods=['GET'], detail=False)
+    def show_requests(self, request, *args, **kwargs):
+        requests = ProfileChangeRequest.objects.filter(profile=request.user)
+        serializers = ChangeProfileRequestSerializer(requests, many=True, context={'request': request})
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
 
 # Служебное вью для просмотра id всех категорий
 class AdditionalTag(APIView):
-    permission_classes = [AllowAny, ]
-
     @extend_schema(summary="Сервисный эндпоинт для получения доп. информации",
                    description="Для Владика Бобова. Тут ты получишь все ключи на категории, скиллы, группы")
     def get(self, request):
