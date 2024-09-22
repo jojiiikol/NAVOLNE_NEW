@@ -3,6 +3,7 @@ from rest_framework import permissions
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.reverse import reverse
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
+from .models import *
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
@@ -15,8 +16,14 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
 class IsOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        if obj == request.user:
-            return True
+        if isinstance(obj, ProjectChangeRequest):
+            return obj.user == request.user
+        if isinstance(obj, Project):
+            return obj.user == request.user
+        if isinstance(obj, User):
+            return obj == request.user
+        if isinstance(obj, ProfileChangeRequest):
+            return obj.user == request.user
         return False
 
 
@@ -37,7 +44,7 @@ def get_project_change_request_view_permissions(view):
     if view.action == 'list':
         permission_classes = [IsAdminUser]
     if view.action == 'retrieve':
-        permission_classes = [IsAdminUser|IsOwner]
+        permission_classes = [IsAdminUser | IsOwner]
     if view.action == 'update':
         permission_classes = [IsAdminUser]
     if view.action == 'destroy':
@@ -95,6 +102,7 @@ def get_profile_view_permissions(view):
     if view.action == 'show_requests':
         permission_classes = [IsOwner | IsAdminUser]
     return [permission() for permission in permission_classes]
+
 
 def get_profile_change_request_view_permissions(view):
     permission_classes = [AllowAny]
