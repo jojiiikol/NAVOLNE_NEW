@@ -70,6 +70,10 @@ class Project(models.Model):
             self.slug = slugify(self.name)
         return super().save(*args, **kwargs)
 
+class ProjectImages(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_images')
+    image = models.CharField()
+
 class ProjectConfirmAnswer(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='answer')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='admin')

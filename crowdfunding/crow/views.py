@@ -19,10 +19,11 @@ from .utils import send_message_verification_email, check_token_timelife
 
 
 # TODO: Пермишины - протестить, поменять доку
-# TODO: Множество картинок
-# TODO: Новая модель: Один(проект) - Множество(Картинки)
+# TODO: СДЕЛАНО ДИНАМИЧЕСКОЕ ДОБАВЛЕНИЕ КАРТИНОК
+# TODO: Нужно сделать с ImageField
+# TODO: Посмотреть почему добавляет объект OrderedDict
 # TODO: Поменять логику сериалайзеров
-# TODO: Продумать систему удаления, добавления картинок
+# TODO: Продумать систему удаления, добавления картинок после
 # TODO: Просмотреть валидаторы на изменение профиля
 # TODO: Система просмотров
 
@@ -57,6 +58,7 @@ class ProjectViewSet(mixins.ListModelMixin,
                    description="Данные отправляются в MultiPart\nДля создания проекта нужно быть авторизированным")
     def create(self, request, *args, **kwargs):
         self.parser_classes = [MultiPartParser, FormParser]
+        print(self.request.data)
         self.serializer_class = ProjectSerializerCreate
         return super().create(request, *args, **kwargs)
 
@@ -423,3 +425,23 @@ class AdditionalTag(APIView):
             return Response(data)
         except:
             return Response({'error': "Произошла ошибка"}, status=status.HTTP_418_IM_A_TEAPOT)
+
+
+class ProjectImagesView(APIView):
+    parser_classes = [MultiPartParser, FormParser]
+    queryset = ProjectImages.objects.all()
+    serializer_class = ProjectImagesSerializer
+
+    def get(self, request, *args, **kwargs):
+        data = ProjectImages.objects.all()
+        serializer = ProjectImagesSerializer(data, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    def post(self, request, *args, **kwargs):
+        print(self.request.data)
+        data = self.serializer_class(data=request.data, many=True)
+        if data.is_valid():
+            print(data.data)
+            return Response(data, status=status.HTTP_200_OK)
+        else:
+            print(data.errors)
+            return Response({'errors': data.errors}, status=status.HTTP_400_BAD_REQUEST)

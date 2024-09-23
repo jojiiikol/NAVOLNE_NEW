@@ -14,11 +14,19 @@ from rest_framework.validators import UniqueValidator
 from django.core.mail import send_mail
 
 from crow.models import Project, Category, Transaction, ProjectChangeRequest, User, VerificationToken, \
-    ResetPasswordToken, ProfileChangeRequest, AnswerProjectChangeRequest, ProjectConfirmAnswer
+    ResetPasswordToken, ProfileChangeRequest, AnswerProjectChangeRequest, ProjectConfirmAnswer, ProjectImages
 from crow.serializers.listings_serializer import CategoryListing, SkillListing, GroupSerializerForAdditionalView
 from crow.serializers.profile_serializer import UserSerializer
 from crow.utils import send_message_verification_email
 from crowdfunding.settings import EMAIL_HOST_USER
+
+
+class ProjectImagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProjectImages
+        fields = ('image',)
+
+
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -28,6 +36,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     need_money = serializers.IntegerField(read_only=True)
     collected_money = serializers.IntegerField(read_only=True)
     image = serializers.ImageField()
+    project_images = ProjectImagesSerializer(many=True)
     payment_url = serializers.SerializerMethodField()
     start_date = serializers.DateField(read_only=True)
     end_date = serializers.DateField(read_only=True)
@@ -41,8 +50,10 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = (
-            'pk', 'slug', 'user', 'name', 'small_description', 'description', 'slug', 'need_money', 'collected_money', 'start_date',
-            'end_date', 'category', 'image', 'confirmed', 'url', 'views', 'payment_url', 'change_url', 'is_owner', 'confirm_url')
+            'pk', 'slug', 'user', 'name', 'small_description', 'description', 'slug', 'need_money', 'collected_money',
+            'start_date',
+            'end_date', 'category', 'image', 'project_images', 'confirmed', 'url', 'views', 'payment_url', 'change_url',
+            'is_owner', 'confirm_url')
 
     def get_is_owner(self, obj):
         if obj.user.username == self.context.get('request').user.username:
@@ -79,17 +90,20 @@ class ProjectSerializerCreate(serializers.ModelSerializer):
     start_date = serializers.DateField(default=timezone.now(),
                                        help_text="Дата начала проекта. По умолчанию - сегодняшняя дата")
     end_date = serializers.DateField(help_text="Дата окончания сборов на проект")
+    project_images = ProjectImagesSerializer(many=True, required=True)
 
     class Meta:
         model = Project
         fields = (
             'user', 'name', 'image', 'small_description', 'description', 'need_money', 'collected_money', 'category',
+            'project_images', 'start_date', 'end_date',
             'start_date', 'end_date')
 
     def validate_money(self, value):
         if value < 1:
             raise serializers.ValidationError("Неверно введенные данные")
         return value
+
 
     def validate_collected_money(self, value):
         if value < 1:
@@ -102,6 +116,14 @@ class ProjectSerializerCreate(serializers.ModelSerializer):
         if attrs['need_money'] < attrs['collected_money']:
             raise serializers.ValidationError({"need_money": "Собранная сумма превышает необходимую"})
         return attrs
+
+    def create(self, validated_data):
+        images = validated_data.pop('project_images')
+        project = super().create(validated_data)
+        for image in images:
+            ProjectImages.objects.create(image=image, project=project)
+        return project
+
 
 class ProjectConfirmSerializer(serializers.ModelSerializer):
     class Meta:
@@ -202,8 +224,6 @@ class AnswerChangeProjectRequestSerializer(serializers.ModelSerializer):
         return project
 
 
-
-
 class ChangeProjectRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectChangeRequest
@@ -277,7 +297,6 @@ class AdditionalUserSerializerForOwner(serializers.ModelSerializer):
         if self.context.get('request').user.username == obj.username:
             return True
 
-
     def validate_sex(self, values):
         if values not in ['М', 'Ж']:
             raise serializers.ValidationError("Введено неверное значение")
@@ -324,8 +343,10 @@ class AdditionalUserSerializerForOther(serializers.ModelSerializer):
         representation = super().to_representation(instance)
         projects = Project.objects.filter(user=instance, confirmed=True)
         print(projects)
-        representation['projects'] = ProjectSerializer(projects, many=True, context={'request': self.context.get('request')}).data
+        representation['projects'] = ProjectSerializer(projects, many=True,
+                                                       context={'request': self.context.get('request')}).data
         return representation
+
 
 class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:

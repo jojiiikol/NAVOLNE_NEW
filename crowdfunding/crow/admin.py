@@ -57,4 +57,9 @@ class ProjectConfirmAnswerAdmin(admin.ModelAdmin):
 class ProfileConfirmAnswer(admin.ModelAdmin):
     pass
 
+@admin.register(ProjectImages)
+class ProjectImagesAdmin(admin.ModelAdmin):
+    pass
+
+
 
