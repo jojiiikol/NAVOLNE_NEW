@@ -1,3 +1,5 @@
+from tkinter import Image
+
 from django.core.exceptions import ObjectDoesNotExist
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
@@ -18,10 +20,10 @@ from .permissions import get_project_view_permissions, \
 from .utils import send_message_verification_email, check_token_timelife
 
 
+
+# TODO: Изменение картинок
+# TODO: Пермишины на удаление картинок и на модели с таблицами картинок
 # TODO: Пермишины - протестить, поменять доку
-# TODO: СДЕЛАНО ДИНАМИЧЕСКОЕ ДОБАВЛЕНИЕ КАРТИНОК
-# TODO: Нужно сделать с ImageField
-# TODO: Посмотреть почему добавляет объект OrderedDict
 # TODO: Поменять логику сериалайзеров
 # TODO: Продумать систему удаления, добавления картинок после
 # TODO: Просмотреть валидаторы на изменение профиля
@@ -126,6 +128,17 @@ class ProjectViewSet(mixins.ListModelMixin,
         answer = ProjectConfirmAnswer.objects.filter(project=project).order_by('-answer_time')
         serializer = ProjectConfirmSerializer(answer, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(methods=['DELETE'], detail=True, url_path='remove-image/(?P<image_id>[^/.]+)')
+    def remove_image(self, request, image_id, *args, **kwargs):
+        try:
+            print(image_id)
+            image = ProjectImages.objects.get(id=image_id)
+            image.delete()
+            return Response(status=status.HTTP_200_OK)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
 
 
 class ProjectChangeRequestViewSet(mixins.ListModelMixin,

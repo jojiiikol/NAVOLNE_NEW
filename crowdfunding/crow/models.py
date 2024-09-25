@@ -72,7 +72,7 @@ class Project(models.Model):
 
 class ProjectImages(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_images')
-    image = models.CharField()
+    image = models.ImageField()
 
 class ProjectConfirmAnswer(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='answer')
@@ -94,6 +94,9 @@ class ProjectChangeRequest(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='change_requests_user', null=True)
     create_date = models.DateField(null=True, auto_now_add=True)
 
+# class NewImageToProject(models.Model):
+#     project_change_request = models.ForeignKey(ProjectChangeRequest, on_delete=models.CASCADE, related_name='add_image')
+#     image = models.ImageField(upload_to="project/")
 
     def __str__(self):
         return f"{self.project}"

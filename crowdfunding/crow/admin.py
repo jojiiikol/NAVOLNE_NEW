@@ -9,9 +9,6 @@ from .views import ResetPassword
 class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'confirmed')
 
-@admin.register(Project)
-class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('name', 'user', 'confirmed')
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -57,9 +54,14 @@ class ProjectConfirmAnswerAdmin(admin.ModelAdmin):
 class ProfileConfirmAnswer(admin.ModelAdmin):
     pass
 
-@admin.register(ProjectImages)
-class ProjectImagesAdmin(admin.ModelAdmin):
-    pass
+class ProjectImagesAdmin(admin.TabularInline):
+    model = ProjectImages
+
+@admin.register(Project)
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = ('name', 'user', 'confirmed')
+    inlines = [ProjectImagesAdmin]
+
 
 
 

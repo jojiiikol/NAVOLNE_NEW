@@ -24,7 +24,7 @@ from crowdfunding.settings import EMAIL_HOST_USER
 class ProjectImagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectImages
-        fields = ('image',)
+        fields = ('pk', 'image',)
 
 
 
@@ -120,8 +120,11 @@ class ProjectSerializerCreate(serializers.ModelSerializer):
     def create(self, validated_data):
         images = validated_data.pop('project_images')
         project = super().create(validated_data)
-        for image in images:
-            ProjectImages.objects.create(image=image, project=project)
+        try:
+            for image in images:
+                ProjectImages.objects.create(project=project, image=image['image'])
+        except:
+            print("Не получилось:(")
         return project
 
 
