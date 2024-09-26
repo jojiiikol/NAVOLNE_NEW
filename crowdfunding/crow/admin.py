@@ -14,54 +14,66 @@ class UserAdmin(admin.ModelAdmin):
 class CategoryAdmin(admin.ModelAdmin):
     pass
 
+
 @admin.register(Skill)
 class SkillAdmin(admin.ModelAdmin):
     pass
+
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
     pass
 
+
+class NewImageToProject(admin.TabularInline):
+    model = NewImageToProject
+
+
 @admin.register(ProjectChangeRequest)
 class ProjectChangeRequestAdmin(admin.ModelAdmin):
-    pass
+    inlines = [NewImageToProject]
+
 
 @admin.register(VerificationToken)
 class VerificationTokenAdmin(admin.ModelAdmin):
     pass
 
+
 @admin.register(ResetPasswordToken)
 class ResetPasswordTokenAdmin(admin.ModelAdmin):
     pass
+
 
 @admin.register(ProfileChangeRequest)
 class ProfileChangeRequestAdmin(admin.ModelAdmin):
     pass
 
+
 @admin.register(AnswerProfileChangeRequest)
 class AnswerProfileChangeRequestAdmin(admin.ModelAdmin):
     pass
+
 
 @admin.register(AnswerProjectChangeRequest)
 class AnswerProjectChangeRequestAdmin(admin.ModelAdmin):
     pass
 
+
 @admin.register(ProjectConfirmAnswer)
 class ProjectConfirmAnswerAdmin(admin.ModelAdmin):
     pass
+
 
 @admin.register(ProfileConfirmAnswer)
 class ProfileConfirmAnswer(admin.ModelAdmin):
     pass
 
+
 class ProjectImagesAdmin(admin.TabularInline):
     model = ProjectImages
+
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ('name', 'user', 'confirmed')
     inlines = [ProjectImagesAdmin]
-
-
-
-

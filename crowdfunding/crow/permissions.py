@@ -74,6 +74,8 @@ def get_project_view_permissions(view):
         permission_classes = [IsOwner]
     if view.action == 'not_confirmed_projects':
         permission_classes = [IsAdminUser]
+    if view.action == 'remove_image':
+        permission_classes = [IsAdminUser | IsOwner]
     return [permission() for permission in permission_classes]
 
 

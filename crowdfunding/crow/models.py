@@ -1,4 +1,3 @@
-import profile
 import uuid
 
 from django.db import models
@@ -70,9 +69,11 @@ class Project(models.Model):
             self.slug = slugify(self.name)
         return super().save(*args, **kwargs)
 
+
 class ProjectImages(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_images')
     image = models.ImageField()
+
 
 class ProjectConfirmAnswer(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='answer')
@@ -80,6 +81,7 @@ class ProjectConfirmAnswer(models.Model):
     answer = models.CharField(null=True, max_length=1000)
     confirmed = models.BooleanField(null=False)
     answer_time = models.DateTimeField(auto_now_add=True)
+
 
 class ProjectChangeRequest(models.Model):
     project = models.ForeignKey(Project, on_delete=models.PROTECT, related_name='change_requests_project')
@@ -94,15 +96,18 @@ class ProjectChangeRequest(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='change_requests_user', null=True)
     create_date = models.DateField(null=True, auto_now_add=True)
 
-# class NewImageToProject(models.Model):
-#     project_change_request = models.ForeignKey(ProjectChangeRequest, on_delete=models.CASCADE, related_name='add_image')
-#     image = models.ImageField(upload_to="project/")
+
+class NewImageToProject(models.Model):
+    project_change_request = models.ForeignKey(ProjectChangeRequest, on_delete=models.CASCADE, related_name='add_image')
+    image = models.ImageField(upload_to="project/")
 
     def __str__(self):
-        return f"{self.project}"
+        return f"{self.project_change_request}"
+
 
 class AnswerProjectChangeRequest(models.Model):
-    change_request = models.ForeignKey(ProjectChangeRequest, on_delete=models.PROTECT, related_name='answer_change_requests_project')
+    change_request = models.ForeignKey(ProjectChangeRequest, on_delete=models.PROTECT,
+                                       related_name='answer_change_requests_project')
     admin = models.ForeignKey(User, on_delete=models.PROTECT, related_name='admin_change_requests_project')
     answer_description = models.CharField(max_length=2048, null=True, blank=True)
     confirmed = models.BooleanField(default=None, null=True)
@@ -129,6 +134,7 @@ class ProfileChangeRequest(models.Model):
     def __str__(self):
         return f"{self.profile.username}"
 
+
 class ProfileConfirmAnswer(models.Model):
     profile = models.ForeignKey(User, on_delete=models.CASCADE, related_name='confirm_profile_answer')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='confirm_profile_admin')
@@ -139,12 +145,14 @@ class ProfileConfirmAnswer(models.Model):
     def __str__(self):
         return f"{self.profile.username}"
 
+
 class AnswerProfileChangeRequest(models.Model):
     profile = models.ForeignKey(ProfileChangeRequest, on_delete=models.PROTECT, related_name='answer_request')
     admin = models.ForeignKey(User, on_delete=models.PROTECT, related_name='change_profile_admin')
     answer_description = models.CharField(max_length=2048, null=True, blank=True)
     confirmed = models.BooleanField(default=None, null=True)
     answer_date = models.DateTimeField(null=True)
+
 
 class Transaction(models.Model):
     project = models.ForeignKey(Project, on_delete=models.PROTECT)
@@ -171,4 +179,3 @@ class ResetPasswordToken(models.Model):
 
     def __str__(self):
         return self.user.username
-

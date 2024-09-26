@@ -1,5 +1,6 @@
 import datetime
 import uuid
+from tkinter import Image
 
 from django.contrib.auth.models import Group
 from django.contrib.auth.password_validation import validate_password
@@ -14,7 +15,8 @@ from rest_framework.validators import UniqueValidator
 from django.core.mail import send_mail
 
 from crow.models import Project, Category, Transaction, ProjectChangeRequest, User, VerificationToken, \
-    ResetPasswordToken, ProfileChangeRequest, AnswerProjectChangeRequest, ProjectConfirmAnswer, ProjectImages
+    ResetPasswordToken, ProfileChangeRequest, AnswerProjectChangeRequest, ProjectConfirmAnswer, ProjectImages, \
+    NewImageToProject
 from crow.serializers.listings_serializer import CategoryListing, SkillListing, GroupSerializerForAdditionalView
 from crow.serializers.profile_serializer import UserSerializer
 from crow.utils import send_message_verification_email
@@ -25,8 +27,6 @@ class ProjectImagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectImages
         fields = ('pk', 'image',)
-
-
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -103,7 +103,6 @@ class ProjectSerializerCreate(serializers.ModelSerializer):
         if value < 1:
             raise serializers.ValidationError("Неверно введенные данные")
         return value
-
 
     def validate_collected_money(self, value):
         if value < 1:
@@ -223,15 +222,23 @@ class AnswerChangeProjectRequestSerializer(serializers.ModelSerializer):
         if change_request.name:
             slug = slugify(change_request.name)
             project.slug = slug
+        [ProjectImages.objects.create(project=project, image=image.image) for image in
+         NewImageToProject.objects.filter(project_change_request=change_request)]
         project.save()
         return project
+
+
+class NewImageToProjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewImageToProject
+        fields = ['pk', 'image']
 
 
 class ChangeProjectRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectChangeRequest
         fields = ('name', 'small_description', 'description', 'need_money',
-                  'end_date', 'category', 'image', 'description_for_change', 'user', 'create_date',
+                  'end_date', 'category', 'image', 'add_image', 'description_for_change', 'user', 'create_date',
                   'answer_change_requests_project',
                   'project_url', 'url')
 
@@ -249,6 +256,7 @@ class ChangeProjectRequestSerializer(serializers.ModelSerializer):
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), many=True, required=False,
                                                   help_text="Категории проекта")
     image = serializers.ImageField(required=False)
+    add_image = NewImageToProjectSerializer(required=False, many=True)
     description_for_change = serializers.CharField(required=False, max_length=2048,
                                                    help_text="Ответ от админа на заявку")
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
@@ -272,6 +280,15 @@ class ChangeProjectRequestSerializer(serializers.ModelSerializer):
 
     def get_url(self, obj):
         return reverse('projectchangerequest-detail', kwargs={'pk': obj.pk}, request=self.context.get('request'))
+
+    def create(self, validated_data):
+        print(validated_data)
+        new_images = validated_data.pop('add_image', None)
+        change_request = super().create(validated_data)
+        if new_images:
+            for image in new_images:
+                NewImageToProject.objects.create(project_change_request=change_request, image=image['image'])
+        return change_request
 
 
 class AdditionalUserSerializerForOwner(serializers.ModelSerializer):

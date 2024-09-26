@@ -21,8 +21,6 @@ from .utils import send_message_verification_email, check_token_timelife
 
 
 
-# TODO: Изменение картинок
-# TODO: Пермишины на удаление картинок и на модели с таблицами картинок
 # TODO: Пермишины - протестить, поменять доку
 # TODO: Поменять логику сериалайзеров
 # TODO: Продумать систему удаления, добавления картинок после
@@ -131,9 +129,10 @@ class ProjectViewSet(mixins.ListModelMixin,
 
     @action(methods=['DELETE'], detail=True, url_path='remove-image/(?P<image_id>[^/.]+)')
     def remove_image(self, request, image_id, *args, **kwargs):
+        print(self.get_object())
         try:
             print(image_id)
-            image = ProjectImages.objects.get(id=image_id)
+            image = ProjectImages.objects.get(id=image_id, project=self.get_object())
             image.delete()
             return Response(status=status.HTTP_200_OK)
         except ObjectDoesNotExist:
