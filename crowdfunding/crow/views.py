@@ -20,7 +20,6 @@ from .permissions import get_project_view_permissions, \
 from .utils import send_message_verification_email, check_token_timelife
 
 
-
 # TODO: Пермишины - протестить, поменять доку
 # TODO: Поменять логику сериалайзеров
 # TODO: Продумать систему удаления, добавления картинок после
@@ -42,11 +41,10 @@ class ProjectViewSet(mixins.ListModelMixin,
     def get_permissions(self):
         return get_project_view_permissions(self)
 
-
     # Просмотр подтвержденных проектов
     @extend_schema(
-        summary="Вывод всех подтвержденных админом проектов",
-        description="Метод имеет фильтры с помощью которого проекты можно находить по категориям/названиям"
+        summary="Вывод всех подтвержденных проектов",
+        description="Метод имеет фильтры с помощью которого проекты можно находить по категориям/названиям. Доступно всем"
     )
     def list(self, request, *args, **kwargs):
         self.queryset = Project.objects.filter(confirmed=True)
@@ -55,7 +53,7 @@ class ProjectViewSet(mixins.ListModelMixin,
     # Создание проекта
     @extend_schema(summary="Создание проекта",
                    request=ProjectSerializerCreate,
-                   description="Данные отправляются в MultiPart\nДля создания проекта нужно быть авторизированным")
+                   description="Данные отправляются в MultiPart\nДля создания проекта нужно быть авторизированным и подтвержденным")
     def create(self, request, *args, **kwargs):
         self.parser_classes = [MultiPartParser, FormParser]
         print(self.request.data)
@@ -80,7 +78,7 @@ class ProjectViewSet(mixins.ListModelMixin,
                    request=ChangeProjectRequestSerializer,
                    description="Данные отправляются в MultiPart."
                                "Поля необязательные - то есть можно передавать их "
-                               "пустыми, если юзер не захочет их менять")
+                               "пустыми, если юзер не захочет их менять. Доступ только у админа и у создателя проекта")
     @action(methods=['POST'], detail=True)
     def change_request(self, request, *args, **kwargs):
         self.parser_classes = [MultiPartParser, FormParser]
@@ -94,8 +92,8 @@ class ProjectViewSet(mixins.ListModelMixin,
             return Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
     # Показать неподтвержденные проекты
-    @extend_schema(summary="Показать неподтвержденные проекты ---не доделано---",
-                   description="Необходимо для админов, которые будут подтверждать/отклонять новые проекты")
+    @extend_schema(summary="Показать все неподтвержденные проекты",
+                   description="Необходимо для админов, которые будут подтверждать/отклонять новые проекты. Только админ")
     @action(methods=['GET'], detail=False)
     def not_confirmed_projects(self, request, *args, **kwargs):
         projects = Project.objects.filter(confirmed=False)
@@ -118,7 +116,8 @@ class ProjectViewSet(mixins.ListModelMixin,
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @extend_schema(summary="Просмотр ответа админов на подтверждение/отклонение проекта",
-                   description="Необходимо для юзеров, для того чтобы посмотреть на ответ админа на свой новый проект",
+                   description="Необходимо для юзеров, для того чтобы посмотреть на ответ админа на свой новый "
+                               "проект. Доступ у создателя проекта",
                    )
     @action(methods=['GET'], detail=True)
     def see_confirm_status(self, request, *args, **kwargs):
@@ -127,6 +126,9 @@ class ProjectViewSet(mixins.ListModelMixin,
         serializer = ProjectConfirmSerializer(answer, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @extend_schema(summary="Удаление картинки с проекта",
+                   description="Для работы необходимо отправить в юрл слаг проекта и номер картинки. Доступ у создателя проекта",
+                   )
     @action(methods=['DELETE'], detail=True, url_path='remove-image/(?P<image_id>[^/.]+)')
     def remove_image(self, request, image_id, *args, **kwargs):
         print(self.get_object())
@@ -137,7 +139,6 @@ class ProjectViewSet(mixins.ListModelMixin,
             return Response(status=status.HTTP_200_OK)
         except ObjectDoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-
 
 
 class ProjectChangeRequestViewSet(mixins.ListModelMixin,
@@ -154,13 +155,14 @@ class ProjectChangeRequestViewSet(mixins.ListModelMixin,
     def get_permissions(self):
         return get_project_change_request_view_permissions(self)
 
-    @extend_schema(summary="Показать заявки на изменение проектов")
+    @extend_schema(summary="Показать заявки на изменение проектов",
+                   description="Доступ только у админов")
     # Покащать список заявок на изменение проекта
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
     @extend_schema(summary="Удаление заявки на изменение проекта",
-                   description="Удаление возможно только в том случае, если он не содержит ответов от администратора")
+                   description="Удаление возможно только в том случае, если он не содержит ответов от администратора. Доступ у создателя заявки")
     def destroy(self, request, *args, **kwargs):
         try:
             AnswerProjectChangeRequest.objects.get(change_request=self.get_object())
@@ -171,6 +173,7 @@ class ProjectChangeRequestViewSet(mixins.ListModelMixin,
 
     # Подтвердить/отклонить изменение проекта. При подтверждении перезаписывается запись проекта
     @extend_schema(summary="Метод для подтверждения/отклонения изменения проектов",
+                   description="Доступ у админов",
                    request=AnswerChangeProjectRequestSerializer)
     def update(self, request, *args, **kwargs):
         serializer = AnswerChangeProjectRequestSerializer
@@ -184,7 +187,8 @@ class ProjectChangeRequestViewSet(mixins.ListModelMixin,
             return Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
     # Показать все свои (по юзеру) заявки на изменения
-    @extend_schema(summary="Эндпоинт для отслеживания заявок создателями")
+    @extend_schema(summary="Эндпоинт для отслеживания заявок создателями",
+                   description="Необходимо юзерам для просмотра всех своих созданных заявок")
     @action(methods=['GET'], detail=False)
     def show_request(self, request, *args, **kwargs):
         self.queryset = ProjectChangeRequest.objects.filter(user=request.user)
@@ -234,7 +238,7 @@ class ProfileViewSet(mixins.ListModelMixin,
         return super().create(request, *args, **kwargs)
 
     @extend_schema(summary="Изменение своих скиллов и категорий юзером",
-                   description="Юзер сам может менять свои скиллы и необходимые категории для него",
+                   description="Юзер сам может менять свои скиллы и необходимые категории для него. Доступ у владельца профиля",
                    request=ChangeCategoryAndSkillSerializer)
     def partial_update(self, request, *args, **kwargs):
         self.serializer_class = ChangeCategoryAndSkillSerializer
@@ -274,7 +278,7 @@ class ProfileViewSet(mixins.ListModelMixin,
 
     @extend_schema(summary="Создание заявки на изменение профиля",
                    description="Создание заявки, которая будет отсмотрена и подтверждена/отклонена админом. Поля "
-                               "необязательны - юзер заполняет то, что он хочет поменять в своем профиле",
+                               "необязательны - юзер заполняет то, что он хочет поменять в своем профиле. Доступ у владельца профиля",
                    request=ChangeProfileRequestSerializer)
     @action(methods=['POST'], detail=True)
     def change(self, request, *args, **kwargs):
@@ -367,12 +371,12 @@ class ProfileChangeRequestViewSet(mixins.ListModelMixin,
         context['request'] = self.request
         return context
 
-    @extend_schema(summary="Показать все заявки на изменение профиля")
+    @extend_schema(summary="Показать все заявки на изменение профиля. Доступ у админов")
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
     @extend_schema(summary="Удаление заявки на изменение профиля",
-                   description="Удаление возможно только в том случае, если он не содержит ответов от администратора")
+                   description="Удаление возможно только в том случае, если он не содержит ответов от администратора. Доступ у создателя заявки")
     def destroy(self, request, *args, **kwargs):
         try:
             AnswerProjectChangeRequest.objects.get(change_request=self.get_object())
@@ -381,7 +385,8 @@ class ProfileChangeRequestViewSet(mixins.ListModelMixin,
         return Response({"data": "Нельзя удалить этот объект, так как он содержит ответы от администраторов"},
                         status=status.HTTP_200_OK)
 
-    @extend_schema(summary="Посмотреть заявку на изменение профиля")
+    @extend_schema(summary="Посмотреть заявку на изменение профиля",
+                   description="Доступ у админа и создателя заявки")
     def retrieve(self, request, *args, **kwargs):
         print("fdsf")
         return super().retrieve(request, *args, **kwargs)
@@ -400,8 +405,8 @@ class ProfileChangeRequestViewSet(mixins.ListModelMixin,
             return Response(serializer_data.data, status=status.HTTP_200_OK)
         return Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @extend_schema(summary="Просмотр ответа админов на твою заявку",
-                   description="Необходимо для юзеров, для того чтобы посмотреть на ответ админа на свою заявку",
+    @extend_schema(summary="Просмотр ответов админов на заявку",
+                   description="Необходимо для юзеров, для того чтобы посмотреть на ответ админа на свою заявку. Доступ у создателя заявки",
                    )
     @action(methods=['GET'], detail=True)
     def see_admin_response(self, request, *args, **kwargs):
@@ -410,6 +415,9 @@ class ProfileChangeRequestViewSet(mixins.ListModelMixin,
         serializer = AnswerChangeProfileSerializer(answer, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @extend_schema(summary="Просмотр владельцем всех своих заявок ",
+                   description="Необходимо для юзеров, для того чтобы посмотреть все свои заявки",
+                   )
     @action(methods=['GET'], detail=False)
     def show_requests(self, request, *args, **kwargs):
         requests = ProfileChangeRequest.objects.filter(profile=request.user)
@@ -439,21 +447,3 @@ class AdditionalTag(APIView):
             return Response({'error': "Произошла ошибка"}, status=status.HTTP_418_IM_A_TEAPOT)
 
 
-class ProjectImagesView(APIView):
-    parser_classes = [MultiPartParser, FormParser]
-    queryset = ProjectImages.objects.all()
-    serializer_class = ProjectImagesSerializer
-
-    def get(self, request, *args, **kwargs):
-        data = ProjectImages.objects.all()
-        serializer = ProjectImagesSerializer(data, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    def post(self, request, *args, **kwargs):
-        print(self.request.data)
-        data = self.serializer_class(data=request.data, many=True)
-        if data.is_valid():
-            print(data.data)
-            return Response(data, status=status.HTTP_200_OK)
-        else:
-            print(data.errors)
-            return Response({'errors': data.errors}, status=status.HTTP_400_BAD_REQUEST)

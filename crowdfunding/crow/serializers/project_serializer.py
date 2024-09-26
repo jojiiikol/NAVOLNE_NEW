@@ -90,7 +90,7 @@ class ProjectSerializerCreate(serializers.ModelSerializer):
     start_date = serializers.DateField(default=timezone.now(),
                                        help_text="Дата начала проекта. По умолчанию - сегодняшняя дата")
     end_date = serializers.DateField(help_text="Дата окончания сборов на проект")
-    project_images = ProjectImagesSerializer(many=True, required=True)
+    project_images = ProjectImagesSerializer(many=True, required=False)
 
     class Meta:
         model = Project
@@ -117,13 +117,10 @@ class ProjectSerializerCreate(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        images = validated_data.pop('project_images')
+        images = validated_data.pop('project_images', [])
         project = super().create(validated_data)
-        try:
-            for image in images:
-                ProjectImages.objects.create(project=project, image=image['image'])
-        except:
-            print("Не получилось:(")
+        for image in images:
+            ProjectImages.objects.create(project=project, image=image['image'])
         return project
 
 
@@ -283,7 +280,7 @@ class ChangeProjectRequestSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         print(validated_data)
-        new_images = validated_data.pop('add_image', None)
+        new_images = validated_data.pop('add_image', [])
         change_request = super().create(validated_data)
         if new_images:
             for image in new_images:
