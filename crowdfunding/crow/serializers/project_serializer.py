@@ -4,7 +4,6 @@ from tkinter import Image
 
 from django.contrib.auth.models import Group
 from django.contrib.auth.password_validation import validate_password
-from django.contrib.auth.tokens import default_token_generator
 from django.core.validators import RegexValidator
 from django.utils import timezone
 from django.utils.timezone import make_aware
@@ -21,6 +20,7 @@ from crow.serializers.listings_serializer import CategoryListing, SkillListing, 
 from crow.serializers.profile_serializer import UserSerializer
 from crow.utils import send_message_verification_email
 from crowdfunding.settings import EMAIL_HOST_USER
+from validators import SpecialCharactersValidator, OnlyTextValidator, ProjectNameValidator
 
 
 class ProjectImagesSerializer(serializers.ModelSerializer):
@@ -75,7 +75,8 @@ class ProjectSerializer(serializers.ModelSerializer):
 class ProjectSerializerCreate(serializers.ModelSerializer):
     name = serializers.CharField(
         validators=[
-            UniqueValidator(queryset=Project.objects.all(), message="Проект с таким названием уже существует")
+            UniqueValidator(queryset=Project.objects.all(), message="Проект с таким названием уже существует"),
+            ProjectNameValidator(),
         ],
         max_length=27, required=True, help_text="Название проекта")
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
@@ -98,6 +99,11 @@ class ProjectSerializerCreate(serializers.ModelSerializer):
             'user', 'name', 'image', 'small_description', 'description', 'need_money', 'collected_money', 'category',
             'project_images', 'start_date', 'end_date',
             'start_date', 'end_date')
+
+    def validate_start_date(self, value):
+        if value < timezone.now().date():
+            raise serializers.ValidationError("Неверно введенная дата")
+        return value
 
     def validate_money(self, value):
         if value < 1:
@@ -372,7 +378,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     username = serializers.CharField(required=True, max_length=255, validators=[
         UniqueValidator(queryset=User.objects.all(), message="Пользователь с таким username уже зарегистрирован"),
-        RegexValidator()
+        RegexValidator(),
+        SpecialCharactersValidator()
     ], help_text="Юзернейм пользователя")
     email = serializers.EmailField(required=True, validators=[
         UniqueValidator(queryset=User.objects.all(), message="Пользователь с таким email уже зарегистрирован")],
@@ -380,24 +387,14 @@ class RegistrationSerializer(serializers.ModelSerializer):
     password_1 = serializers.CharField(write_only=True, required=True, validators=[validate_password],
                                        help_text="Пароль")
     password_2 = serializers.CharField(write_only=True, required=True, help_text="Повтор пароля")
-    last_name = serializers.CharField(required=True, max_length=150, help_text="Фамилия")
-    first_name = serializers.CharField(required=True, max_length=150, help_text="Имя")
+    last_name = serializers.CharField(required=True, max_length=150, help_text="Фамилия", validators=[
+        OnlyTextValidator()
+    ])
+    first_name = serializers.CharField(required=True, max_length=150, help_text="Имя", validators=[
+        OnlyTextValidator()
+    ])
     groups = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(), many=True, help_text="Группа")
 
-    def validate_username(self, values):
-        if not values.isalpha():
-            raise serializers.ValidationError('Юзернейм должен состоять только из букв')
-        return values
-
-    def validate_first_name(self, values):
-        if not values.isalpha():
-            raise serializers.ValidationError('Имя должно состоять только из букв')
-        return values
-
-    def validate_last_name(self, values):
-        if not values.isalpha():
-            raise serializers.ValidationError('Фамилия должна состоять только из букв')
-        return values
 
     def validate_groups(self, values):
         if len(values) == 0:
@@ -414,8 +411,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
         user = User.objects.create(
             username=validated_data['username'],
             email=validated_data['email'],
-            last_name=validated_data['last_name'],
-            first_name=validated_data['first_name'],
+            last_name=validated_data['last_name'].lower().capitalize(),
+            first_name=validated_data['first_name'].lower().capitalize(),
         )
         user.set_password(validated_data['password_1'])
         [group.user_set.add(user) for group in validated_data['groups']]

@@ -19,6 +19,5 @@ urlpatterns = [
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-    path('images/', ProjectImagesView.as_view(), name='images'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + projects_router.urls + project_change_request_router.urls + profile_router.urls + profile_change_requests_router.urls
 

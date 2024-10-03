@@ -20,10 +20,9 @@ from .permissions import get_project_view_permissions, \
 from .utils import send_message_verification_email, check_token_timelife
 
 
-# TODO: Пермишины - протестить, поменять доку
-# TODO: Поменять логику сериалайзеров
-# TODO: Продумать систему удаления, добавления картинок после
-# TODO: Просмотреть валидаторы на изменение профиля
+# TODO: Тестим часть с проектами, осталось изменение, удаление картинок
+# TODO: Тестить часть от лица злоумышленника
+# TODO: Просмотреть валидаторы
 # TODO: Система просмотров
 
 class ProjectViewSet(mixins.ListModelMixin,
