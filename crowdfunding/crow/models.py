@@ -82,6 +82,9 @@ class ProjectConfirmAnswer(models.Model):
     confirmed = models.BooleanField(null=False)
     answer_time = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"{self.project}"
+
 
 class ProjectChangeRequest(models.Model):
     project = models.ForeignKey(Project, on_delete=models.PROTECT, related_name='change_requests_project')
@@ -95,6 +98,8 @@ class ProjectChangeRequest(models.Model):
     description_for_change = models.CharField(max_length=2048, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='change_requests_user', null=True)
     create_date = models.DateField(null=True, auto_now_add=True)
+    def __str__(self):
+        return self.project.name
 
 
 class NewImageToProject(models.Model):
@@ -112,6 +117,9 @@ class AnswerProjectChangeRequest(models.Model):
     answer_description = models.CharField(max_length=2048, null=True, blank=True)
     confirmed = models.BooleanField(default=None, null=True)
     answer_date = models.DateTimeField(null=True)
+
+    def __str__(self):
+        return f"{self.change_request}"
 
 
 class ProfileChangeRequest(models.Model):

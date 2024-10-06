@@ -20,7 +20,7 @@ from .permissions import get_project_view_permissions, \
     get_profile_change_request_view_permissions
 from .utils import send_message_verification_email, check_token_timelife
 
-# TODO: Просмотреть валидаторы
+# TODO: Неподтвержденный пользователь должен быть скрыт из списка, к нему также никто не может зайти
 # TODO: Система просмотров
 
 class ProjectViewSet(mixins.ListModelMixin,

@@ -61,12 +61,12 @@ class AnswerProjectChangeRequestAdmin(admin.ModelAdmin):
 
 @admin.register(ProjectConfirmAnswer)
 class ProjectConfirmAnswerAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('project', 'user', 'confirmed', )
 
 
 @admin.register(ProfileConfirmAnswer)
 class ProfileConfirmAnswer(admin.ModelAdmin):
-    pass
+    list_display = ('profile', 'user', 'confirmed',)
 
 
 class ProjectImagesAdmin(admin.TabularInline):

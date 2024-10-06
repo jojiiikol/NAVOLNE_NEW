@@ -27,8 +27,8 @@ class ProjectSerializer(serializers.ModelSerializer):
     category = CategoryListing(many=True)
     user = UserSerializer(read_only=True)
     slug = serializers.CharField(read_only=True)
-    need_money = serializers.IntegerField(read_only=True)
-    collected_money = serializers.IntegerField(read_only=True)
+    need_money = serializers.FloatField(read_only=True)
+    collected_money = serializers.FloatField(read_only=True)
     image = serializers.ImageField()
     project_images = ProjectImagesSerializer(many=True)
     payment_url = serializers.SerializerMethodField()
@@ -78,8 +78,8 @@ class ProjectSerializerCreate(serializers.ModelSerializer):
                                               help_text="Малое описание проекта. Максимум - 40 символов")
     description = serializers.CharField(max_length=1000, required=True,
                                         help_text="Описание проекта. Максимум - 1000 символов")
-    need_money = serializers.IntegerField(required=True, help_text="Необходимая сумма сбора")
-    collected_money = serializers.IntegerField(required=True, help_text="Собранная сумма")
+    need_money = serializers.FloatField(required=True, help_text="Необходимая сумма сбора")
+    collected_money = serializers.FloatField(required=True, help_text="Собранная сумма")
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), many=True,
                                                   help_text="Категории проекта")
     start_date = serializers.DateField(default=timezone.now(),
