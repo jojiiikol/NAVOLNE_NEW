@@ -1,26 +1,20 @@
 import datetime
-import uuid
-from tkinter import Image
 
 from django.contrib.auth.models import Group
 from django.contrib.auth.password_validation import validate_password
 from django.core.validators import RegexValidator
 from django.utils import timezone
-from django.utils.timezone import make_aware
 from pytils.translit import slugify
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 from rest_framework.validators import UniqueValidator
-from django.core.mail import send_mail
 
-from crow.models import Project, Category, Transaction, ProjectChangeRequest, User, VerificationToken, \
-    ResetPasswordToken, ProfileChangeRequest, AnswerProjectChangeRequest, ProjectConfirmAnswer, ProjectImages, \
+from crow.models import Project, Category, Transaction, ProjectChangeRequest, User, AnswerProjectChangeRequest, ProjectConfirmAnswer, ProjectImages, \
     NewImageToProject
 from crow.serializers.listings_serializer import CategoryListing, SkillListing, GroupSerializerForAdditionalView
 from crow.serializers.profile_serializer import UserSerializer
 from crow.utils import send_message_verification_email
-from crowdfunding.settings import EMAIL_HOST_USER
-from validators import SpecialCharactersValidator, OnlyTextValidator, ProjectNameValidator
+from crow.validators import SpecialCharactersValidator, OnlyTextValidator, ProjectNameValidator
 
 
 class ProjectImagesSerializer(serializers.ModelSerializer):
@@ -124,6 +118,7 @@ class ProjectSerializerCreate(serializers.ModelSerializer):
 
     def create(self, validated_data):
         images = validated_data.pop('project_images', [])
+        validated_data['name'] = validated_data['name'].lower().capitalize()
         project = super().create(validated_data)
         for image in images:
             ProjectImages.objects.create(project=project, image=image['image'])
@@ -254,7 +249,7 @@ class ChangeProjectRequestSerializer(serializers.ModelSerializer):
                                               help_text="Малое описание проекта. Максимум - 40 символов")
     description = serializers.CharField(required=False, max_length=1000,
                                         help_text="Описание проекта. Максимум - 1000 символов")
-    need_money = serializers.IntegerField(required=False, help_text="Необходимая сумма сбора")
+    need_money = serializers.FloatField(required=False, help_text="Необходимая сумма сбора")
     end_date = serializers.DateField(required=False, help_text="Дата окончания")
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), many=True, required=False,
                                                   help_text="Категории проекта")
@@ -267,6 +262,11 @@ class ChangeProjectRequestSerializer(serializers.ModelSerializer):
     answer_change_requests_project = AnswerChangeProjectRequestSerializer(many=True, read_only=True)
     project_url = serializers.SerializerMethodField()
     url = serializers.SerializerMethodField()
+
+    def validate_need_money(self, attrs):
+        if self.context['project'].collected_money >= attrs:
+            raise serializers.ValidationError("Необходимая сумма средств меньше или равна собранной сумме")
+        return attrs
 
     def validate_end_date(self, attrs):
         if self.context['project'].start_date >= attrs['end_date']:
@@ -285,8 +285,8 @@ class ChangeProjectRequestSerializer(serializers.ModelSerializer):
         return reverse('projectchangerequest-detail', kwargs={'pk': obj.pk}, request=self.context.get('request'))
 
     def create(self, validated_data):
-        print(validated_data)
         new_images = validated_data.pop('add_image', [])
+        validated_data['name'] = validated_data['name'].lower().capitalize()
         change_request = super().create(validated_data)
         if new_images:
             for image in new_images:

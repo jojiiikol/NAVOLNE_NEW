@@ -10,6 +10,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from .models import VerificationToken
 from .paginators import AllProjectsPaginator
 from crow.serializers.project_serializer import *
 from crow.serializers.profile_serializer import *
@@ -19,9 +20,6 @@ from .permissions import get_project_view_permissions, \
     get_profile_change_request_view_permissions
 from .utils import send_message_verification_email, check_token_timelife
 
-
-# TODO: Тестим часть с проектами, осталось изменение, удаление картинок
-# TODO: Тестить часть от лица злоумышленника
 # TODO: Просмотреть валидаторы
 # TODO: Система просмотров
 
@@ -135,9 +133,9 @@ class ProjectViewSet(mixins.ListModelMixin,
             print(image_id)
             image = ProjectImages.objects.get(id=image_id, project=self.get_object())
             image.delete()
-            return Response(status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_200_OK, data={'message': "Изображение было удалено"})
         except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response(status=status.HTTP_404_NOT_FOUND, data = {'message': "Изображение не было найдено"})
 
 
 class ProjectChangeRequestViewSet(mixins.ListModelMixin,

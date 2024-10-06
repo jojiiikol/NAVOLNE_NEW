@@ -53,6 +53,8 @@ def get_project_change_request_view_permissions(view):
         permission_classes = [IsOwner]
     if view.action == 'see_admin_response':
         permission_classes = [IsOwner]
+    if view.action == 'show_request':
+        permission_classes = [IsAuthenticatedAndConfirmed]
     return [permission() for permission in permission_classes]
 
 
