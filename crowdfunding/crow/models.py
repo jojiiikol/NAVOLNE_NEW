@@ -65,6 +65,7 @@ class Project(models.Model):
     views = models.IntegerField(default=0)
     confirmed = models.BooleanField(default=False, null=False)
     status_code = models.ForeignKey(ProjectStatusCode, on_delete=models.CASCADE, null=True)
+    transfer_allowed = models.BooleanField(default=False, null=False)
 
     def __str__(self):
         return self.name

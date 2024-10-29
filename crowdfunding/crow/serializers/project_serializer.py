@@ -42,13 +42,14 @@ class ProjectSerializer(serializers.ModelSerializer):
     is_owner = serializers.SerializerMethodField()
     confirm_url = serializers.SerializerMethodField()
 
+
     class Meta:
         model = Project
         fields = (
             'pk', 'slug', 'user', 'name', 'small_description', 'description', 'slug', 'need_money', 'collected_money',
             'start_date',
             'end_date', 'category', 'image', 'project_images', 'confirmed', 'url', 'views', 'payment_url', 'change_url',
-            'is_owner', 'confirm_url')
+            'is_owner', 'confirm_url', 'transfer_allowed')
 
     def get_is_owner(self, obj):
         if obj.user.username == self.context.get('request').user.username:
@@ -65,6 +66,13 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     def get_confirm_url(self, obj):
         return reverse('project-confirm-project', kwargs={'slug': obj.slug}, request=self.context['request'])
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if (self.context['request'].user.is_superuser is False) and (self.context['request'].user != instance.user):
+            representation.pop('transfer_allowed')
+        return representation
+
 
 
 class ProjectSerializerCreate(serializers.ModelSerializer):
