@@ -42,6 +42,13 @@ class User(AbstractUser):
     def get_absolute_url(self):
         return reverse('profile', kwargs={'pk': self.pk})
 
+class ProjectStatusCode(models.Model):
+    code = models.IntegerField(null=False)
+    name = models.CharField(null=False, max_length=255)
+
+    def __str__(self):
+        return f"{self.code} - {self.name}"
+
 
 class Project(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='projects')
@@ -57,6 +64,7 @@ class Project(models.Model):
     slug = models.SlugField(max_length=255, unique=True, db_index=True)
     views = models.IntegerField(default=0)
     confirmed = models.BooleanField(default=False, null=False)
+    status_code = models.ForeignKey(ProjectStatusCode, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.name
@@ -187,3 +195,5 @@ class ResetPasswordToken(models.Model):
 
     def __str__(self):
         return self.user.username
+
+

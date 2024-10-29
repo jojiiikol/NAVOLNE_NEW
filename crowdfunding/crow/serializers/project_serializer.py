@@ -9,8 +9,9 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 from rest_framework.validators import UniqueValidator
 
-from crow.models import Project, Category, Transaction, ProjectChangeRequest, User, AnswerProjectChangeRequest, ProjectConfirmAnswer, ProjectImages, \
-    NewImageToProject
+from crow.models import Project, Category, Transaction, ProjectChangeRequest, User, AnswerProjectChangeRequest, \
+    ProjectConfirmAnswer, ProjectImages, \
+    NewImageToProject, ProjectStatusCode
 from crow.serializers.listings_serializer import CategoryListing, SkillListing, GroupSerializerForAdditionalView
 from crow.serializers.profile_serializer import UserSerializer
 from crow.utils import send_message_verification_email
@@ -119,6 +120,7 @@ class ProjectSerializerCreate(serializers.ModelSerializer):
     def create(self, validated_data):
         images = validated_data.pop('project_images', [])
         validated_data['name'] = validated_data['name'].lower().capitalize()
+        validated_data['status_code'] = ProjectStatusCode.objects.get(code=0)
         project = super().create(validated_data)
         for image in images:
             ProjectImages.objects.create(project=project, image=image['image'])

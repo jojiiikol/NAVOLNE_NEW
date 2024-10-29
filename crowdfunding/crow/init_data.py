@@ -1,0 +1,42 @@
+from .models import ProjectStatusCode, Skill, Category
+
+
+def init_data():
+    ProjectStatusCode.objects.create(code=0, name="Not confirmed")
+    ProjectStatusCode.objects.create(code=1, name="In work")
+    ProjectStatusCode.objects.create(code=2, name="Payment stopped")
+    ProjectStatusCode.objects.create(code=3, name="Finished")
+
+    Skill.objects.create(name="Целеустремленность")
+    Skill.objects.create(name="Быстрая обучаемость")
+    Skill.objects.create(name="Пунктуальность")
+    Skill.objects.create(name="Ответственность")
+    Skill.objects.create(name="Коммуникабельность")
+    Skill.objects.create(name="Умение работать в команде")
+    Skill.objects.create(name="Организованность")
+    Skill.objects.create(name="Внимательность к деталям")
+    Skill.objects.create(name="Стрессоустойчивость")
+    Skill.objects.create(name="Креативность")
+    Skill.objects.create(name="Адаптивность")
+    Skill.objects.create(name="Эмпатия")
+    Skill.objects.create(name="Самостоятельность")
+    Skill.objects.create(name="Инициативность")
+    Skill.objects.create(name="Аналитический склад ума")
+
+    Category.objects.create(name="Работа с людьми")
+    Category.objects.create(name="Искусственный интеллект")
+    Category.objects.create(name="Ботаника")
+    Category.objects.create(name="Мобильные приложения")
+    Category.objects.create(name="Веб-разработка")
+    Category.objects.create(name="Образование")
+    Category.objects.create(name="Игровая индустрия")
+    Category.objects.create(name="Электронная коммерция")
+    Category.objects.create(name="Медицина")
+    Category.objects.create(name="Финансовые технологии")
+    Category.objects.create(name="Социальные сети")
+    Category.objects.create(name="Экология")
+    Category.objects.create(name="Аналитика данных")
+    Category.objects.create(name="Кибербезопасность")
+    Category.objects.create(name="Логистика и транспорт")
+
+init_data()

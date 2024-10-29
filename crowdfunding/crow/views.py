@@ -20,7 +20,15 @@ from .permissions import get_project_view_permissions, \
     get_profile_change_request_view_permissions
 from .utils import send_message_verification_email, check_token_timelife
 
-# TODO: Неподтвержденный пользователь должен быть скрыт из списка, к нему также никто не может зайти
+# TODO: --------БЛОК ЗАКРЫТИЯ ПРОЕКТА ---------------
+# TODO: Необходимо сделать таблицу для заявок на закрытие проекта
+# TODO: При создании проекта указывать способ закрытия проекта -> Ввести новую колонку в БД
+# TODO: При потверждении закрытия вся сумма летит в ЛК создателю
+# TODO: Перевод проекта на статус завершенного -> Добавить либо колонку в БД, либо сделать отдельную таблицу с кодами стадии проекта
+# TODO: Перевод проекта на статус завершения сбора -> Добавить либо колонку в БД, либо сделать отдельную таблицу с кодами стадии проекта
+# TODO: Добавить колонку о возможности вывода средств
+# TODO: Проверка при наборе суммы
+# TODO: -----------------------------------------------
 # TODO: Система просмотров
 
 class ProjectViewSet(mixins.ListModelMixin,
@@ -224,8 +232,9 @@ class ProfileViewSet(mixins.ListModelMixin,
         if (self.get_object() == self.request.user) or (self.request.user.is_staff):
             self.serializer_class = AdditionalUserSerializerForOwner
         else:
+            if self.get_object().confirmed is False and self.request.user.is_superuser is False:
+                return Response(status=status.HTTP_404_NOT_FOUND)
             self.serializer_class = AdditionalUserSerializerForOther
-        print(self.request.user)
         return super().retrieve(request, *args, **kwargs)
 
     @extend_schema(summary="Регистрация",

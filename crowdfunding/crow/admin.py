@@ -1,3 +1,5 @@
+from tkinter import Image
+
 from crow.models import *
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
@@ -77,3 +79,7 @@ class ProjectImagesAdmin(admin.TabularInline):
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ('name', 'user', 'confirmed')
     inlines = [ProjectImagesAdmin]
+
+@admin.register(ProjectStatusCode)
+class ProjectStatusCodeAdmin(admin.ModelAdmin):
+    pass
