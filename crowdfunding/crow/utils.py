@@ -25,3 +25,13 @@ def check_token_timelife(token):
     if timezone.now() - token.created_at > EMAIL_VERIFICATION_TOKEN_LIFETIME:
         token.delete()
         return Response(data={"Ссылка недействительна"}, status=status.HTTP_200_OK)
+
+
+def check_transfer_status(project):
+    if project.collected_money >= project.need_money:
+        change_transfer_status(project)
+
+
+def change_transfer_status(project):
+    project.transfer_allowed = True
+    project.save()

@@ -18,7 +18,8 @@ from crow.serializers.listings_serializer import *
 from .permissions import get_project_view_permissions, \
     get_project_change_request_view_permissions, get_profile_view_permissions, \
     get_profile_change_request_view_permissions
-from .utils import send_message_verification_email, check_token_timelife
+from .utils import send_message_verification_email, check_token_timelife, check_transfer_status
+
 
 # TODO: --------БЛОК ЗАКРЫТИЯ ПРОЕКТА ---------------
 # TODO: 1) Проверка при наборе суммы
@@ -78,6 +79,7 @@ class ProjectViewSet(mixins.ListModelMixin,
         serializer_data = self.serializer_class(data=request.data, context={'request': request})
         if serializer_data.is_valid():
             serializer_data.save(project=self.get_object())
+            check_transfer_status(project=self.get_object())
             return Response({"data": "Транзакция проведена"}, status=status.HTTP_200_OK)
         else:
             return Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
