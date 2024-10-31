@@ -42,14 +42,13 @@ class ProjectSerializer(serializers.ModelSerializer):
     is_owner = serializers.SerializerMethodField()
     confirm_url = serializers.SerializerMethodField()
 
-
     class Meta:
         model = Project
         fields = (
             'pk', 'slug', 'user', 'name', 'small_description', 'description', 'slug', 'need_money', 'collected_money',
             'start_date',
             'end_date', 'category', 'image', 'project_images', 'confirmed', 'url', 'views', 'payment_url', 'change_url',
-            'is_owner', 'confirm_url', 'transfer_allowed')
+            'is_owner', 'confirm_url', 'transfer_allowed', 'closure_type')
 
     def get_is_owner(self, obj):
         if obj.user.username == self.context.get('request').user.username:
@@ -74,7 +73,6 @@ class ProjectSerializer(serializers.ModelSerializer):
         return representation
 
 
-
 class ProjectSerializerCreate(serializers.ModelSerializer):
     name = serializers.CharField(
         validators=[
@@ -95,13 +93,20 @@ class ProjectSerializerCreate(serializers.ModelSerializer):
                                        help_text="Дата начала проекта. По умолчанию - сегодняшняя дата")
     end_date = serializers.DateField(help_text="Дата окончания сборов на проект")
     project_images = ProjectImagesSerializer(many=True, required=False)
+    closure_type = serializers.ChoiceField(
+        choices=[
+            ('BY_AMOUNT', 'Closing of fundraising'),
+            ('BY_TIME', "Closing after time expires")
+        ],
+        help_text="Тип закрытия проекта. BY_AMOUNT - закрытие сбора по определенной сумме, BY_TIME - закрытие сбора по истечении времени",
+        required=True
+    )
 
     class Meta:
         model = Project
         fields = (
             'user', 'name', 'image', 'small_description', 'description', 'need_money', 'collected_money', 'category',
-            'project_images', 'start_date', 'end_date',
-            'start_date', 'end_date')
+            'project_images', 'start_date', 'end_date', 'closure_type')
 
     def validate_start_date(self, value):
         if value < timezone.now().date():
@@ -404,7 +409,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
         OnlyTextValidator()
     ])
     groups = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(), many=True, help_text="Группа")
-
 
     def validate_groups(self, values):
         if len(values) == 0:

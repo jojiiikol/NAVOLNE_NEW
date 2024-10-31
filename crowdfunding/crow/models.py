@@ -64,6 +64,7 @@ class Project(models.Model):
     slug = models.SlugField(max_length=255, unique=True, db_index=True)
     views = models.IntegerField(default=0)
     confirmed = models.BooleanField(default=False, null=False)
+    closure_type = models.CharField(blank=False, null=False, max_length=10, default="BY_AMOUNT")
     status_code = models.ForeignKey(ProjectStatusCode, on_delete=models.CASCADE, null=True)
     transfer_allowed = models.BooleanField(default=False, null=False)
 
