@@ -11,7 +11,7 @@ from rest_framework.validators import UniqueValidator
 
 from crow.models import Project, Category, Transaction, ProjectChangeRequest, User, AnswerProjectChangeRequest, \
     ProjectConfirmAnswer, ProjectImages, \
-    NewImageToProject, ProjectStatusCode
+    NewImageToProject, ProjectStatusCode, ProjectClosureRequest
 from crow.serializers.listings_serializer import CategoryListing, SkillListing, GroupSerializerForAdditionalView
 from crow.serializers.profile_serializer import UserSerializer
 from crow.utils import send_message_verification_email
@@ -170,6 +170,27 @@ class ConfirmProjectSerializer(serializers.ModelSerializer):
         instance.confirmed = validated_data.get('confirmed', instance.confirmed)
         instance.save()
         return instance
+
+class ProjectClosureRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProjectClosureRequest
+        fields = ('date', )
+
+    date = serializers.DateTimeField(default=timezone.now())
+
+class AnswerProjectClosureRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProjectClosureRequest
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['project'] = ProjectSerializer(instance.project, context={"request": self.context.get('request')}).data
+        return representation
+
+
+
+
 
 
 class PaymentSerializer(serializers.ModelSerializer):

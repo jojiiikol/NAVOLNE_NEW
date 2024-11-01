@@ -83,3 +83,8 @@ class ProjectAdmin(admin.ModelAdmin):
 @admin.register(ProjectStatusCode)
 class ProjectStatusCodeAdmin(admin.ModelAdmin):
     pass
+
+@admin.register(ProjectClosureRequest)
+class ProjectClosureRequestAdmin(admin.ModelAdmin):
+    pass
+

@@ -172,6 +172,16 @@ class AnswerProfileChangeRequest(models.Model):
     answer_date = models.DateTimeField(null=True)
 
 
+class ProjectClosureRequest(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.PROTECT, related_name='project_closure')
+    description = models.CharField(null=True)
+    allowed = models.BooleanField(null=True)
+    admin = models.ForeignKey(User, on_delete=models.PROTECT, related_name='admin_project_closure', null=True)
+    date = models.DateTimeField(null=True, auto_now_add=True)
+    answer_date = models.DateTimeField(null=True)
+
+
+
 class Transaction(models.Model):
     project = models.ForeignKey(Project, on_delete=models.PROTECT)
     user = models.ForeignKey(User, on_delete=models.PROTECT)

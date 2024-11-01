@@ -18,17 +18,21 @@ from crow.serializers.listings_serializer import *
 from .permissions import get_project_view_permissions, \
     get_project_change_request_view_permissions, get_profile_view_permissions, \
     get_profile_change_request_view_permissions
-from .utils import send_message_verification_email, check_token_timelife, check_transfer_status
+from .utils import send_message_verification_email, check_token_timelife, check_transfer_status, set_payment_stop_status
 
 
 # TODO: --------БЛОК ЗАКРЫТИЯ ПРОЕКТА ---------------
-# TODO: 1) Проверка при наборе суммы
+# TODO: 1) Логика заявки. Возможно только при true
+# TODO:     * Добавить пермишины на эндпоинт
+# TODO:     * Добавить эндрлинт для админов для ответа на заявки
+# TODO:     * Изменение статус кода проекта при завершении сбора
+# TODO:     * Изменение статус кода проекта при отклонении заявки при завершении
+# TODO:     * Изменение статус кода проекта при одобрении заявки при завершении
+# TODO: 2) Запретить отправку средств при 2-4 статус коде
 # TODO: 2) Перевод проекта на статус завершения сбора:
 # TODO:      * Сделать изменение статуса:
 # TODO:          * По времени
-# TODO:          * По сумме
-# TODO: 3) Необходимо сделать таблицу для заявок на закрытие проекта:
-# TODO:      * Логика заявки. Возможно только при true
+# TODO:          * По сумме -- Доп. проверка на celery
 # TODO: 4) Перевод проекта на статус завершенного
 # TODO: 5) При потверждении закрытия вся сумма летит в ЛК создателю
 # TODO: 6) Добавить админу просмотр статус кода
@@ -149,7 +153,20 @@ class ProjectViewSet(mixins.ListModelMixin,
             image.delete()
             return Response(status=status.HTTP_200_OK, data={'message': "Изображение было удалено"})
         except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND, data = {'message': "Изображение не было найдено"})
+            return Response(status=status.HTTP_404_NOT_FOUND, data={'message': "Изображение не было найдено"})
+
+    @action(methods=['POST'], detail=True)
+    def close_money_collection(self, request, *args, **kwargs):
+        project = self.get_object()
+        serializer = ProjectClosureRequestSerializer(data=request.data, context={'request': request})
+        if project.transfer_allowed is True:
+            if serializer.is_valid():
+                set_payment_stop_status(project=project)
+                serializer.save(project=project)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"errors": "Нельзя закрыть сбор проекта по условиям закрытия"},
+                        status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProjectChangeRequestViewSet(mixins.ListModelMixin,
@@ -437,6 +454,17 @@ class ProfileChangeRequestViewSet(mixins.ListModelMixin,
         return Response(serializers.data, status=status.HTTP_200_OK)
 
 
+class ProjectClosureRequestViewSet(mixins.ListModelMixin,
+                                   mixins.RetrieveModelMixin,
+                                   viewsets.GenericViewSet):
+    queryset = ProjectClosureRequest.objects.all()
+    serializer_class = AnswerProjectClosureRequestSerializer
+
+    def list(self, request, *args, **kwargs):
+        print(self.request.data)
+        return super().list(request, *args, **kwargs)
+
+
 # Служебное вью для просмотра id всех категорий
 class AdditionalTag(APIView):
     @extend_schema(summary="Сервисный эндпоинт для получения доп. информации",
@@ -457,5 +485,3 @@ class AdditionalTag(APIView):
             return Response(data)
         except:
             return Response({'error': "Произошла ошибка"}, status=status.HTTP_418_IM_A_TEAPOT)
-
-

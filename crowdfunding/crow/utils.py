@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 from rest_framework.response import Response
-from crow.models import VerificationToken
+from crow.models import VerificationToken, ProjectStatusCode
 from crowdfunding.settings import EMAIL_HOST_USER, EMAIL_VERIFICATION_TOKEN_LIFETIME
 
 
@@ -34,4 +34,8 @@ def check_transfer_status(project):
 
 def change_transfer_status(project):
     project.transfer_allowed = True
+    project.save()
+
+def set_payment_stop_status(project):
+    project.status_code = ProjectStatusCode.objects.get(code="2")
     project.save()
