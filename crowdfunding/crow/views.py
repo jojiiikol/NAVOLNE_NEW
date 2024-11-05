@@ -24,10 +24,8 @@ from .utils import send_message_verification_email, check_token_timelife, check_
 # TODO: --------БЛОК ЗАКРЫТИЯ ПРОЕКТА ---------------
 # TODO: 1) Логика заявки. Возможно только при true
 # TODO:     * Добавить пермишины на эндпоинт
-# TODO:     * Добавить эндрлинт для админов для ответа на заявки
-# TODO:     * Изменение статус кода проекта при завершении сбора
-# TODO:     * Изменение статус кода проекта при отклонении заявки при завершении
-# TODO:     * Изменение статус кода проекта при одобрении заявки при завершении
+# TODO:     * Понять почему не работает message
+# TODO:     * Поменять update на свой action
 # TODO: 2) Запретить отправку средств при 2-4 статус коде
 # TODO: 2) Перевод проекта на статус завершения сбора:
 # TODO:      * Сделать изменение статуса:
@@ -155,18 +153,18 @@ class ProjectViewSet(mixins.ListModelMixin,
         except ObjectDoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND, data={'message': "Изображение не было найдено"})
 
+    @extend_schema(summary="Отправка заявки на закрытие сбора",
+                   description="Использование возможно тогда, когда поле проекта transfer_allowed = True. Доступ у создателя проекта",
+                   )
     @action(methods=['POST'], detail=True)
     def close_money_collection(self, request, *args, **kwargs):
         project = self.get_object()
         serializer = ProjectClosureRequestSerializer(data=request.data, context={'request': request})
-        if project.transfer_allowed is True:
-            if serializer.is_valid():
-                set_payment_stop_status(project=project)
-                serializer.save(project=project)
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"errors": "Нельзя закрыть сбор проекта по условиям закрытия"},
-                        status=status.HTTP_400_BAD_REQUEST)
+        if serializer.is_valid():
+            set_payment_stop_status(project=project)
+            serializer.save(project=project)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProjectChangeRequestViewSet(mixins.ListModelMixin,
@@ -367,7 +365,6 @@ class EmailVerification(APIView):
             return Response(data={"Токен не найден"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-# Смена пароля по ссылке
 class ResetPassword(APIView):
     @extend_schema(summary="Эндпоинт сброса пароля",
                    description="Тут юзер должен придумать новый пароль",
@@ -456,13 +453,47 @@ class ProfileChangeRequestViewSet(mixins.ListModelMixin,
 
 class ProjectClosureRequestViewSet(mixins.ListModelMixin,
                                    mixins.RetrieveModelMixin,
+                                   mixins.UpdateModelMixin,
+                                   mixins.DestroyModelMixin,
                                    viewsets.GenericViewSet):
     queryset = ProjectClosureRequest.objects.all()
     serializer_class = AnswerProjectClosureRequestSerializer
 
+    @extend_schema(summary="Просмотр заявок на закрытие проекта",
+                   description="Необходимо для админов",
+                   )
     def list(self, request, *args, **kwargs):
-        print(self.request.data)
         return super().list(request, *args, **kwargs)
+
+    @extend_schema(summary="Удаление заявки на закрытие",
+                   description="Доступно создателям проекта",
+                   )
+    def destroy(self, request, *args, **kwargs):
+        request = self.get_object()
+        if request.admin is not None:
+            return Response(data={'err': 'Содержит ответ админа'})  # TODO: Вынести в пермишн
+        return super().destroy(request, *args, **kwargs)
+
+    @extend_schema(summary="Просмотр заявок на закрытие проекта",
+                   description="Необходимо для юзеров, создавших заявку",
+                   )
+    @action(methods=['GET'], detail=False)
+    def see_request(self, request, *args, **kwargs):
+        user = request.user
+        requests = ProjectClosureRequest.objects.filter(project__user=user).order_by('-date')
+        data = self.serializer_class(requests, many=True, context={'request': request})
+        return Response(data.data, status=status.HTTP_200_OK)
+
+    @extend_schema(summary="Ответ на заявку пользователям",
+                   description="Необходимо для админов",
+                   request=AnswerProjectClosureRequestSerializer
+                   )
+    def update(self, request, *args, **kwargs):
+        project_closure_request = self.get_object()
+        serializer_data = self.serializer_class(project_closure_request, data=request.data,
+                                                context={'request': request})
+
+        return super().update(request, *args, **kwargs)
 
 
 # Служебное вью для просмотра id всех категорий

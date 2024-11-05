@@ -27,6 +27,14 @@ class IsOwner(permissions.BasePermission):
         return False
 
 
+class IsTransferAllowed(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        if obj.transfer_allowed is True:
+            return True
+        return False
+
+
 class IsAuthenticatedAndConfirmed(permissions.BasePermission):
     def has_permission(self, request, view):
         return bool(request.user.is_authenticated and request.user.confirmed)
@@ -78,6 +86,8 @@ def get_project_view_permissions(view):
         permission_classes = [IsAdminUser]
     if view.action == 'remove_image':
         permission_classes = [IsAdminUser | IsOwner]
+    if view.action == 'close_money_collection':
+        permission_classes = [IsOwner & IsTransferAllowed]
     return [permission() for permission in permission_classes]
 
 

@@ -181,16 +181,34 @@ class ProjectClosureRequestSerializer(serializers.ModelSerializer):
 class AnswerProjectClosureRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectClosureRequest
-        fields = '__all__'
+        fields = ['admin', 'description', 'allowed', 'answer_date', 'url']
+
+    admin = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    description = serializers.CharField(required=False, max_length=1000)
+    allowed = serializers.BooleanField(required=True)
+    answer_date = serializers.DateTimeField(default=timezone.now())
+    url = serializers.SerializerMethodField()
+
+    def get_url(self, obj):
+        return reverse('projectclosurerequest-detail', kwargs={'pk': obj.pk}, request=self.context['request'])
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['project'] = ProjectSerializer(instance.project, context={"request": self.context.get('request')}).data
+        representation['admin'] = UserSerializer(instance.admin, context={"request": self.context.get('request')}).data
         return representation
 
-
-
-
+    def update(self, instance, validated_data):
+        super().update(instance, validated_data)
+        request = instance
+        project = request.project
+        if validated_data['allowed'] is True:
+            project.status_code = ProjectStatusCode.objects.get(code=3)
+            # тут нужно описать перевод денег на лк
+        else:
+            project.status_code = ProjectStatusCode.objects.get(code=1)
+        project.save()
+        return instance
 
 
 class PaymentSerializer(serializers.ModelSerializer):
