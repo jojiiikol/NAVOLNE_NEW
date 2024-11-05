@@ -7,6 +7,11 @@ import {
     ListGroup,
     ListGroupItem,
     Badge,
+    CardHeader,
+    Card,
+    CardBody,
+    Row,
+    Col,
 } from 'react-bootstrap';
 import EditProfileModal from './EditProfileModal';
 
@@ -36,7 +41,7 @@ const ProfileComponent = () => {
             const accessToken = localStorage.getItem('accessToken');
             if (localStorage.getItem('accessToken')) {
                 const response = await fetch(
-                    'http://localhost:8000/profiles/' + profilename+'/',
+                    'http://localhost:8000/profiles/' + profilename + '/',
                     {
                         headers: {
                             'Content-Type': 'application/json',
@@ -50,7 +55,7 @@ const ProfileComponent = () => {
             }
             if (!localStorage.getItem('accessToken')) {
                 const response = await fetch(
-                    'http://localhost:8000/profiles/' + profilename+'/',
+                    'http://localhost:8000/profiles/' + profilename + '/',
                     {
                         headers: {
                             'Content-Type': 'application/json',
@@ -68,29 +73,31 @@ const ProfileComponent = () => {
         <Container style={{ marginTop: '80px' }}>
             {data && (
                 <div>
-                    <div className="d-flex">
-                        <div>
+                    <Row>
+                        <Col sm={3}>
                             <Image
-                                style={{ width: '350px', objectFit: 'cover' }}
+                                style={{ width: '300px' }}
                                 className="me-5"
                                 src={data.image}
+<<<<<<< Updated upstream
                                 rounded
 
+=======
+                                roundedCircle
+>>>>>>> Stashed changes
                             />
                             {data.skill.length !== 0 && (
                                 <div className="d-flex ">
-                                    {data.skill.map(
-                                        (skill, index) => (
-                                            <h5>
-                                                <Badge
-                                                    key={index}
-                                                    className="ms-1 mt-1"
-                                                >
-                                                    {skill}
-                                                </Badge>
-                                            </h5>
-                                        )
-                                    )}
+                                    {data.skill.map((skill, index) => (
+                                        <h5>
+                                            <Badge
+                                                key={index}
+                                                className="ms-1 mt-1"
+                                            >
+                                                {skill}
+                                            </Badge>
+                                        </h5>
+                                    ))}
                                 </div>
                             )}
 
@@ -151,65 +158,77 @@ const ProfileComponent = () => {
                                     </Button>
                                 </div>
                             )}
-                        </div>
-                        <div>
-                            <p className="fs-1 fw-bold mb-0">
-                                {data.first_name}{' '}
-                                {data.last_name}
-                            </p>
-                            <p className="fs-5 fw-normal text-secondary">
-                                Автор присоединился {data.date_joined}
-                            </p>
-                            {data.about && (
-                                <div>
-                                    <p className="fs-5 fw-normal text-secondary">
-                                        О себе:{' '}
-                                    </p>
-                                    <p className="fs-5 fw-normal ">
-                                        {data.about}
-                                    </p>
-                                </div>
-                            )}
-
-                            {!data.about && (
-                                <div>
-                                    <p className="fs-5 fw-normal text-secondary">
-                                        О себе:{' '}
-                                    </p>
-                                    <p className="fs-5 fw-normal">
-                                        пользователь любит анонимность, поэтому
-                                        ничего о себе решил не рассказывать
-                                    </p>
-                                </div>
-                            )}
-
-                            {data.sex && (
-                                <div className="d-flex">
-                                    <p className="fs-5 fw-normal text-secondary">
-                                        Пол:{' '}
-                                    </p>
-                                    <p className="fs-5 fw-normal ms-1">
-                                        {data.sex}
-                                    </p>
-                                </div>
-                            )}
-
-                            {!data.sex && (
-                                <div className="d-flex">
-                                    <p className="fs-5 fw-normal text-secondary">
-                                        Пол:{' '}
-                                    </p>
-                                    <p className="fs-5 fw-normal ms-1">
-                                        всё сложно...
-                                    </p>
-                                </div>
-                            )}
+                        </Col>
+                        <Col sm={9}>
+                            <Row className="g-5">
+                                <Col>
+                                    <Badge className=" bg-secondary h-100 d-inline-flex align-items-center">
+                                        <p className="fs-3 fw-bold text-black  mt-1 ms-2 me-2">
+                                            {data.first_name} {data.last_name}
+                                        </p>
+                                    </Badge>
+                                </Col>
+                                <Col>
+                                    <Badge className=" bg-secondary h-100 d-inline-flex align-items-center">
+                                        <p className="fs-3 fw-bold text-black mt-1 ms-2 me-2 ">
+                                            {data.birthday}
+                                        </p>
+                                    </Badge>
+                                </Col>
+                                <Col>
+                                    <Badge className="bg-secondary h-100 d-inline-flex align-items-center">
+                                        <p className="fs-3 fw-bold text-black mt-1 ms-2 me-2">
+                                            {data.company}
+                                        </p>
+                                    </Badge>
+                                </Col>
+                                <Col>
+                                    <Badge className=" bg-secondary ">
+                                        <p className="fs-5 fw-bold text-primary mt-2 mb-0 ms-2 me-2">
+                                            Мой баланс:
+                                        </p>
+                                        <p className="fs-4 fw-bold text-primary  mb-2 ms-2 me-2">
+                                            {data.total_money_sent}
+                                        </p>
+                                    </Badge>
+                                </Col>
+                            </Row>
+                            <div className="d-flex  justify-content-between mt-4 "></div>
+                            <Row>
+                                <Col sm={7}>
+                                    <Card className="mt-2">
+                                        <CardHeader className="bg-black text-white fs-3 text-center fw-bold">
+                                            О себе
+                                        </CardHeader>
+                                        <CardBody
+                                            className="bg-secondary"
+                                            style={{ height: '200px' }}
+                                        >
+                                            {data.about}
+                                        </CardBody>
+                                    </Card>
+                                </Col>
+                                <Col sm={5}>
+                                    <Card className="mt-2" rounded>
+                                        <CardHeader className="bg-black text-white fs-3 text-center fw-bold">
+                                            Поддержаные проекты
+                                        </CardHeader>
+                                        <CardBody
+                                            className="bg-secondary"
+                                            style={{ height: '200px' }}
+                                        >
+                                            мяумяумуяу
+                                        </CardBody>
+                                    </Card>
+                                </Col>
+                            </Row>
 
                             {data.groups.length !== 0 && (
                                 <div className="d-flex">
                                     <p className="fs-5 fw-normal text-secondary">
                                         Группы:{' '}
                                     </p>
+<<<<<<< Updated upstream
 
                                             <div
                                                 className="badge bg-secondary text-wrap ms-1 mb-3"
@@ -218,6 +237,17 @@ const ProfileComponent = () => {
                                                 {data.groups.name}
                                             </div>
 
+=======
+                                    {data.groups.map((skill, index) => (
+                                        <div
+                                            className="badge bg-secondary text-wrap ms-1 mb-3"
+                                            style={{ width: '8rem' }}
+                                            key={index}
+                                        >
+                                            {skill}
+                                        </div>
+                                    ))}
+>>>>>>> Stashed changes
                                     {/* <p className='fs-5 fw-normal text-normal ms-1'>{data.skill.join(", ")}</p> */}
                                 </div>
                             )}
@@ -264,10 +294,10 @@ const ProfileComponent = () => {
                                     </p>
                                 </div>
                             )}
-                        </div>
-                    </div>
+                        </Col>
+                    </Row>
 
-                    <div>
+                    <Row>
                         <p className="fs-1 fw-bold mb-0 text-center">
                             Проекты пользователя:
                         </p>
@@ -292,10 +322,10 @@ const ProfileComponent = () => {
                                         ></dotlottie-player>
                                         <div className="ms-5">
                                             <p className="fs-3 fw-normal  ">
-                                                У {data.first_name}{' '}
-                                                еще нет проектов... Не будь как{' '}
-                                                {data.first_name},
-                                                скорее нажимай на кнопку{' '}
+                                                У {data.first_name} еще нет
+                                                проектов... Не будь как{' '}
+                                                {data.first_name}, скорее
+                                                нажимай на кнопку{' '}
                                             </p>
                                             <div
                                                 style={{
@@ -327,7 +357,7 @@ const ProfileComponent = () => {
                                     </ListGroupItem>
                                 ))}
                         </ListGroup>
-                    </div>
+                    </Row>
                 </div>
             )}
         </Container>
