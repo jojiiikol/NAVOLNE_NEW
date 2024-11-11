@@ -23,15 +23,13 @@ from .utils import send_message_verification_email, check_token_timelife, check_
 
 # TODO: --------БЛОК ЗАКРЫТИЯ ПРОЕКТА ---------------
 # TODO: 1) Логика заявки. Возможно только при true
-# TODO:     * Добавить пермишины на эндпоинт
 # TODO:     * Понять почему не работает message
-# TODO:     * Поменять update на свой action
-# TODO: 2) Запретить отправку средств при 2-4 статус коде
 # TODO: 2) Перевод проекта на статус завершения сбора:
 # TODO:      * Сделать изменение статуса:
 # TODO:          * По времени
 # TODO:          * По сумме -- Доп. проверка на celery
-# TODO: 4) Перевод проекта на статус завершенного
+# TODO: 4) Перевод проекта на статус завершенного -- По времени!!
+# TODO: 4) Высчитать процент коммиссии
 # TODO: 5) При потверждении закрытия вся сумма летит в ЛК создателю
 # TODO: 6) Добавить админу просмотр статус кода
 # TODO: -----------------------------------------------
@@ -453,7 +451,6 @@ class ProfileChangeRequestViewSet(mixins.ListModelMixin,
 
 class ProjectClosureRequestViewSet(mixins.ListModelMixin,
                                    mixins.RetrieveModelMixin,
-                                   mixins.UpdateModelMixin,
                                    mixins.DestroyModelMixin,
                                    viewsets.GenericViewSet):
     queryset = ProjectClosureRequest.objects.all()
@@ -474,7 +471,7 @@ class ProjectClosureRequestViewSet(mixins.ListModelMixin,
             return Response(data={'err': 'Содержит ответ админа'})  # TODO: Вынести в пермишн
         return super().destroy(request, *args, **kwargs)
 
-    @extend_schema(summary="Просмотр заявок на закрытие проекта",
+    @extend_schema(summary="Просмотр своих заявок на закрытие проекта",
                    description="Необходимо для юзеров, создавших заявку",
                    )
     @action(methods=['GET'], detail=False)
@@ -488,12 +485,16 @@ class ProjectClosureRequestViewSet(mixins.ListModelMixin,
                    description="Необходимо для админов",
                    request=AnswerProjectClosureRequestSerializer
                    )
-    def update(self, request, *args, **kwargs):
+    @action(methods=['PUT'], detail=True)
+    def answer(self, request, *args, **kwargs):
         project_closure_request = self.get_object()
         serializer_data = self.serializer_class(project_closure_request, data=request.data,
                                                 context={'request': request})
 
-        return super().update(request, *args, **kwargs)
+        if serializer_data.is_valid():
+            serializer_data.save()
+            return Response(serializer_data.data, status=status.HTTP_200_OK)
+        return Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # Служебное вью для просмотра id всех категорий
