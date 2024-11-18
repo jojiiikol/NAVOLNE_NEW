@@ -45,7 +45,7 @@ def init_data(apps, schema_editor):
     Category.objects.create(name="Кибербезопасность")
     Category.objects.create(name="Логистика и транспорт")
 
-    Group = apps.get_model("crow", "Group")
+    Group = apps.get_model("auth", "Group")
     Group.objects.create(name="Студент")
     Group.objects.create(name="Инвестор")
 

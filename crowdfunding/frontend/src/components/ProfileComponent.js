@@ -79,12 +79,8 @@ const ProfileComponent = () => {
                                 style={{ width: '300px' }}
                                 className="me-5"
                                 src={data.image}
-<<<<<<< Updated upstream
                                 rounded
-
-=======
                                 roundedCircle
->>>>>>> Stashed changes
                             />
                             {data.skill.length !== 0 && (
                                 <div className="d-flex ">
@@ -228,26 +224,14 @@ const ProfileComponent = () => {
                                     <p className="fs-5 fw-normal text-secondary">
                                         Группы:{' '}
                                     </p>
-<<<<<<< Updated upstream
 
-                                            <div
-                                                className="badge bg-secondary text-wrap ms-1 mb-3"
-                                                style={{ width: '8rem' }}
-                                            >
-                                                {data.groups.name}
-                                            </div>
+                                    <div
+                                        className="badge bg-secondary text-wrap ms-1 mb-3"
+                                        style={{ width: '8rem' }}
+                                    >
+                                        {data.groups.name}
+                                    </div>
 
-=======
-                                    {data.groups.map((skill, index) => (
-                                        <div
-                                            className="badge bg-secondary text-wrap ms-1 mb-3"
-                                            style={{ width: '8rem' }}
-                                            key={index}
-                                        >
-                                            {skill}
-                                        </div>
-                                    ))}
->>>>>>> Stashed changes
                                     {/* <p className='fs-5 fw-normal text-normal ms-1'>{data.skill.join(", ")}</p> */}
                                 </div>
                             )}
