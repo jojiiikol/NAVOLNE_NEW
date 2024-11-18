@@ -11,7 +11,6 @@
 ### 3 Настройка БД и миграции
 В файле crowdfunding/crowdfunding/settings.py установить настройки вашей БД в DATABASES
 
-`python manage.py makemigrations` -- Создать миграции
 
 `python manage.py migrate` -- Провести миграции
 ### 4 Настройка суперюзера
