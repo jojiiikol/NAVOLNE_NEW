@@ -3,6 +3,7 @@ import datetime
 from django.contrib.auth.models import Group
 from django.contrib.auth.password_validation import validate_password
 from django.core.validators import RegexValidator
+from django.db import transaction
 from django.utils import timezone
 from pytils.translit import slugify
 from rest_framework import serializers
@@ -14,7 +15,7 @@ from crow.models import Project, Category, Transaction, ProjectChangeRequest, Us
     NewImageToProject, ProjectStatusCode, ProjectClosureRequest
 from crow.serializers.listings_serializer import CategoryListing, SkillListing, GroupSerializerForAdditionalView
 from crow.serializers.profile_serializer import UserSerializer
-from crow.utils import send_message_verification_email
+from crow.tasks import send_message_verification_email
 from crow.validators import SpecialCharactersValidator, OnlyTextValidator, ProjectNameValidator
 
 
@@ -471,6 +472,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
         [group.user_set.add(user) for group in validated_data['groups']]
         user.save()
 
-        send_message_verification_email(user)
+        send_message_verification_email.delay_on_commit(user.pk)
 
         return user
