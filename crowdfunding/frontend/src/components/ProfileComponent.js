@@ -76,13 +76,13 @@ const ProfileComponent = () => {
                     <Row>
                         <Col sm={3}>
                             <Image
-                                style={{ width: '300px' }}
-                                className="me-5"
+                                style={{ width: '300px', height: '300px' }}
+                                className="me-5 object-fit-cover"
                                 src={data.image}
                                 rounded
                                 roundedCircle
                             />
-                            {data.skill.length !== 0 && (
+                            {/* {data.skill.length !== 0 && (
                                 <div className="d-flex ">
                                     {data.skill.map((skill, index) => (
                                         <h5>
@@ -95,14 +95,14 @@ const ProfileComponent = () => {
                                         </h5>
                                     ))}
                                 </div>
-                            )}
+                            )} */}
 
                             <div className="d-flex justify-content-between me-5">
                                 <p
                                     className="fs-5 fw-normal text-secondary mt-1"
                                     style={{ width: '300px' }}
                                 >
-                                    Поддержал проекты на сумму:{' '}
+                                    Поддержал проекты на:{' '}
                                 </p>
                                 <p className="fs-5 fw-normal text-normal mt-1">
                                     {' '}
@@ -219,7 +219,7 @@ const ProfileComponent = () => {
                                 </Col>
                             </Row>
 
-                            {data.groups.length !== 0 && (
+                            {/* {data.groups.length !== 0 && (
                                 <div className="d-flex">
                                     <p className="fs-5 fw-normal text-secondary">
                                         Группы:{' '}
@@ -232,11 +232,11 @@ const ProfileComponent = () => {
                                         {data.groups.name}
                                     </div>
 
-                                    {/* <p className='fs-5 fw-normal text-normal ms-1'>{data.skill.join(", ")}</p> */}
+                                    
                                 </div>
-                            )}
+                            )} */}
 
-                            {data.is_owner && (
+                            {/* {data.is_owner && (
                                 <div className="d-flex">
                                     <p className="fs-5 fw-normal text-secondary">
                                         День рождения:{' '}
@@ -277,7 +277,7 @@ const ProfileComponent = () => {
                                         {data.passport}
                                     </p>
                                 </div>
-                            )}
+                            )} */}
                         </Col>
                     </Row>
 

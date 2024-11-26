@@ -12,6 +12,7 @@ import {
 import ProgressBar from './progress-bar.component';
 import EditProjectModal from './EditProjectModal';
 import ContactCard from './CardContactsComponent';
+import PaymentComponent from './PaymentComponent';
 const ProjectPage = () => {
     const [showModal, setShowModal] = useState(false); // Состояние для отображения модального окна
     const openModal = () => setShowModal(true); // Функция для открытия модального окна
@@ -88,7 +89,7 @@ const ProjectPage = () => {
                             fontSize: '30px',
                             position: 'absolute',
                             transform: 'translate(-50%, -50%)',
-                            top: '22%',
+                            top: '23%',
                             left: '50%',
                             color: 'white',
                         }}
@@ -99,7 +100,7 @@ const ProjectPage = () => {
                         size="lg"
                         className="mt-0"
                         variant="outline-primarylight"
-                        href="#"
+                        onClick={openModal}
                         style={{
                             position: 'absolute',
                             transform: 'translate(-50%, -50%)',
@@ -111,28 +112,32 @@ const ProjectPage = () => {
                         Поддержать проект
                     </Button>
 
+                    {showModal && (
+                        <PaymentComponent
+                            show={true}
+                            onHide={closeModal}
+                            slug={slug}
+                        />
+                    )}
                     <Row className="g-4 mt-1">
                         <Col sm={7}>
                             {/* <p className='mb-0 mt-0 fw-bold ' style={{ fontSize: '60px', }}>{data.name}</p>
 						<p className='mt-0 mb-0 fs-5 text-secondary  '>{data.small_description}</p> */}
                             <div className="d-flex mt-0 mb-2">
-                                {data.category.map(
-                                    (category, index) => (
-                                        <div
-                                            className="badge bg-secondary text-wrap ms-1 mb-1"
-                                            style={{ width: '6rem' }}
-                                            key={index}
-                                        >
-                                            {category}
-                                        </div>
-                                    )
-                                )}
+                                {data.category.map((category, index) => (
+                                    <div
+                                        className="badge bg-secondary text-wrap ms-1 mb-1"
+                                        style={{ width: '6rem' }}
+                                        key={index}
+                                    >
+                                        {category}
+                                    </div>
+                                ))}
                             </div>
                             <ProgressBar
                                 bgcolor={'#0d6efd'}
                                 completed={Math.round(
-                                    (data.collected_money /
-                                        data.need_money) *
+                                    (data.collected_money / data.need_money) *
                                         100
                                 )}
                                 completed_money={data.collected_money}
@@ -192,7 +197,6 @@ const ProjectPage = () => {
                             sm={7}
                         >
                             {data.description}
-
                         </Col>
                     </Row>
                     <span className="fs-5 "></span>

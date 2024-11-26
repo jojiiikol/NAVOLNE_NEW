@@ -46,14 +46,17 @@ const EditProjectModal = ({ show, onHide, slug }) => {
 
         const accessToken = localStorage.getItem('accessToken');
         try {
-            await fetch(`http://localhost:8000/projects/info/${slug}`, {
-                method: 'PATCH',
-                headers: {
-                    //'Content-Type': 'application/json',
-                    Authorization: 'Bearer ' + accessToken,
-                },
-                body: formDataObject,
-            });
+            await fetch(
+                `http://localhost:8000/projects/${slug}/change_request/`,
+                {
+                    method: 'POST',
+                    headers: {
+                        //'Content-Type': 'application/json',
+                        Authorization: 'Bearer ' + accessToken,
+                    },
+                    body: formDataObject,
+                }
+            );
             onHide();
         } catch (error) {
             console.error('Ошибка при отправке запроса на сервер:', error);
@@ -82,7 +85,7 @@ const EditProjectModal = ({ show, onHide, slug }) => {
     return (
         <Modal show={show} onHide={onHide}>
             <Modal.Header closeButton>
-                <Modal.Title>Редактирование профиля</Modal.Title>
+                <Modal.Title>Редактирование проекта</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
