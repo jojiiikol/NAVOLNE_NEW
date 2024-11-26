@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Group
 from rest_framework import serializers
 
-from crow.models import Category, Skill
+from crow.models import Category, Skill, ProjectStatusCode
 
 
 class CategoryListing(serializers.PrimaryKeyRelatedField):
@@ -39,3 +39,9 @@ class GroupSerializerForAdditionalView(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ("id", "name",)
+
+
+class ProjectStatusCodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProjectStatusCode
+        fields = ('code', 'name')

@@ -107,7 +107,7 @@ class ProjectChangeRequest(models.Model):
     image = models.ImageField(upload_to="project/", default="project/no_image.jpg")
     description_for_change = models.CharField(max_length=2048, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='change_requests_user', null=True)
-    create_date = models.DateField(null=True, auto_now_add=True)
+    create_date = models.DateField(null=True)
     def __str__(self):
         return self.project.name
 

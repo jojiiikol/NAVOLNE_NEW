@@ -13,9 +13,11 @@ from rest_framework.validators import UniqueValidator
 from crow.models import Project, Category, Transaction, ProjectChangeRequest, User, AnswerProjectChangeRequest, \
     ProjectConfirmAnswer, ProjectImages, \
     NewImageToProject, ProjectStatusCode, ProjectClosureRequest
-from crow.serializers.listings_serializer import CategoryListing, SkillListing, GroupSerializerForAdditionalView
+from crow.serializers.listings_serializer import CategoryListing, SkillListing, GroupSerializerForAdditionalView, \
+    ProjectStatusCodeSerializer
 from crow.serializers.profile_serializer import UserSerializer
 from crow.tasks import send_message_verification_email
+from crow.utils import set_inwork_status
 from crow.validators import SpecialCharactersValidator, OnlyTextValidator, ProjectNameValidator
 
 
@@ -42,6 +44,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     change_url = serializers.SerializerMethodField()
     is_owner = serializers.SerializerMethodField()
     confirm_url = serializers.SerializerMethodField()
+    status_code = ProjectStatusCodeSerializer(read_only=True)
 
     class Meta:
         model = Project
@@ -49,7 +52,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             'pk', 'slug', 'user', 'name', 'small_description', 'description', 'slug', 'need_money', 'collected_money',
             'start_date',
             'end_date', 'category', 'image', 'project_images', 'confirmed', 'url', 'views', 'payment_url', 'change_url',
-            'is_owner', 'confirm_url', 'transfer_allowed', 'closure_type')
+            'is_owner', 'confirm_url', 'transfer_allowed', 'closure_type', 'status_code')
 
     def get_is_owner(self, obj):
         if obj.user.username == self.context.get('request').user.username:
@@ -153,6 +156,8 @@ class ProjectConfirmSerializer(serializers.ModelSerializer):
 
     def update_project(self, project):
         project.confirmed = self.validated_data['confirmed']
+        if project.confirmed:
+            set_inwork_status(project)
         project.save()
     # def to_representation(self, instance):
     #     representation = super().to_representation(instance)
@@ -308,7 +313,7 @@ class ChangeProjectRequestSerializer(serializers.ModelSerializer):
     end_date = serializers.DateField(required=False, help_text="Дата окончания")
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), many=True, required=False,
                                                   help_text="Категории проекта")
-    image = serializers.ImageField(required=False)
+    image = serializers.ImageField(required=False, default="")
     add_image = NewImageToProjectSerializer(required=False, many=True)
     description_for_change = serializers.CharField(required=False, max_length=2048,
                                                    help_text="Ответ от админа на заявку")
@@ -331,6 +336,7 @@ class ChangeProjectRequestSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['user'] = UserSerializer((instance.user), context={"request": self.context.get('request')}).data
+        representation['create_date'] = instance.create_date
         return representation
 
     def get_project_url(self, obj):

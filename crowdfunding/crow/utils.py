@@ -16,9 +16,13 @@ def check_token_timelife(token):
 
 
 def check_transfer_status(project):
-    if project.collected_money >= project.need_money:
-        change_transfer_status(project)
+    if project.closure_type == "BY_AMOUNT":
+        if project.collected_money >= project.need_money:
+            change_transfer_status(project)
 
+def set_inwork_status(project):
+    project.status_code = ProjectStatusCode.objects.get(code='1')
+    project.save()
 
 def change_transfer_status(project):
     project.transfer_allowed = True

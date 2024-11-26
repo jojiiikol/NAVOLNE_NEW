@@ -21,22 +21,9 @@ from .permissions import get_project_view_permissions, \
 from .utils import check_token_timelife, check_transfer_status, set_payment_stop_status
 from .tasks import send_message_verification_email
 
-# TODO: Создание проекта по всем полям
-# TODO: Подтверждеие проекта
-# TODO: Отклонение проекта
-# TODO: Изменить категории скилы
-# TODO: Изменение проекта по всем полям
-# TODO: Принять заявку
-# TODO: Отклонить заявку
-
-# TODO: Работа с проектом
-# TODO: Оплата
-# TODO: Закрытие
-
 
 # TODO: --------БЛОК ЗАКРЫТИЯ ПРОЕКТА ---------------
-# TODO: 1) Логика заявки. Возможно только при true
-# TODO:     * Понять почему не работает message
+# TODO: Работа со статус кодами
 # TODO: 2) Перевод проекта на статус завершения сбора:
 # TODO:      * Сделать изменение статуса:
 # TODO:          * По времени
