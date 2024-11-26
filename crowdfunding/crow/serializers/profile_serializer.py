@@ -150,8 +150,13 @@ class ChangeProfileRequestSerializer(serializers.ModelSerializer):
     last_name = serializers.CharField(required=False, max_length=150, help_text="Фамилия пользователя")
     first_name = serializers.CharField(required=False, max_length=150, help_text="Имя пользователя")
     about = serializers.CharField(required=False, max_length=1000, help_text="О себе")
-    sex = serializers.CharField(max_length=1, required=False,
-                                help_text="Пол пользователя. Передавать букву 'М' или 'Ж'")
+    sex = serializers.ChoiceField(choices=[
+            ('М', 'Male'),
+            ('Ж', "Female")
+        ],
+        help_text="Пол юзера. М - мужчина, Ж - женщина",
+        required=False
+    )
     company = serializers.CharField(max_length=255, required=False, help_text="Компания")
     passport = serializers.CharField(max_length=10, required=False, help_text="Паспорт")
     document = serializers.CharField(max_length=50, required=False, help_text="Какой-то документ. Будет удален")

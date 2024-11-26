@@ -21,6 +21,18 @@ from .permissions import get_project_view_permissions, \
 from .utils import check_token_timelife, check_transfer_status, set_payment_stop_status
 from .tasks import send_message_verification_email
 
+# TODO: Создание проекта по всем полям
+# TODO: Подтверждеие проекта
+# TODO: Отклонение проекта
+# TODO: Изменить категории скилы
+# TODO: Изменение проекта по всем полям
+# TODO: Принять заявку
+# TODO: Отклонить заявку
+
+# TODO: Работа с проектом
+# TODO: Оплата
+# TODO: Закрытие
+
 
 # TODO: --------БЛОК ЗАКРЫТИЯ ПРОЕКТА ---------------
 # TODO: 1) Логика заявки. Возможно только при true
@@ -35,6 +47,7 @@ from .tasks import send_message_verification_email
 # TODO: 6) Добавить админу просмотр статус кода
 # TODO: -----------------------------------------------
 # TODO: Перенести логику сброса пароля в utils
+# TODO: Добавить филтры поиска для админов в заявки
 # TODO: Добавить коды в additional
 # TODO: Система просмотров
 
@@ -256,7 +269,7 @@ class ProfileViewSet(mixins.ListModelMixin,
         if (self.get_object() == self.request.user) or (self.request.user.is_staff):
             self.serializer_class = AdditionalUserSerializerForOwner
         else:
-            if self.get_object().confirmed is False and self.request.user.is_superuser is False:
+            if self.get_object().confirmed is False and self.request.user.is_staff is False:
                 return Response(status=status.HTTP_404_NOT_FOUND)
             self.serializer_class = AdditionalUserSerializerForOther
         return super().retrieve(request, *args, **kwargs)
@@ -389,7 +402,7 @@ class ProfileChangeRequestViewSet(mixins.ListModelMixin,
                                   mixins.RetrieveModelMixin,
                                   mixins.DestroyModelMixin,
                                   viewsets.GenericViewSet):
-    queryset = ProfileChangeRequest.objects.all()
+    queryset = ProfileChangeRequest.objects.all().order_by("-create_date")
     serializer_class = ChangeProfileRequestSerializer
 
     def get_permissions(self):
