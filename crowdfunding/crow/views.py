@@ -36,6 +36,8 @@ from .utils import send_message_verification_email, check_token_timelife, check_
 # TODO: Добавить коды в additional
 # TODO: Система просмотров
 
+
+
 class ProjectViewSet(mixins.ListModelMixin,
                      mixins.RetrieveModelMixin,
                      mixins.CreateModelMixin,
@@ -153,6 +155,7 @@ class ProjectViewSet(mixins.ListModelMixin,
 
     @extend_schema(summary="Отправка заявки на закрытие сбора",
                    description="Использование возможно тогда, когда поле проекта transfer_allowed = True. Доступ у создателя проекта",
+                   request=ProjectClosureRequestSerializer
                    )
     @action(methods=['POST'], detail=True)
     def close_money_collection(self, request, *args, **kwargs):
