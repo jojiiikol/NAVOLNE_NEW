@@ -18,7 +18,8 @@ from crow.serializers.listings_serializer import *
 from .permissions import get_project_view_permissions, \
     get_project_change_request_view_permissions, get_profile_view_permissions, \
     get_profile_change_request_view_permissions
-from .utils import send_message_verification_email, check_token_timelife, check_transfer_status, set_payment_stop_status
+from .utils import check_token_timelife, check_transfer_status, set_payment_stop_status
+from .tasks import send_message_verification_email
 
 
 # TODO: --------БЛОК ЗАКРЫТИЯ ПРОЕКТА ---------------
@@ -33,6 +34,7 @@ from .utils import send_message_verification_email, check_token_timelife, check_
 # TODO: 5) При потверждении закрытия вся сумма летит в ЛК создателю
 # TODO: 6) Добавить админу просмотр статус кода
 # TODO: -----------------------------------------------
+# TODO: Перенести логику сброса пароля в utils
 # TODO: Добавить коды в additional
 # TODO: Система просмотров
 
@@ -300,7 +302,7 @@ class ProfileViewSet(mixins.ListModelMixin,
         if user.is_authenticated:
             if user.email_verified:
                 return Response(data={"Ваша почта уже активирована"}, status=status.HTTP_200_OK)
-            send_message_verification_email(user)
+            send_message_verification_email.delay(user.pk)
             return Response(data={"На вашу почту была отправлена ссылка на подтверждение"}, status=status.HTTP_200_OK)
         return Response(data={"Вы не авторизированы"}, status=status.HTTP_200_OK)
 

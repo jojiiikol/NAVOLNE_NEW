@@ -12,6 +12,7 @@ from crow.models import User, ResetPasswordToken, ProfileChangeRequest, Skill, C
     ProfileConfirmAnswer
 import datetime
 from crowdfunding.settings import EMAIL_HOST_USER
+from crow.tasks import send_reset_password_message
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -41,16 +42,7 @@ class EmailForResetPasswordSerializer(serializers.ModelSerializer):
 
     def save(self, **kwargs):
         user = User.objects.get(email=self.validated_data['email'])
-        token = default_token_generator.make_token(user)
-        reset_url = reverse('reset_password', args=[token])
-        send_mail(
-            'NAVOLNE. Изменение пароля',
-            f'Для сброса пароля перейдите по этой ссылке: http://localhost:8000{reset_url}',
-            EMAIL_HOST_USER,
-            [user.email],
-            fail_silently=False,
-        )
-        ResetPasswordToken.objects.create(user=user, token=token)
+        send_reset_password_message.delay(user.pk)
         return user
 
 
