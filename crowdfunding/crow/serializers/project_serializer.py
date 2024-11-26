@@ -341,7 +341,8 @@ class ChangeProjectRequestSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         new_images = validated_data.pop('add_image', [])
-        validated_data['name'] = validated_data['name'].lower().capitalize()
+        if validated_data.get('name'):
+            validated_data['name'] = validated_data['name'].lower().capitalize()
         change_request = super().create(validated_data)
         if new_images:
             for image in new_images:
