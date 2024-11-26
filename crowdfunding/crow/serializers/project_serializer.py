@@ -120,7 +120,7 @@ class ProjectSerializerCreate(serializers.ModelSerializer):
         return value
 
     def validate_collected_money(self, value):
-        if value < 1:
+        if value < 0:
             raise serializers.ValidationError("Неверное введенные данные")
         return value
 
@@ -227,7 +227,7 @@ class PaymentSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if attrs['user'].money < attrs['money']:
-            raise serializers.ValidationError({"error": 'На вашем балансе не хватает средств'})
+            raise serializers.ValidationError({"data": 'На вашем балансе не хватает средств'})
         return attrs
 
     def create(self, validated_data):
