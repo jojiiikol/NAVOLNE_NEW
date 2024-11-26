@@ -356,7 +356,7 @@ class AdditionalUserSerializerForOwner(serializers.ModelSerializer):
         fields = (
             'username', 'image', 'first_name', 'last_name', 'birthday', 'about', 'skill', 'sex', 'company', 'passport',
             'document', 'money', 'total_money_sent', 'confirmed', 'category', 'date_joined', 'projects', 'groups',
-            'email_verified', 'is_owner')
+            'email_verified', 'is_owner', 'is_admin')
 
     username = serializers.CharField(read_only=True)
     image = serializers.ImageField(required=False)
@@ -371,10 +371,17 @@ class AdditionalUserSerializerForOwner(serializers.ModelSerializer):
     sex = serializers.CharField(max_length=1, required=False)
     email_verified = serializers.BooleanField(read_only=True)
     is_owner = serializers.SerializerMethodField()
+    is_admin = serializers.SerializerMethodField()
 
     def get_is_owner(self, obj):
         if self.context.get('request').user.username == obj.username:
             return True
+        return False
+
+    def get_is_admin(self, obj):
+        if obj.is_superuser or obj.is_staff:
+            return True
+        return False
 
     def validate_sex(self, values):
         if values not in ['М', 'Ж']:
