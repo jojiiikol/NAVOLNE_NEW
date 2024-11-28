@@ -42,6 +42,7 @@ class User(AbstractUser):
     def get_absolute_url(self):
         return reverse('profile', kwargs={'pk': self.pk})
 
+
 class ProjectStatusCode(models.Model):
     code = models.IntegerField(null=False)
     name = models.CharField(null=False, max_length=255)
@@ -70,6 +71,22 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
+
+    def set_inwork_status(self):
+        self.status_code = ProjectStatusCode.objects.get(code="1")
+        self.save()
+
+    def set_payment_stop_status(self):
+        self.status_code = ProjectStatusCode.objects.get(code="2")
+        self.save()
+
+    def set_finish_status(self):
+        self.status_code = ProjectStatusCode.objects.get(code="3")
+        self.save()
+
+    def set_allowed_transfer_status(self):
+        self.transfer_allowed = True
+        self.save()
 
     def get_absolute_url(self):
         return reverse('project_view', kwargs={'slug': self.slug})
@@ -108,6 +125,7 @@ class ProjectChangeRequest(models.Model):
     description_for_change = models.CharField(max_length=2048, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='change_requests_user', null=True)
     create_date = models.DateField(null=True)
+
     def __str__(self):
         return self.project.name
 
@@ -181,7 +199,6 @@ class ProjectClosureRequest(models.Model):
     answer_date = models.DateTimeField(null=True)
 
 
-
 class Transaction(models.Model):
     project = models.ForeignKey(Project, on_delete=models.PROTECT)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
@@ -208,4 +225,7 @@ class ResetPasswordToken(models.Model):
     def __str__(self):
         return self.user.username
 
-
+class CommissionRules(models.Model):
+    min_percentage = models.FloatField(null=True, blank=True)
+    max_percentage = models.FloatField(null=True, blank=True)
+    commission_rate = models.FloatField(null=True, blank=True)

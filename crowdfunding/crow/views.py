@@ -1,5 +1,3 @@
-from tkinter import Image
-
 from django.core.exceptions import ObjectDoesNotExist
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
@@ -18,15 +16,14 @@ from crow.serializers.listings_serializer import *
 from .permissions import get_project_view_permissions, \
     get_project_change_request_view_permissions, get_profile_view_permissions, \
     get_profile_change_request_view_permissions
-from .utils import check_token_timelife, check_transfer_status, set_payment_stop_status
+from .utils import check_token_timelife, change_transfer_status
 from .tasks import send_message_verification_email
 
 
 # TODO: --------БЛОК ЗАКРЫТИЯ ПРОЕКТА ---------------
-# TODO: Работа со статус кодами
 # TODO: 2) Перевод проекта на статус завершения сбора:
 # TODO:      * Сделать изменение статуса:
-# TODO:          * По времени
+# TODO:          * По времени -- Расписать условия для трансфер алловед в задаче целери
 # TODO:          * По сумме -- Доп. проверка на celery
 # TODO: 4) Перевод проекта на статус завершенного -- По времени!!
 # TODO: 4) Высчитать процент коммиссии
@@ -37,7 +34,6 @@ from .tasks import send_message_verification_email
 # TODO: Добавить филтры поиска для админов в заявки
 # TODO: Добавить коды в additional
 # TODO: Система просмотров
-
 
 
 class ProjectViewSet(mixins.ListModelMixin,
@@ -83,7 +79,7 @@ class ProjectViewSet(mixins.ListModelMixin,
         serializer_data = self.serializer_class(data=request.data, context={'request': request})
         if serializer_data.is_valid():
             serializer_data.save(project=self.get_object())
-            check_transfer_status(project=self.get_object())
+            change_transfer_status(project=self.get_object())
             return Response({"data": "Транзакция проведена"}, status=status.HTTP_200_OK)
         else:
             return Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -164,7 +160,7 @@ class ProjectViewSet(mixins.ListModelMixin,
         project = self.get_object()
         serializer = ProjectClosureRequestSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
-            set_payment_stop_status(project=project)
+            project.set_payment_stop_status()
             serializer.save(project=project)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

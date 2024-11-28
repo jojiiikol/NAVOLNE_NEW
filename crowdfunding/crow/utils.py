@@ -4,9 +4,8 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 from rest_framework.response import Response
-from crow.models import VerificationToken, ProjectStatusCode
+from crow.models import VerificationToken, ProjectStatusCode, CommissionRules
 from crowdfunding.settings import EMAIL_HOST_USER, EMAIL_VERIFICATION_TOKEN_LIFETIME
-
 
 
 def check_token_timelife(token):
@@ -15,19 +14,32 @@ def check_token_timelife(token):
         return Response(data={"Ссылка недействительна"}, status=status.HTTP_200_OK)
 
 
-def check_transfer_status(project):
-    if project.closure_type == "BY_AMOUNT":
-        if project.collected_money >= project.need_money:
-            change_transfer_status(project)
-
-def set_inwork_status(project):
-    project.status_code = ProjectStatusCode.objects.get(code='1')
-    project.save()
-
 def change_transfer_status(project):
-    project.transfer_allowed = True
-    project.save()
+    if project.closure_type == "BY_AMOUNT":
+        if check_transfer_possibility(project):
+            project.set_allowed_transfer_status()
 
-def set_payment_stop_status(project):
-    project.status_code = ProjectStatusCode.objects.get(code="2")
-    project.save()
+
+def get_commission_rate(project):
+    perecentage = get_sum_percentage(project)
+    try:
+        rule = CommissionRules.objects.get(
+            min_percentage__lte=perecentage,
+            max_percentage__gte=perecentage,
+        )
+        return rule.commission_rate
+    except CommissionRules.DoesNotExist:
+        more_100_rule = CommissionRules.objects.get(max_percentage=None)
+        return more_100_rule.commission_rate
+
+
+def check_transfer_possibility(project):
+    perecentage = get_sum_percentage(project)
+    rule = CommissionRules.objects.order_by('min_percentage').first()
+    if perecentage >= rule.min_percentage:
+        return True
+    return False
+
+
+def get_sum_percentage(project):
+    return project.collected_money / project.need_money * 100

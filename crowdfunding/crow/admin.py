@@ -1,10 +1,7 @@
-from tkinter import Image
-
 from crow.models import *
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
 from .models import User
-from .views import ResetPassword
+
 
 
 @admin.register(User)
@@ -77,7 +74,7 @@ class ProjectImagesAdmin(admin.TabularInline):
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('name', 'user', 'confirmed')
+    list_display = ('name', 'user', 'status_code')
     inlines = [ProjectImagesAdmin]
 
 @admin.register(ProjectStatusCode)
@@ -88,3 +85,6 @@ class ProjectStatusCodeAdmin(admin.ModelAdmin):
 class ProjectClosureRequestAdmin(admin.ModelAdmin):
     pass
 
+@admin.register(CommissionRules)
+class CommissionRulesAdmin(admin.ModelAdmin):
+    pass

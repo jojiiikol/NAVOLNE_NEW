@@ -17,7 +17,6 @@ from crow.serializers.listings_serializer import CategoryListing, SkillListing, 
     ProjectStatusCodeSerializer
 from crow.serializers.profile_serializer import UserSerializer
 from crow.tasks import send_message_verification_email
-from crow.utils import set_inwork_status
 from crow.validators import SpecialCharactersValidator, OnlyTextValidator, ProjectNameValidator
 
 
@@ -157,7 +156,7 @@ class ProjectConfirmSerializer(serializers.ModelSerializer):
     def update_project(self, project):
         project.confirmed = self.validated_data['confirmed']
         if project.confirmed:
-            set_inwork_status(project)
+            project.set_inwork_status()
         project.save()
     # def to_representation(self, instance):
     #     representation = super().to_representation(instance)
@@ -209,10 +208,10 @@ class AnswerProjectClosureRequestSerializer(serializers.ModelSerializer):
         request = instance
         project = request.project
         if validated_data['allowed'] is True:
-            project.status_code = ProjectStatusCode.objects.get(code=3)
+            project.set_finish_status()
             # тут нужно описать перевод денег на лк
         else:
-            project.status_code = ProjectStatusCode.objects.get(code=1)
+            project.set_inwork_status()
         project.save()
         return instance
 

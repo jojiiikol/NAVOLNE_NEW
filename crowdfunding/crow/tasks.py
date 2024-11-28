@@ -1,26 +1,36 @@
 import uuid
 
+
 from celery import shared_task
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
+from django.utils import timezone
 from rest_framework.reverse import reverse
 
-from crow.models import VerificationToken, User, ResetPasswordToken
+from crow.models import VerificationToken, User, ResetPasswordToken, Project, ProjectStatusCode
+from crow.utils import check_transfer_possibility
 from crowdfunding.settings import EMAIL_HOST_USER
 from crowdfunding.celery import app
 
 
 app.conf.beat_schedule = {
-    'testing': {
-        'task': 'test_task',
-        'schedule': 5,
-        'args': ('hello', )
+    'check_transfer_status': {
+        'task': 'time_check_transfer_status',
+        'schedule': 60,
     },
 }
 
-@app.task(name='test_task')
-def test(text):
-    print(text)
+
+@app.task(name='time_check_transfer_status')
+def time_check_transfer_status():
+    projects = Project.objects.filter(closure_type="BY_TIME")
+    for project in projects:
+        if timezone.now().date() >= project.end_date and project.status_code == ProjectStatusCode.objects.get(code=1):
+            if check_transfer_possibility(project):
+                project.set_allowed_transfer_status()
+            project.set_payment_stop_status()
+            print(f"{project.name} закрыт")
+
 
 @shared_task
 def send_message_verification_email(user_id):
