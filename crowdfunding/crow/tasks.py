@@ -21,7 +21,7 @@ app.conf.beat_schedule = {
 }
 
 
-@app.task(name='time_check_transfer_status')
+@app.task(name='time_check_transfer_status', queue='transfer_status_queue')
 def time_check_transfer_status():
     projects = Project.objects.filter(closure_type="BY_TIME")
     for project in projects:
@@ -32,7 +32,7 @@ def time_check_transfer_status():
             print(f"{project.name} закрыт")
 
 
-@shared_task
+@shared_task(queue='email_queue')
 def send_message_verification_email(user_id):
     user = User.objects.get(pk=user_id)
     user_email = user.email
@@ -48,7 +48,7 @@ def send_message_verification_email(user_id):
     VerificationToken.objects.create(user=user, token=email_verification_token)
 
 
-@shared_task
+@shared_task(queue='email_queue')
 def send_reset_password_message(user_id):
     user = User.objects.get(pk=user_id)
     token = default_token_generator.make_token(user)

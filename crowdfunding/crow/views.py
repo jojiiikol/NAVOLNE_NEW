@@ -16,16 +16,11 @@ from crow.serializers.listings_serializer import *
 from .permissions import get_project_view_permissions, \
     get_project_change_request_view_permissions, get_profile_view_permissions, \
     get_profile_change_request_view_permissions
-from .utils import check_token_timelife, change_transfer_status
+from .utils import check_token_timelife, change_transfer_status, get_client_ip
 from .tasks import send_message_verification_email
 
 
 # TODO: --------БЛОК ЗАКРЫТИЯ ПРОЕКТА ---------------
-# TODO: 2) Перевод проекта на статус завершения сбора:
-# TODO:      * Сделать изменение статуса:
-# TODO:          * По времени -- Расписать условия для трансфер алловед в задаче целери
-# TODO:          * По сумме -- Доп. проверка на celery
-# TODO: 4) Перевод проекта на статус завершенного -- По времени!!
 # TODO: 4) Высчитать процент коммиссии
 # TODO: 5) При потверждении закрытия вся сумма летит в ЛК создателю
 # TODO: 6) Добавить админу просмотр статус кода
@@ -50,6 +45,10 @@ class ProjectViewSet(mixins.ListModelMixin,
 
     def get_permissions(self):
         return get_project_view_permissions(self)
+
+    def retrieve(self, request, *args, **kwargs):
+        print(get_client_ip(request))
+        return super().retrieve(request, *args, **kwargs)
 
     # Просмотр подтвержденных проектов
     @extend_schema(

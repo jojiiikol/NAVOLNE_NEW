@@ -43,3 +43,12 @@ def check_transfer_possibility(project):
 
 def get_sum_percentage(project):
     return project.collected_money / project.need_money * 100
+
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip

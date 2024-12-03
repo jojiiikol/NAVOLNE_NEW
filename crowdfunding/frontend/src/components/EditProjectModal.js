@@ -10,7 +10,7 @@ const EditProjectModal = ({ show, onHide, slug }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch('http://localhost:8000/additional/', {
+            const response = await fetch('http://localhost:8000host:8000/additional/', {
                 headers: {
                     'Content-Type': 'application/json',
                 },

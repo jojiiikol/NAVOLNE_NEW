@@ -49,6 +49,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -56,7 +57,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware'
 ]
 
 ROOT_URLCONF = 'crowdfunding.urls'
@@ -87,13 +87,15 @@ WSGI_APPLICATION = 'crowdfunding.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv("DB_NAME"),
+        'NAME': os.getenv("POSTGRES_DB"),
         'USER': 'postgres',
-        'PASSWORD': os.getenv("DB_PASSWORD"),
-        'HOST': 'localhost',
+        'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
+        'HOST': os.getenv("POSTGRES_HOST"),
         'PORT': '5432',
     }
 }
+
+
 
 
 
@@ -223,3 +225,4 @@ EMAIL_VERIFICATION_TOKEN_LIFETIME = timedelta(minutes=5)
 CELERY_TIMEZONE = 'Asia/Yekaterinburg'
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")

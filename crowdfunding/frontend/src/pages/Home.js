@@ -15,7 +15,7 @@ class Home extends Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:8000/projects/') // замените на URL вашего DRF API и ID проекта
+        fetch('http://localhost:8000/projects') // замените на URL вашего DRF API и ID проекта
             .then((response) => response.json())
             .then((data) => {this.setState({ project: data.results })});
            
