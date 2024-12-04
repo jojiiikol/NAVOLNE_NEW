@@ -55,7 +55,7 @@ const ProjectPage = () => {
     }, [slug]);
 
     return (
-        <Container style={{ marginTop: '80px' }}>
+        <Container style={{ marginTop: '80px', marginBottom: '170px' }}>
             {data && (
                 <div>
                     <Image
@@ -146,6 +146,19 @@ const ProjectPage = () => {
                             {/* {!data.is_owner &&
 							<Button size='lg' className='mt-3' href="#">Поддержать проект</Button>
 						} */}
+                            <div className=" mt-3 d-block">
+                                <span className="text-secondary fs-3 ">
+                                    О проекте:
+                                </span>
+                            </div>
+                            <Row>
+                                <Col
+                                    className="fs-5 mt-3"
+                                    style={{ textAlign: 'justify ' }}
+                                >
+                                    {data.description}
+                                </Col>
+                            </Row>
                         </Col>
 
                         <Col style={{ paddingLeft: '10px' }} className="mt-2">
@@ -187,19 +200,8 @@ const ProjectPage = () => {
                             </div>
                         </Col>
                     </Row>
-                    <div className=" mt-3 d-block">
-                        <span className="text-secondary fs-3 ">О проекте:</span>
-                    </div>
-                    <Row>
-                        <Col
-                            className="fs-5 mt-3"
-                            style={{ textAlign: 'justify ' }}
-                            sm={7}
-                        >
-                            {data.description}
-                        </Col>
-                    </Row>
-                    <span className="fs-5 "></span>
+
+                    {/* <span className="fs-5 "></span> */}
                 </div>
             )}
         </Container>

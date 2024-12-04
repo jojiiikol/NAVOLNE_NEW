@@ -60,10 +60,10 @@ export default class header extends Component {
                                     {' '}
                                     Проекты{' '}
                                 </Nav.Link>
-                                <Nav.Link href="/courses" className="fw-bold">
+                                {/* <Nav.Link href="/courses" className="fw-bold">
                                     {' '}
                                     Курсы{' '}
-                                </Nav.Link>
+                                </Nav.Link> */}
                                 <Nav.Link href="/about" className="fw-bold">
                                     {' '}
                                     FAQ{' '}

@@ -14,6 +14,7 @@ import {
     Col,
 } from 'react-bootstrap';
 import EditProfileModal from './EditProfileModal';
+import MyCard from './CardComponent';
 
 const ProfileComponent = () => {
     // useEffect(() => {
@@ -22,6 +23,7 @@ const ProfileComponent = () => {
     // }, []);
     const { profilename } = useParams();
     const [data, setData] = useState(null);
+    const [projects, setProjects] = useState(null);
 
     const [isCleared, setIsCleared] = useState(false);
 
@@ -65,13 +67,27 @@ const ProfileComponent = () => {
                 const data = await response.json();
                 setData(data);
             }
+            const response = await fetch(
+                'http://localhost:8000/profiles/' +
+                    profilename +
+                    '/get_payment_projects/',
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Bearer ' + accessToken,
+                    },
+                }
+            );
+            const data = await response.json();
+            setProjects(data);
+            console.log(data);
         };
         fetchData();
     }, [profilename]);
 
     return (
         <Container style={{ marginTop: '80px' }}>
-            {data && (
+            {data && projects && (
                 <div>
                     <Row>
                         <Col sm={3}>
@@ -213,7 +229,68 @@ const ProfileComponent = () => {
                                             className="bg-secondary"
                                             style={{ height: '200px' }}
                                         >
-                                            мяумяумуяу
+                                            <Row>
+                                                <ListGroup>
+                                                    {projects &&
+                                                        projects.length ===
+                                                            0 && (
+                                                            <div>
+                                                                <div
+                                                                    style={{
+                                                                        display:
+                                                                            'flex',
+                                                                        justifyContent:
+                                                                            'center',
+                                                                    }}
+                                                                >
+                                                                    <div className="ms-5">
+                                                                        <p className="fs-3 fw-normal  ">
+                                                                            Пользователь
+                                                                            еще
+                                                                            не
+                                                                            поддержал
+                                                                            проекты
+                                                                        </p>
+                                                                        <div
+                                                                            style={{
+                                                                                display:
+                                                                                    'flex',
+                                                                                justifyContent:
+                                                                                    'center',
+                                                                            }}
+                                                                            className="mt-3"
+                                                                        >
+                                                                            <Button
+                                                                                size="lg"
+                                                                                href="/create"
+                                                                            >
+                                                                                Cоздать
+                                                                                проект
+                                                                            </Button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        )}
+
+                                                    {projects.length !== 0 &&
+                                                        projects.map(
+                                                            (project) => (
+                                                                <ListGroupItem
+                                                                    href={`/projects/${project.slug}`}
+                                                                    key={
+                                                                        project.url
+                                                                    }
+                                                                    action
+                                                                >
+                                                                    {
+                                                                        project.name
+                                                                    }
+                                                                </ListGroupItem>
+                                                            )
+                                                        )}
+                                                </ListGroup>
+                                            </Row>
                                         </CardBody>
                                     </Card>
                                 </Col>
@@ -330,16 +407,28 @@ const ProfileComponent = () => {
                                 </div>
                             )}
 
-                            {data.projects.length !== 0 &&
-                                data.projects.map((project) => (
-                                    <ListGroupItem
-                                        href={`/projects/${project.slug}`}
-                                        key={project.url}
-                                        action
-                                    >
-                                        {project.name}
-                                    </ListGroupItem>
-                                ))}
+                            <Row md={3}>
+                                {data.projects.length !== 0 &&
+                                    data.projects.map((project) => (
+                                        <Col>
+                                            <MyCard
+                                                key={project.pk}
+                                                slug={project.slug}
+                                                collected_money={
+                                                    project.collected_money
+                                                }
+                                                need_money={project.need_money}
+                                                name={project.name}
+                                                category={project.category}
+                                                small_description={
+                                                    project.small_description
+                                                }
+                                                views={project.views}
+                                                image={project.image}
+                                            />
+                                        </Col>
+                                    ))}
+                            </Row>
                         </ListGroup>
                     </Row>
                 </div>
