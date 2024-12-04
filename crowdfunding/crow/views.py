@@ -25,6 +25,7 @@ from .tasks import send_message_verification_email
 # TODO: 5) При потверждении закрытия вся сумма летит в ЛК создателю
 # TODO: 6) Добавить админу просмотр статус кода
 # TODO: -----------------------------------------------
+# TODO: Отрефачить поддержанные проекты view get_payment_projects
 # TODO: Перенести логику сброса пароля в utils
 # TODO: Добавить филтры поиска для админов в заявки
 # TODO: Добавить коды в additional
@@ -230,6 +231,7 @@ class ProjectChangeRequestViewSet(mixins.ListModelMixin,
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+
 class ProfileViewSet(mixins.ListModelMixin,
                      mixins.RetrieveModelMixin,
                      mixins.CreateModelMixin,
@@ -345,6 +347,16 @@ class ProfileViewSet(mixins.ListModelMixin,
         profile = self.get_object()
         answer = ProfileConfirmAnswer.objects.filter(profile=profile).order_by('-answer_time')
         serializer = ProjectConfirmSerializer(answer, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+    @extend_schema(summary="Просмотреть проекты, которые поддержал пользователь")
+    @action(methods=['GET'], detail=True)
+    def get_payment_projects(self, request, *args, **kwargs):
+        user = self.get_object()
+        projects = Project.objects.filter(transaction__user=user).distinct()
+        serializer = ProjectSerializer(projects, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
