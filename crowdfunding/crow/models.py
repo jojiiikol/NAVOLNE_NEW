@@ -14,27 +14,27 @@ class Category(models.Model):
 
 
 class Skill(models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255, unique=True, help_text="Название умений")
 
     def __str__(self):
         return self.name
 
 
 class User(AbstractUser):
-    birthday = models.DateField(blank=True, null=True)
-    about = models.CharField(blank=True, null=True, max_length=1000)
-    skill = models.ManyToManyField(Skill)
-    sex = models.CharField(blank=True, null=True, max_length=1)
-    city = models.CharField(blank=True, null=True, max_length=170)
-    company = models.CharField(blank=True, null=True, max_length=255)
-    passport = models.CharField(blank=True, null=True, max_length=10)
-    document = models.CharField(blank=True, null=True, max_length=50)
+    birthday = models.DateField(blank=True, null=True, help_text="Дата рождения пользователя")
+    about = models.CharField(blank=True, null=True, max_length=1000, help_text="О пользователе")
+    skill = models.ManyToManyField(Skill, help_text="Уменя пользователя")
+    sex = models.CharField(blank=True, null=True, max_length=1, help_text="Пол пользователя. М/Ж")
+    city = models.CharField(blank=True, null=True, max_length=170, help_text="Город проживания")
+    company = models.CharField(blank=True, null=True, max_length=255, help_text="Компания в которой работает пользователь")
+    passport = models.CharField(blank=True, null=True, max_length=10, help_text="Паспортные данные пользователя")
+    document = models.CharField(blank=True, null=True, max_length=50, help_text="Документ пользователя")
     image = models.ImageField(upload_to="users/", blank=True, default='users/user.png')
-    money = models.FloatField(blank=True, null=False, default=0)
-    total_money_sent = models.FloatField(blank=True, null=False, default=0)
-    category = models.ManyToManyField(Category)
-    confirmed = models.BooleanField(default=False, null=False)
-    email_verified = models.BooleanField(default=False, null=False)
+    money = models.FloatField(blank=True, null=False, default=0, help_text="Актнуальный счет пользователя")
+    total_money_sent = models.FloatField(blank=True, null=False, default=0, help_text="Сколько всего задонатил пользователь")
+    category = models.ManyToManyField(Category, help_text="Интересные категории проектов для пользователя")
+    confirmed = models.BooleanField(default=False, null=False, help_text="Подтвержден дли пользователь в системе")
+    email_verified = models.BooleanField(default=False, null=False, help_text="Подтверждена ли почта пользователя")
 
     def __str__(self):
         return self.username
@@ -44,8 +44,8 @@ class User(AbstractUser):
 
 
 class ProjectStatusCode(models.Model):
-    code = models.IntegerField(null=False)
-    name = models.CharField(null=False, max_length=255)
+    code = models.IntegerField(null=False, help_text="Код статуса")
+    name = models.CharField(null=False, max_length=255, help_text="Название статуса")
 
     def __str__(self):
         return f"{self.code} - {self.name}"
@@ -65,9 +65,9 @@ class Project(models.Model):
     slug = models.SlugField(max_length=255, unique=True, db_index=True)
     views = models.IntegerField(default=0)
     confirmed = models.BooleanField(default=False, null=False)
-    closure_type = models.CharField(blank=False, null=False, max_length=10, default="BY_AMOUNT")
-    status_code = models.ForeignKey(ProjectStatusCode, on_delete=models.CASCADE, null=True)
-    transfer_allowed = models.BooleanField(default=False, null=False)
+    closure_type = models.CharField(blank=False, null=False, max_length=10, default="BY_AMOUNT", help_text="Тип закрытия проекта. BY_AMOUNT - закрытие сбора по определенной сумме, BY_TIME - закрытие сбора по истечении времени")
+    status_code = models.ForeignKey(ProjectStatusCode, on_delete=models.CASCADE, null=True,  help_text="Статус код проекта. 0 - не поступил в работу, 1 - в работе, 2 - сбор приостановлен, 3 - в архиве")
+    transfer_allowed = models.BooleanField(default=False, null=False, help_text="Поле для разрешения снятии средств с проекта")
 
     def __str__(self):
         return self.name

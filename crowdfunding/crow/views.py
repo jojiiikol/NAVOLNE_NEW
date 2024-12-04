@@ -20,16 +20,21 @@ from .utils import check_token_timelife, change_transfer_status, get_client_ip
 from .tasks import send_message_verification_email
 
 
-# TODO: --------БЛОК ЗАКРЫТИЯ ПРОЕКТА ---------------
-# TODO: 4) Высчитать процент коммиссии
-# TODO: 5) При потверждении закрытия вся сумма летит в ЛК создателю
-# TODO: 6) Добавить админу просмотр статус кода
+# TODO: -------- ГЛАВНОЕ СЕЙЧАС ---------------
+# TODO: 1) Высчитать процент коммиссии на момент сняти денег
+# TODO: 2) При потверждении закрытия по проценту сумма летит в ЛК создателю
+# TODO: 3) Разобраться с cors для просмотра по фильтрам
 # TODO: -----------------------------------------------
+
+# TODO: -------- Доп логика ---------------
+# TODO: 1) Система просмотров
+# TODO:     * Вывод популярных проектов за счет уникальных просмотров
+# TODO: 2) Вывод проектов по интересам пользователя
+# TODO: -----------------------------------------------
+
 # TODO: Отрефачить поддержанные проекты view get_payment_projects
 # TODO: Перенести логику сброса пароля в utils
 # TODO: Добавить филтры поиска для админов в заявки
-# TODO: Добавить коды в additional
-# TODO: Система просмотров
 
 
 class ProjectViewSet(mixins.ListModelMixin,
@@ -518,13 +523,16 @@ class AdditionalTag(APIView):
             category = Category.objects.all()
             skills = Skill.objects.all()
             group = Group.objects.all()
+            status_codes = ProjectStatusCode.objects.all()
             serializer_group = GroupSerializerForAdditionalView(group, many=True)
             serializer_skill = SkillSerializer(skills, many=True)
             serializer_category = CategorySerializer(category, many=True)
+            serializer_status_code = ProjectStatusCodeSerializer(status_codes, many=True)
             data = {
                 "groups": serializer_group.data,
                 "skills": serializer_skill.data,
-                "category": serializer_category.data
+                "category": serializer_category.data,
+                "status_codes": serializer_status_code.data
             }
             return Response(data)
         except:
