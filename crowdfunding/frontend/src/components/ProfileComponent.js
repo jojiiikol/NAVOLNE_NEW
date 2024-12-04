@@ -74,7 +74,7 @@ const ProfileComponent = () => {
                 {
                     headers: {
                         'Content-Type': 'application/json',
-                        Authorization: 'Bearer ' + accessToken,
+                       // Authorization: 'Bearer ' + accessToken,
                     },
                 }
             );
@@ -125,7 +125,7 @@ const ProfileComponent = () => {
                                     {data.total_money_sent}
                                 </p>
                             </div>
-                            {data.is_owner && (
+                            {/* {data.is_owner && (
                                 <div className="d-flex justify-content-between me-5">
                                     <p
                                         className="fs-5 fw-normal text-secondary "
@@ -138,7 +138,7 @@ const ProfileComponent = () => {
                                         {data.money}
                                     </p>
                                 </div>
-                            )}
+                            )} */}
 
                             {data.is_owner && (
                                 <div
@@ -200,7 +200,7 @@ const ProfileComponent = () => {
                                             Мой баланс:
                                         </p>
                                         <p className="fs-4 fw-bold text-primary  mb-2 ms-2 me-2">
-                                            {data.total_money_sent}
+                                            {data.money}
                                         </p>
                                     </Badge>
                                 </Col>
@@ -260,13 +260,7 @@ const ProfileComponent = () => {
                                                                             }}
                                                                             className="mt-3"
                                                                         >
-                                                                            <Button
-                                                                                size="lg"
-                                                                                href="/create"
-                                                                            >
-                                                                                Cоздать
-                                                                                проект
-                                                                            </Button>
+                                                                          
                                                                         </div>
                                                                     </div>
                                                                 </div>
