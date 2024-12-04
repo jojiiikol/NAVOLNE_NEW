@@ -5,7 +5,7 @@ video {
 }
 
 .video-h1-center {
-    font-size: 170px;
+    font-size: 9vw;
     font-weight: 900;
     position: absolute;
     left: 50%;
@@ -15,7 +15,7 @@ video {
 }
 
 .video-h2-center {
-    font-size: 70px;
+    font-size: 3vw;
     font-weight: 500;
     position: absolute;
     left: 50%;
@@ -26,11 +26,11 @@ video {
 .video-h3-center {
     width: 900px;
     text-align: center;
-    font-size: 40px;
+    font-size: 1.5vw;
     font-weight: 300;
     position: absolute;
     left: 50%;
-    top: 55%;
+    top: 50%;
     transform: translate(-50%, -50%);
     color: white;
 }
