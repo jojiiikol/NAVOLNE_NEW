@@ -94,19 +94,188 @@ export default class Registration extends Component {
     };
     render() {
         return (
-            <Container style={{ marginTop: '60px' }}>
-                <Row xs={1} md={2} className="g-4">
-                    <Col>
-                        <h1
-                            style={{
-                                marginBottom: '0.5em',
-                                fontWeight: 'bold',
-                                fontSize: '55px',
-                            }}
-                        >
-                            Регистрация
-                        </h1>
-                        <div
+            <Container style={{}}>
+                <Form onSubmit={this.handleSubmit}>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Я:</Form.Label>
+                        {this.state.info_groups.length === 0 ? (
+                            <div> No data for collection </div>
+                        ) : (
+                            <div>
+                                <Form.Check
+                                    type="radio"
+                                    value={[this.state.info_groups[0].id]}
+                                    checked={
+                                        this.state.info_cat ==
+                                        this.state.info_groups[0].id
+                                    }
+                                    label={this.state.info_groups[0].name}
+                                    onChange={this.handleRadioChange.bind(this)}
+                                />
+                                <Form.Check
+                                    type="radio"
+                                    value={this.state.info_groups[1].id}
+                                    checked={
+                                        this.state.info_cat ==
+                                        this.state.info_groups[1].id
+                                    }
+                                    label={this.state.info_groups[1].name}
+                                    onChange={this.handleRadioChange.bind(this)}
+                                />
+                            </div>
+                        )}
+                        {this.state.errorMessage && (
+                            <Form.Text className="text-danger">
+                                {' '}
+                                {this.state.errorMessage.groups}{' '}
+                            </Form.Text>
+                        )}
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="formBasicPassword">
+                        <Form.Control
+                            name="username"
+                            value={this.state.username}
+                            onChange={this.handleChange}
+                            type="text"
+                            placeholder="Введите логин"
+                        />
+                        {this.state.errorMessage && (
+                            <Form.Text className="text-danger">
+                                {' '}
+                                {this.state.errorMessage.username}{' '}
+                            </Form.Text>
+                        )}
+                        <div style={{ display: 'block' }}>
+                            <Form.Text className="text-muted">
+                                *имя, которое увидят другие пользователи
+                            </Form.Text>
+                        </div>
+                    </Form.Group>
+
+                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                        {/* <Form.Label>Email</Form.Label> */}
+                        <Form.Control
+                            type="email"
+                            name="email"
+                            value={this.state.email}
+                            onChange={this.handleChange}
+                            placeholder="Введите ваш email"
+                        />
+                        {this.state.errorMessage && (
+                            <Form.Text className="text-danger">
+                                {' '}
+                                {this.state.errorMessage.email}{' '}
+                            </Form.Text>
+                        )}
+                    </Form.Group>
+
+                    <Form.Group className="mb-3" controlId="formBasicPassword">
+                        {/* <Form.Label>Пароль</Form.Label> */}
+                        <Form.Control
+                            type="password"
+                            name="password_1"
+                            value={this.state.password_1}
+                            onChange={this.handleChange}
+                            placeholder="Введите пароль"
+                        />
+                        {this.state.errorMessage && (
+                            <Form.Text className="text-danger">
+                                {' '}
+                                {this.state.errorMessage.password_1}{' '}
+                            </Form.Text>
+                        )}
+                    </Form.Group>
+
+                    <Form.Group className="mb-3" controlId="formBasicPassword">
+                        {/* <Form.Label>Повторите пароль</Form.Label> */}
+                        <Form.Control
+                            type="password"
+                            name="password_2"
+                            value={this.state.password_2}
+                            onChange={this.handleChange}
+                            placeholder="Повторите пароль"
+                        />
+                        {this.state.errorMessage && (
+                            <Form.Text className="text-danger">
+                                {' '}
+                                {this.state.errorMessage.password_2}{' '}
+                            </Form.Text>
+                        )}
+                    </Form.Group>
+
+                    <Form.Group className="mb-3" controlId="formBasicPassword">
+                        {/* <Form.Label>Фамилия</Form.Label> */}
+                        <Form.Control
+                            name="last_name"
+                            value={this.state.last_name}
+                            onChange={this.handleChange}
+                            type="text"
+                            placeholder="Введите фамилию"
+                        />
+                        {this.state.errorMessage && (
+                            <Form.Text className="text-danger">
+                                {' '}
+                                {this.state.errorMessage.last_name}{' '}
+                            </Form.Text>
+                        )}
+                        <div style={{ display: 'block' }}>
+                            <Form.Text className="text-muted">
+                                *напишите свою настоящую фамилию
+                            </Form.Text>
+                        </div>
+                    </Form.Group>
+
+                    <Form.Group className="mb-3" controlId="formBasicPassword">
+                        {/* <Form.Label>Имя</Form.Label> */}
+                        <Form.Control
+                            name="first_name"
+                            value={this.state.first_name}
+                            onChange={this.handleChange}
+                            type="text"
+                            placeholder="Введите имя"
+                        />
+                        {this.state.errorMessage && (
+                            <Form.Text className="text-danger">
+                                {' '}
+                                {this.state.errorMessage.first_name}{' '}
+                            </Form.Text>
+                        )}
+                        <div style={{ display: 'block' }}>
+                            <Form.Text className="text-muted">
+                                *напишите своё настоящее имя
+                            </Form.Text>
+                        </div>
+                    </Form.Group>
+
+                    <Form.Group
+                        className="mb-3"
+                        controlId="formBasicCheckbox"
+                        style={{ display: 'flex' }}
+                    >
+                        <Form.Check
+                            type="checkbox"
+                            style={{ marginRight: '1em' }}
+                        />
+                        <Form.Label>
+                            Нажимая на кнопку «Зарегистрироваться», я соглашаюсь
+                            с{' '}
+                            <a href="https://vk.com/lastimperatorr">
+                                политикой по обработке персональных данных
+                            </a>
+                        </Form.Label>
+                    </Form.Group>
+
+                    <Button variant="primary" type="submit">
+                        Зарегистрироваться
+                    </Button>
+                </Form>
+            </Container>
+        );
+    }
+}
+
+{
+    /* <div
                             className="registration-pik-and-text"
                             style={{ display: 'flex', alignItems: 'center' }}
                         >
@@ -146,221 +315,5 @@ export default class Registration extends Component {
                                     Войти в аккаунт
                                 </Button>
                             </div>
-                        </div>
-
-                        <Form onSubmit={this.handleSubmit}>
-                            <Form.Group className="mb-3">
-                                <Form.Label>Я:</Form.Label>
-                                {this.state.info_groups.length === 0 ? (
-                                    <div> No data for collection </div>
-                                ) : (
-                                    <div>
-                                        <Form.Check
-                                            type="radio"
-                                            value={[
-                                                this.state.info_groups[0].id,
-                                            ]}
-                                            checked={
-                                                this.state.info_cat ==
-                                                this.state.info_groups[0].id
-                                            }
-                                            label={
-                                                this.state.info_groups[0].name
-                                            }
-                                            onChange={this.handleRadioChange.bind(
-                                                this
-                                            )}
-                                        />
-                                        <Form.Check
-                                            type="radio"
-                                            value={this.state.info_groups[1].id}
-                                            checked={
-                                                this.state.info_cat ==
-                                                this.state.info_groups[1].id
-                                            }
-                                            label={
-                                                this.state.info_groups[1].name
-                                            }
-                                            onChange={this.handleRadioChange.bind(
-                                                this
-                                            )}
-                                        />
-                                    </div>
-                                )}
-                                {this.state.errorMessage && (
-                                    <Form.Text className="text-danger">
-                                        {' '}
-                                        {this.state.errorMessage.groups}{' '}
-                                    </Form.Text>
-                                )}
-                            </Form.Group>
-                            <Form.Group
-                                className="mb-3"
-                                controlId="formBasicPassword"
-                            >
-                                <Form.Label>Логин</Form.Label>
-                                <Form.Control
-                                    name="username"
-                                    value={this.state.username}
-                                    onChange={this.handleChange}
-                                    type="text"
-                                    placeholder="Введите логин"
-                                />
-                                {this.state.errorMessage && (
-                                    <Form.Text className="text-danger">
-                                        {' '}
-                                        {this.state.errorMessage.username}{' '}
-                                    </Form.Text>
-                                )}
-                                <div style={{ display: 'block' }}>
-                                    <Form.Text className="text-muted">
-                                        *имя, которое увидят другие пользователи
-                                    </Form.Text>
-                                </div>
-                            </Form.Group>
-
-                            <Form.Group
-                                className="mb-3"
-                                controlId="formBasicEmail"
-                            >
-                                <Form.Label>Email</Form.Label>
-                                <Form.Control
-                                    type="email"
-                                    name="email"
-                                    value={this.state.email}
-                                    onChange={this.handleChange}
-                                    placeholder="Введите ваш email"
-                                />
-                                {this.state.errorMessage && (
-                                    <Form.Text className="text-danger">
-                                        {' '}
-                                        {this.state.errorMessage.email}{' '}
-                                    </Form.Text>
-                                )}
-                            </Form.Group>
-
-                            <Form.Group
-                                className="mb-3"
-                                controlId="formBasicPassword"
-                            >
-                                <Form.Label>Пароль</Form.Label>
-                                <Form.Control
-                                    type="password"
-                                    name="password_1"
-                                    value={this.state.password_1}
-                                    onChange={this.handleChange}
-                                    placeholder="Введите сложный пароль"
-                                />
-                                {this.state.errorMessage && (
-                                    <Form.Text className="text-danger">
-                                        {' '}
-                                        {
-                                            this.state.errorMessage.password_1
-                                        }{' '}
-                                    </Form.Text>
-                                )}
-                            </Form.Group>
-
-                            <Form.Group
-                                className="mb-3"
-                                controlId="formBasicPassword"
-                            >
-                                <Form.Label>Повторите пароль</Form.Label>
-                                <Form.Control
-                                    type="password"
-                                    name="password_2"
-                                    value={this.state.password_2}
-                                    onChange={this.handleChange}
-                                    placeholder="Опять введите свой пароль)"
-                                />
-                                {this.state.errorMessage && (
-                                    <Form.Text className="text-danger">
-                                        {' '}
-                                        {
-                                            this.state.errorMessage.password_2
-                                        }{' '}
-                                    </Form.Text>
-                                )}
-                            </Form.Group>
-
-                            <Form.Group
-                                className="mb-3"
-                                controlId="formBasicPassword"
-                            >
-                                <Form.Label>Фамилия</Form.Label>
-                                <Form.Control
-                                    name="last_name"
-                                    value={this.state.last_name}
-                                    onChange={this.handleChange}
-                                    type="text"
-                                    placeholder="Введите фамилию"
-                                />
-                                {this.state.errorMessage && (
-                                    <Form.Text className="text-danger">
-                                        {' '}
-                                        {this.state.errorMessage.last_name}{' '}
-                                    </Form.Text>
-                                )}
-                                <div style={{ display: 'block' }}>
-                                    <Form.Text className="text-muted">
-                                        *напишите свою настоящую фамилию
-                                    </Form.Text>
-                                </div>
-                            </Form.Group>
-
-                            <Form.Group
-                                className="mb-3"
-                                controlId="formBasicPassword"
-                            >
-                                <Form.Label>Имя</Form.Label>
-                                <Form.Control
-                                    name="first_name"
-                                    value={this.state.first_name}
-                                    onChange={this.handleChange}
-                                    type="text"
-                                    placeholder="Введите имя"
-                                />
-                                {this.state.errorMessage && (
-                                    <Form.Text className="text-danger">
-                                        {' '}
-                                        {
-                                            this.state.errorMessage.first_name
-                                        }{' '}
-                                    </Form.Text>
-                                )}
-                                <div style={{ display: 'block' }}>
-                                    <Form.Text className="text-muted">
-                                        *напишите своё настоящее имя
-                                    </Form.Text>
-                                </div>
-                            </Form.Group>
-
-                            <Form.Group
-                                className="mb-3"
-                                controlId="formBasicCheckbox"
-                                style={{ display: 'flex' }}
-                            >
-                                <Form.Check
-                                    type="checkbox"
-                                    style={{ marginRight: '1em' }}
-                                />
-                                <Form.Label>
-                                    Нажимая на кнопку «Зарегистрироваться», я
-                                    соглашаюсь с{' '}
-                                    <a href="https://vk.com/lastimperatorr">
-                                        политикой по обработке персональных
-                                        данных
-                                    </a>
-                                </Form.Label>
-                            </Form.Group>
-
-                            <Button variant="primary" type="submit">
-                                Зарегистрироваться
-                            </Button>
-                        </Form>
-                    </Col>
-                </Row>
-            </Container>
-        );
-    }
+                        </div> */
 }

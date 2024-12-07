@@ -23,7 +23,8 @@ import ProjectPage from './ProjectPage';
 import Create from '../components/forms/CreateComponent';
 import SearchComponent from './SearchComponent';
 import Category from './CategoryComponent';
-
+import NotFoundComponent from './NotFoundComponent';
+import AuthPage from '../pages/AuthPage';
 export default class header extends Component {
     render() {
         return (
@@ -90,14 +91,14 @@ export default class header extends Component {
                                         <Button
                                             variant="outline-primary"
                                             className="me-sm-2"
-                                            href="/login"
+                                            href="/auth"
                                         >
                                             Войти
                                         </Button>
                                         <Button
                                             variant="primary"
                                             className="me-sm-2"
-                                            href="/registration"
+                                            href="/auth"
                                         >
                                             Зарегистрироваться
                                         </Button>
@@ -124,6 +125,7 @@ export default class header extends Component {
                         <Route exact path="/Courses" component={Courses} />
                         <Route exact path="/About" component={About} />
                         <Route exact path="/Login" component={Login} />
+                        <Route exact path="/Auth" component={AuthPage} />
                         <Route
                             exact
                             path="/Registration"
@@ -138,6 +140,7 @@ export default class header extends Component {
                         <Route path="/projects/:slug" component={ProjectPage} />
                         <Route path="/search/" component={SearchComponent} />
                         <Route path="/category/" component={Category} />
+                        <Route exact path="*" component={NotFoundComponent} />
                     </Switch>
                 </Router>
             </>

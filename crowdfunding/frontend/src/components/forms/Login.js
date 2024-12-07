@@ -57,18 +57,58 @@ export default class Login extends Component {
 
     render() {
         return (
-            <Container style={{ marginTop: '60px' }}>
-                <h1
-                    style={{
-                        marginBottom: '0.5em',
-                        fontWeight: 'bold',
-                        fontSize: '55px',
-                    }}
-                >
-                    Вход
-                </h1>
+            <Container style={{}}>
+                <Form onSubmit={this.handleSubmit} className="mt-4">
+                    <Form.Group controlId="formBasicEmail">
+                        <Form.Control
+                            name="username"
+                            value={this.state.username}
+                            onChange={this.handleChange}
+                            type="text"
+                            placeholder="Введите имя пользователя"
+                        />
+                        {this.state.errorMessage && (
+                            <Form.Text className="text-danger">
+                                {' '}
+                                {this.state.errorMessage.username}{' '}
+                            </Form.Text>
+                        )}
+                    </Form.Group>
 
-                <Row xs={1} md={2} className="g-4">
+                    <Form.Group controlId="formBasicPassword" className="mt-2">
+                        <Form.Control
+                            type="password"
+                            name="password"
+                            value={this.state.password}
+                            onChange={this.handleChange}
+                            placeholder="Введите ваш пароль"
+                        />
+                        {this.state.errorMessage && (
+                            <Form.Text className="text-danger">
+                                {' '}
+                                {this.state.errorMessage.password}{' '}
+                            </Form.Text>
+                        )}
+                    </Form.Group>
+                    {this.state.errorMessage && (
+                        <Form.Text className="text-danger">
+                            {' '}
+                            {this.state.errorMessage.detail}{' '}
+                        </Form.Text>
+                    )}
+                    <div className="d-grid ">
+                        <Button
+                            variant="primary"
+                            type="submit"
+                            className="mt-4 fw-bold fs-4"
+                            style={{ height: '3rem' }}
+                        >
+                            ПРОДОЛЖИТЬ
+                        </Button>
+                    </div>
+                </Form>
+
+                {/* <Row xs={1} md={2} className="g-4">
                     <Col>
                         <Form onSubmit={this.handleSubmit}>
                             <Form.Group
@@ -140,7 +180,7 @@ export default class Login extends Component {
                             </Button>
                         </Form>
                     </Col>
-                </Row>
+                </Row> */}
             </Container>
         );
     }
