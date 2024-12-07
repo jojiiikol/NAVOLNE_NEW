@@ -9,8 +9,8 @@ import {
 } from 'mdb-react-ui-kit';
 import { Link } from 'react-router-dom';
 import '../css/home.css';
-import MyCard from './CardComponent.js';
-import PaymentComponent from './PaymentComponent.js';
+import MyCard from '../components/cards/CardComponent.js';
+import PaymentComponent from '../components/PaymentComponent.js';
 
 const PaginationComponent = () => {
     const [data, setData] = useState([]);

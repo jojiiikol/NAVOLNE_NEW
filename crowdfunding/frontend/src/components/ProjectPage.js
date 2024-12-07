@@ -10,8 +10,8 @@ import {
     CardBody,
 } from 'react-bootstrap';
 import ProgressBar from './progress-bar.component';
-import EditProjectModal from './EditProjectModal';
-import ContactCard from './CardContactsComponent';
+import EditProjectModal from '../components/forms/EditProjectModal';
+import ContactCard from '../components/cards/CardContactsComponent';
 import PaymentComponent from './PaymentComponent';
 const ProjectPage = () => {
     const [showModal, setShowModal] = useState(false); // Состояние для отображения модального окна
@@ -66,16 +66,16 @@ const ProjectPage = () => {
                             filter: 'brightness(50%)',
                             position: 'relative',
                         }}
-                        src="https://png.pngtree.com/back_origin_pic/00/02/16/cd1f6288c79730c5c2e50e9498dbb00b.jpg"
+                        src="https://avatars.mds.yandex.net/i?id=00258557af4a739f80dc1ca441f6bd48_l-8564741-images-thumbs&n=13"
                         className="shadow rounded-4"
                     />
                     <p
                         className="mb-0 mt-0 fw-bold text-uppercase"
                         style={{
-                            fontSize: '70px',
+                            fontSize: '5vw',
                             position: 'absolute',
                             transform: 'translate(-50%, -50%)',
-                            top: '17%',
+                            top: '18%',
                             left: '50%',
                             color: 'white',
                         }}
@@ -84,12 +84,12 @@ const ProjectPage = () => {
                     </p>
 
                     <p
-                        className="mt-1"
+                        className="mt-2"
                         style={{
-                            fontSize: '30px',
+                            fontSize: '2vw',
                             position: 'absolute',
                             transform: 'translate(-50%, -50%)',
-                            top: '23%',
+                            top: '25%',
                             left: '50%',
                             color: 'white',
                         }}
@@ -104,7 +104,7 @@ const ProjectPage = () => {
                         style={{
                             position: 'absolute',
                             transform: 'translate(-50%, -50%)',
-                            top: '30%',
+                            top: '33%',
                             left: '50%',
                             width: '20%',
                         }}

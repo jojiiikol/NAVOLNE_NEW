@@ -13,8 +13,8 @@ import {
     Row,
     Col,
 } from 'react-bootstrap';
-import EditProfileModal from './EditProfileModal';
-import MyCard from './CardComponent';
+import EditProfileModal from './forms/EditProfileModal';
+import MyCard from './cards/MiniProjectCard';
 
 const ProfileComponent = () => {
     // useEffect(() => {
@@ -74,7 +74,7 @@ const ProfileComponent = () => {
                 {
                     headers: {
                         'Content-Type': 'application/json',
-                       // Authorization: 'Bearer ' + accessToken,
+                        // Authorization: 'Bearer ' + accessToken,
                     },
                 }
             );
@@ -259,9 +259,7 @@ const ProfileComponent = () => {
                                                                                     'center',
                                                                             }}
                                                                             className="mt-3"
-                                                                        >
-                                                                          
-                                                                        </div>
+                                                                        ></div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -401,7 +399,7 @@ const ProfileComponent = () => {
                                 </div>
                             )}
 
-                            <Row md={3}>
+                            <Row md={12}>
                                 {data.projects.length !== 0 &&
                                     data.projects.map((project) => (
                                         <Col>

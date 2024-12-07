@@ -13,14 +13,14 @@ import { PersonFill } from 'react-bootstrap-icons';
 
 import About from '../pages/About';
 import Courses from '../pages/Courses';
-import Login from '../pages/Login';
+import Login from '../components/forms/Login';
 import News from '../pages/News';
 import Projects from '../pages/Projects';
-import Registration from '../pages/Registration';
+import Registration from '../components/forms/Registration';
 import Home from '../pages/Home';
 import ProfileComponent from './ProfileComponent';
 import ProjectPage from './ProjectPage';
-import Create from './CreateComponent';
+import Create from '../components/forms/CreateComponent';
 import SearchComponent from './SearchComponent';
 import Category from './CategoryComponent';
 

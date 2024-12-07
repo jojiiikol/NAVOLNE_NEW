@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import idea from '../images/idea.png';
+import idea from '../../images/idea.png';
 
 export default class Registration extends Component {
     constructor(props) {

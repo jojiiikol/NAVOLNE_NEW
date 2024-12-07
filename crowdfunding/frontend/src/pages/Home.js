@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Card, Col, Row } from 'react-bootstrap';
 import ProgressBar from '../components/progress-bar.component';
-import MyCard from '../components/CardComponent';
+import MyCard from '../components/cards/CardComponent';
 import '../css/home.css';
 import footage from '../images/surgut.mp4';
 import { Link } from 'react-router-dom';
@@ -17,8 +17,9 @@ class Home extends Component {
     componentDidMount() {
         fetch('http://localhost:8000/projects') // замените на URL вашего DRF API и ID проекта
             .then((response) => response.json())
-            .then((data) => {this.setState({ project: data.results })});
-           
+            .then((data) => {
+                this.setState({ project: data.results });
+            });
     }
 
     render() {
@@ -79,7 +80,7 @@ class Home extends Component {
                         </a>
                     </div>
 
-                    <Row xs={2} md={3} className="g-4">
+                    <Row xs={1} md={3} className="g-4">
                         {project.map((project) => (
                             <Col>
                                 <MyCard
