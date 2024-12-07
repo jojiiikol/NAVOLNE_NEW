@@ -404,6 +404,7 @@ const ProfileComponent = () => {
                                     data.projects.map((project) => (
                                         <Col>
                                             <MyCard
+                                                className="mb-3"
                                                 key={project.pk}
                                                 slug={project.slug}
                                                 collected_money={

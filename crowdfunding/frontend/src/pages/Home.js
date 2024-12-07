@@ -95,6 +95,7 @@ class Home extends Component {
                                     }
                                     views={project.views}
                                     image={project.image}
+                                    code={project.status_code.code}
                                 />
                             </Col>
                         ))}

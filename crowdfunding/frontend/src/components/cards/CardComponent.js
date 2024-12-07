@@ -12,6 +12,7 @@ const MyCard = (props) => {
         small_description,
         views,
         image,
+        code,
     } = props;
     return (
         <div>
@@ -20,12 +21,26 @@ const MyCard = (props) => {
                     className="border-0 rounded-5 shadow"
                     style={{ backgroundColor: '#FFFFFF' }}
                 >
-                    <Card.Img
-                        className="rounded-5 "
-                        style={{ height: 200, objectFit: 'cover' }}
-                        variant="top"
-                        src={image}
-                    />
+                    {code == 1 && (
+                        <Card.Img
+                            className="rounded-5 "
+                            style={{ height: 200, objectFit: 'cover' }}
+                            variant="top"
+                            src={image}
+                        />
+                    )}
+                    {code == 3 && (
+                        <Card.Img
+                            className="rounded-5 "
+                            style={{
+                                height: 200,
+                                objectFit: 'cover',
+                                filter: 'saturate(20%)',
+                            }}
+                            variant="top"
+                            src={image}
+                        />
+                    )}
                     <Card.Body className="d-flex flex-column">
                         <Card.Title className="fs-1">{name}</Card.Title>
                         <div className="d-flex">
@@ -43,7 +58,8 @@ const MyCard = (props) => {
                             {small_description}
                         </Card.Text>
                         <div style={{ marginTop: 'auto' }}>
-                            <Card.Text>Собрано:</Card.Text>
+                            {code == 1 && <Card.Text>Собрано:</Card.Text>}
+                            {code == 3 && <Card.Text>Сбор окончен</Card.Text>}
                             <ProgressBar
                                 completed={Math.round(
                                     (collected_money / need_money) * 100

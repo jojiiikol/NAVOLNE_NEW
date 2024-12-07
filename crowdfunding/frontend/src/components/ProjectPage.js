@@ -17,6 +17,9 @@ const ProjectPage = () => {
     const [showModal, setShowModal] = useState(false); // Состояние для отображения модального окна
     const openModal = () => setShowModal(true); // Функция для открытия модального окна
     const closeModal = () => setShowModal(false); // Функция для закрытия модального окна
+    const [showModalPayment, setShowModalPayment] = useState(false); // Состояние для отображения модального окна
+    const openModalPayment = () => setShowModalPayment(true); // Функция для открытия модального окна
+    const closeModalPayment = () => setShowModalPayment(false); // Функция для закрытия модального окна
     const { slug } = useParams();
     const [data, setData] = useState(null);
     useEffect(() => {
@@ -100,7 +103,7 @@ const ProjectPage = () => {
                         size="lg"
                         className="mt-0"
                         variant="outline-primarylight"
-                        onClick={openModal}
+                        onClick={openModalPayment}
                         style={{
                             position: 'absolute',
                             transform: 'translate(-50%, -50%)',
@@ -112,10 +115,10 @@ const ProjectPage = () => {
                         Поддержать проект
                     </Button>
 
-                    {showModal && (
+                    {showModalPayment && (
                         <PaymentComponent
                             show={true}
-                            onHide={closeModal}
+                            onHide={closeModalPayment}
                             slug={slug}
                         />
                     )}
