@@ -9,10 +9,13 @@ import {
     Card,
     CardBody,
 } from 'react-bootstrap';
+import Carousel from 'react-bootstrap/Carousel';
+
 import ProgressBar from './progress-bar.component';
 import EditProjectModal from '../components/forms/EditProjectModal';
 import ContactCard from '../components/cards/CardContactsComponent';
 import PaymentComponent from './PaymentComponent';
+import InfoProjectCard from './cards/InfoProjectCard';
 const ProjectPage = () => {
     const [showModal, setShowModal] = useState(false); // Состояние для отображения модального окна
     const openModal = () => setShowModal(true); // Функция для открытия модального окна
@@ -61,7 +64,163 @@ const ProjectPage = () => {
         <Container style={{ marginTop: '80px', marginBottom: '170px' }}>
             {data && (
                 <div>
-                    <Image
+                    <Carousel
+                        data-bs-theme="white"
+                        className="shadow rounded-4"
+                    >
+                        {data.project_images.map((img, pk) => (
+                            <Carousel.Item key={pk}>
+                                <img
+                                    className="d-block w-100 shadow rounded-4"
+                                    src={img.image}
+                                    style={{
+                                        filter: 'brightness(50%)',
+                                        objectFit: 'cover',
+                                        height: '20rem',
+                                    }}
+                                />
+                                <Carousel.Caption>
+                                    <h1
+                                        className="mb-0 mt-0 fw-bold text-uppercase"
+                                        style={{ fontSize: '4vw' }}
+                                    >
+                                        {data.name}
+                                    </h1>
+                                    <p style={{ fontSize: '2vw' }}>
+                                        {data.small_description}
+                                    </p>
+                                    <Button
+                                        size="lg"
+                                        className="mt-0"
+                                        variant="outline-primarylight"
+                                        onClick={openModalPayment}
+                                        style={{ width: '25rem' }}
+                                    >
+                                        Поддержать проект
+                                    </Button>
+
+                                    {showModalPayment && (
+                                        <PaymentComponent
+                                            show={true}
+                                            onHide={closeModalPayment}
+                                            slug={slug}
+                                        />
+                                    )}
+                                </Carousel.Caption>
+                            </Carousel.Item>
+                        ))}
+                    </Carousel>
+
+                    <Row className="g-4 mt-1">
+                        <Col md={8}>
+                            {data && (
+                                <InfoProjectCard
+                                    description={data.description}
+                                    collected_money={data.collected_money}
+                                    need_money={data.need_money}
+                                    category={data.category}
+                                    className="mt-0"
+                                />
+                            )}{' '}
+                        </Col>
+
+                        <Col style={{ paddingLeft: '10px' }} className="mt-4">
+                            <div
+                                className="d-flex flex-row-reverse"
+                                style={{
+                                    position: 'sticky',
+                                }}
+                            >
+                                <ContactCard
+                                    email={data.user.email}
+                                    first_name={data.user.first_name}
+                                    last_name={data.user.last_name}
+                                    username={data.user.username}
+                                    image={data.user.image}
+                                    slug={slug}
+                                ></ContactCard>
+                            </div>
+
+                            <div className="d-flex flex-row-reverse">
+                                {data.is_owner && (
+                                    <div className="mt-1" style={{}}>
+                                        <Button
+                                            size="lg"
+                                            variant="secondary"
+                                            onClick={openModal}
+                                        >
+                                            Редактировать
+                                        </Button>
+                                        {showModal && (
+                                            <EditProjectModal
+                                                show={true}
+                                                onHide={closeModal}
+                                                slug={slug}
+                                            />
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        </Col>
+                    </Row>
+
+                    {/* <span className="fs-5 "></span> */}
+                </div>
+            )}
+        </Container>
+    );
+};
+
+export default ProjectPage;
+
+{
+    /* <p className='mb-0 mt-0 fw-bold ' style={{ fontSize: '60px', }}>{data.name}</p>
+						<p className='mt-0 mb-0 fs-5 text-secondary  '>{data.small_description}</p> */
+}
+{
+    /* <div className="d-flex mt-0 mb-2">
+                                {data.category.map((category, index) => (
+                                    <div
+                                        className="badge bg-secondary text-wrap ms-1 mb-1"
+                                        style={{ width: '6rem' }}
+                                        key={index}
+                                    >
+                                        {category}
+                                    </div>
+                                ))}
+                            </div>
+                            <ProgressBar
+                                bgcolor={'#0E7580'}
+                                completed={Math.round(
+                                    (data.collected_money / data.need_money) *
+                                        100
+                                )}
+                                completed_money={data.collected_money}
+                                need_money={data.need_money}
+                            /> */
+}
+{
+    /* {!data.is_owner &&
+							<Button size='lg' className='mt-3' href="#">Поддержать проект</Button>
+						} */
+}
+{
+    /* <div className=" mt-3 d-block">
+                                <span className="text-secondary fs-3 ">
+                                    О проекте:
+                                </span>
+                            </div>
+                            <Row>
+                                <Col
+                                    className="fs-5 mt-3"
+                                    style={{ textAlign: 'justify ' }}
+                                >
+                                    {data.description}
+                                </Col>
+                            </Row> */
+}
+{
+    /* <Image
                         style={{
                             width: '100%',
                             height: '300px',
@@ -121,94 +280,5 @@ const ProjectPage = () => {
                             onHide={closeModalPayment}
                             slug={slug}
                         />
-                    )}
-                    <Row className="g-4 mt-1">
-                        <Col sm={7}>
-                            {/* <p className='mb-0 mt-0 fw-bold ' style={{ fontSize: '60px', }}>{data.name}</p>
-						<p className='mt-0 mb-0 fs-5 text-secondary  '>{data.small_description}</p> */}
-                            <div className="d-flex mt-0 mb-2">
-                                {data.category.map((category, index) => (
-                                    <div
-                                        className="badge bg-secondary text-wrap ms-1 mb-1"
-                                        style={{ width: '6rem' }}
-                                        key={index}
-                                    >
-                                        {category}
-                                    </div>
-                                ))}
-                            </div>
-                            <ProgressBar
-                                bgcolor={'#0d6efd'}
-                                completed={Math.round(
-                                    (data.collected_money / data.need_money) *
-                                        100
-                                )}
-                                completed_money={data.collected_money}
-                                need_money={data.need_money}
-                            />
-                            {/* {!data.is_owner &&
-							<Button size='lg' className='mt-3' href="#">Поддержать проект</Button>
-						} */}
-                            <div className=" mt-3 d-block">
-                                <span className="text-secondary fs-3 ">
-                                    О проекте:
-                                </span>
-                            </div>
-                            <Row>
-                                <Col
-                                    className="fs-5 mt-3"
-                                    style={{ textAlign: 'justify ' }}
-                                >
-                                    {data.description}
-                                </Col>
-                            </Row>
-                        </Col>
-
-                        <Col style={{ paddingLeft: '10px' }} className="mt-2">
-                            <div
-                                className="d-flex flex-row-reverse"
-                                style={{
-                                    position: 'sticky',
-                                }}
-                            >
-                                <ContactCard
-                                    email={data.user.email}
-                                    first_name={data.user.first_name}
-                                    last_name={data.user.last_name}
-                                    username={data.user.username}
-                                    image={data.user.image}
-                                    slug={slug}
-                                ></ContactCard>
-                            </div>
-
-                            <div className="d-flex flex-row-reverse">
-                                {data.is_owner && (
-                                    <div className="mt-1" style={{}}>
-                                        <Button
-                                            size="lg"
-                                            variant="secondary"
-                                            onClick={openModal}
-                                        >
-                                            Редактировать
-                                        </Button>
-                                        {showModal && (
-                                            <EditProjectModal
-                                                show={true}
-                                                onHide={closeModal}
-                                                slug={slug}
-                                            />
-                                        )}
-                                    </div>
-                                )}
-                            </div>
-                        </Col>
-                    </Row>
-
-                    {/* <span className="fs-5 "></span> */}
-                </div>
-            )}
-        </Container>
-    );
-};
-
-export default ProjectPage;
+                    )} */
+}

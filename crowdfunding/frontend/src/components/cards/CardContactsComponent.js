@@ -17,8 +17,8 @@ const ContactCard = (props) => {
                     <ListGroup className="list-group-flush">
                         <ListGroup.Item></ListGroup.Item>
                         <ListGroup.Item className="">
-                            <span className="text-secondary fs-5">
-                                СОЗДАТЕЛЬ{' '}
+                            <span className="text-secondary fs-5 text-uppercase">
+                                Создатель{' '}
                             </span>
                             <div className="mt-2 d-flex ">
                                 <a href={`/profile/${username}`}>
