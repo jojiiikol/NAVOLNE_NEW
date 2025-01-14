@@ -15,7 +15,10 @@ import ContactCard from './CardContactsComponent';
 import PaymentComponent from './PaymentComponent';
 const ProjectPage = () => {
     const [showModal, setShowModal] = useState(false); // Состояние для отображения модального окна
+    const [showModal2, setShowModal2] = useState(false); // Состояние для отображения модального окна
+    const openModal2 = () => setShowModal2(true); // Функция для открытия модального окна
     const openModal = () => setShowModal(true); // Функция для открытия модального окна
+    const closeModal2 = () => setShowModal2(false); // Функция для закрытия модального окна
     const closeModal = () => setShowModal(false); // Функция для закрытия модального окна
     const { slug } = useParams();
     const [data, setData] = useState(null);
@@ -100,7 +103,7 @@ const ProjectPage = () => {
                         size="lg"
                         className="mt-0"
                         variant="outline-primarylight"
-                        onClick={openModal}
+                        onClick={openModal2}
                         style={{
                             position: 'absolute',
                             transform: 'translate(-50%, -50%)',
@@ -112,10 +115,10 @@ const ProjectPage = () => {
                         Поддержать проект
                     </Button>
 
-                    {showModal && (
+                    {showModal2 && (
                         <PaymentComponent
                             show={true}
-                            onHide={closeModal}
+                            onHide={closeModal2}
                             slug={slug}
                         />
                     )}

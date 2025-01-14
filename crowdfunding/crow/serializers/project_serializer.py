@@ -116,7 +116,7 @@ class ProjectSerializerCreate(serializers.ModelSerializer):
             raise serializers.ValidationError("Неверно введенная дата")
         return value
 
-    def validate_money(self, value):
+    def validate_need_money(self, value):
         if value < 1:
             raise serializers.ValidationError("Неверно введенные данные")
         return value
