@@ -112,6 +112,10 @@ class ProjectConfirmAnswer(models.Model):
     def __str__(self):
         return f"{self.project}"
 
+class CashingOutProject(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.PROTECT, related_name='cashing_out_project')
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='cashing_out_user')
+
 
 class ProjectChangeRequest(models.Model):
     project = models.ForeignKey(Project, on_delete=models.PROTECT, related_name='change_requests_project')
