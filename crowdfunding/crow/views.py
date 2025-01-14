@@ -21,7 +21,6 @@ from .tasks import send_message_verification_email
 
 
 # TODO: -------- ГЛАВНОЕ СЕЙЧАС ---------------
-# TODO: 1) Вывод проектов по статус кодам (посмотреть какие выводить, не выводить в листе)
 # TODO: 1) Высчитать процент коммиссии на момент сняти денег
 # TODO: 2) При потверждении закрытия по проценту сумма летит в ЛК создателю
 # TODO: 3) Разобраться с cors для просмотра по фильтрам
@@ -33,6 +32,8 @@ from .tasks import send_message_verification_email
 # TODO: 2) Вывод проектов по интересам пользователя
 # TODO: -----------------------------------------------
 
+
+# TODO: Ввод кеширования
 # TODO: Отрефачить поддержанные проекты view get_payment_projects
 # TODO: Перенести логику сброса пароля в utils
 # TODO: Добавить филтры поиска для админов в заявки
@@ -46,7 +47,7 @@ class ProjectViewSet(mixins.ListModelMixin,
     serializer_class = ProjectSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     search_fields = ['name']
-    filterset_fields = ['category']
+    filterset_fields = ['category', 'status_code']
     lookup_field = 'slug'
     pagination_class = AllProjectsPaginator
 
@@ -63,7 +64,7 @@ class ProjectViewSet(mixins.ListModelMixin,
         description="Метод имеет фильтры с помощью которого проекты можно находить по категориям/названиям. Доступно всем"
     )
     def list(self, request, *args, **kwargs):
-        self.queryset = Project.objects.filter(confirmed=True)
+        self.queryset = Project.objects.exclude(status_code=ProjectStatusCode.objects.get(code=0))
         return super().list(request, *args, **kwargs)
 
     # Создание проекта
