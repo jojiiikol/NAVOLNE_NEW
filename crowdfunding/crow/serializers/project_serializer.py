@@ -209,7 +209,6 @@ class AnswerProjectClosureRequestSerializer(serializers.ModelSerializer):
         project = request.project
         if validated_data['allowed'] is True:
             project.set_finish_status()
-            # тут нужно описать перевод денег на лк
         else:
             project.set_inwork_status()
         project.save()

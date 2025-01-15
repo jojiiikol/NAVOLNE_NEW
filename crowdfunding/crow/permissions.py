@@ -40,6 +40,11 @@ class IsTransferAllowed(permissions.BasePermission):
             return True
         return False
 
+class IsCashOutAllowed(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if obj.status_code == ProjectStatusCode.objects.get(code="3"):
+            return True
+        return False
 
 class IsAuthenticatedAndConfirmed(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -96,6 +101,8 @@ def get_project_view_permissions(view):
         permission_classes = [IsOwner & IsTransferAllowed]
     if view.action == 'answer':
         permission_classes = [IsAdminUser]
+    if view.action == 'cash_out':
+        permission_classes = [IsOwner & IsCashOutAllowed]
     return [permission() for permission in permission_classes]
 
 

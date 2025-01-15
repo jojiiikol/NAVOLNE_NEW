@@ -1,9 +1,10 @@
 import uuid
 
-from django.db import models
+from django.db import models, transaction
 from django.contrib.auth.models import AbstractUser, Group
 from django.urls import reverse
 from pytils.translit import slugify
+
 
 
 class Category(models.Model):
@@ -88,6 +89,8 @@ class Project(models.Model):
         self.transfer_allowed = True
         self.save()
 
+
+
     def get_absolute_url(self):
         return reverse('project_view', kwargs={'slug': self.slug})
 
@@ -115,6 +118,8 @@ class ProjectConfirmAnswer(models.Model):
 class CashingOutProject(models.Model):
     project = models.ForeignKey(Project, on_delete=models.PROTECT, related_name='cashing_out_project')
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='cashing_out_user')
+    money = models.FloatField(null=False, default=0)
+    actual_amount = models.FloatField(null=False, default=0)
 
 
 class ProjectChangeRequest(models.Model):

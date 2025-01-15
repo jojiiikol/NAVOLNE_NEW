@@ -88,3 +88,8 @@ class ProjectClosureRequestAdmin(admin.ModelAdmin):
 @admin.register(CommissionRules)
 class CommissionRulesAdmin(admin.ModelAdmin):
     pass
+
+@admin.register(CashingOutProject)
+class ModelNameAdmin(admin.ModelAdmin):
+    pass
+

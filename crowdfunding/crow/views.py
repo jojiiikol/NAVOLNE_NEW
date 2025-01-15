@@ -8,7 +8,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import VerificationToken
+from .models import VerificationToken, CashingOutProject
 from .paginators import AllProjectsPaginator
 from crow.serializers.project_serializer import *
 from crow.serializers.profile_serializer import *
@@ -16,15 +16,13 @@ from crow.serializers.listings_serializer import *
 from .permissions import get_project_view_permissions, \
     get_project_change_request_view_permissions, get_profile_view_permissions, \
     get_profile_change_request_view_permissions
-from .utils import check_token_timelife, change_transfer_status, get_client_ip
+from .transactions import cash_out_project
+from .utils import check_token_timelife, change_transfer_status, get_client_ip, get_commission_rate
 from .tasks import send_message_verification_email
 
 
 # TODO: -------- ГЛАВНОЕ СЕЙЧАС ---------------
-# TODO: 1) Вывод средств с проекта
-# TODO: 1) Сохранять в бд вывод средств на акк?
-# TODO: 1) Высчитать процент коммиссии на момент сняти денег
-# TODO: 2) При потверждении закрытия по проценту сумма летит в ЛК создателю
+# TODO: 1) Вывод средств с проекта ----> Куда отправлять коммиссию?
 # TODO: 3) Разобраться с cors для просмотра по фильтрам
 # TODO: -----------------------------------------------
 
@@ -39,6 +37,8 @@ from .tasks import send_message_verification_email
 # TODO: Отрефачить поддержанные проекты view get_payment_projects
 # TODO: Перенести логику сброса пароля в utils
 # TODO: Добавить филтры поиска для админов в заявки
+
+# TODO: Что делать с деньгами на проекте, если их сняли? (пока в 0 ставлю)
 
 
 class ProjectViewSet(mixins.ListModelMixin,
@@ -173,6 +173,24 @@ class ProjectViewSet(mixins.ListModelMixin,
             serializer.save(project=project)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @extend_schema(summary="Снятие денег с проекта",
+                   description="Оно возможно, если проект имеет статус завершенного и запрос делает создатель проекта",
+                   )
+    @action(methods=['POST'], detail=True)
+    def cash_out(self, request, *args, **kwargs):
+        print(request.user)
+        project = self.get_object()
+        try:
+            cash_out_project(project)
+            return Response({"data": 'Операция выполнена'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'data': 'Операция невозможна'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
 
 
 class ProjectChangeRequestViewSet(mixins.ListModelMixin,
