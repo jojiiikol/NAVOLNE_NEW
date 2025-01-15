@@ -8,7 +8,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import VerificationToken, CashingOutProject
+from .models import VerificationToken, IP
 from .paginators import AllProjectsPaginator
 from crow.serializers.project_serializer import *
 from crow.serializers.profile_serializer import *
@@ -27,8 +27,6 @@ from .tasks import send_message_verification_email
 # TODO: -----------------------------------------------
 
 # TODO: -------- Доп логика ---------------
-# TODO: 1) Система просмотров
-# TODO:     * Вывод популярных проектов за счет уникальных просмотров
 # TODO: 2) Вывод проектов по интересам пользователя
 # TODO: -----------------------------------------------
 
@@ -47,9 +45,10 @@ class ProjectViewSet(mixins.ListModelMixin,
                      viewsets.GenericViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter]
     search_fields = ['name']
     filterset_fields = ['category', 'status_code']
+    ordering_fields = ['collected_money', 'views']
     lookup_field = 'slug'
     pagination_class = AllProjectsPaginator
 
@@ -57,7 +56,10 @@ class ProjectViewSet(mixins.ListModelMixin,
         return get_project_view_permissions(self)
 
     def retrieve(self, request, *args, **kwargs):
-        print(get_client_ip(request))
+        project = self.get_object()
+        request_ip = get_client_ip(request)
+        ip, _ = IP.objects.get_or_create(ip=request_ip)
+        project.views.add(ip)
         return super().retrieve(request, *args, **kwargs)
 
     # Просмотр подтвержденных проектов
@@ -188,11 +190,6 @@ class ProjectViewSet(mixins.ListModelMixin,
             return Response({'data': 'Операция невозможна'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-
-
-
-
 class ProjectChangeRequestViewSet(mixins.ListModelMixin,
                                   mixins.RetrieveModelMixin,
                                   mixins.DestroyModelMixin,
@@ -256,7 +253,6 @@ class ProjectChangeRequestViewSet(mixins.ListModelMixin,
         answer = AnswerProjectChangeRequest.objects.filter(change_request=change_request).order_by('-answer_date')
         serializer = AnswerChangeProjectRequestSerializer(answer, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
-
 
 
 class ProfileViewSet(mixins.ListModelMixin,
@@ -375,8 +371,6 @@ class ProfileViewSet(mixins.ListModelMixin,
         answer = ProfileConfirmAnswer.objects.filter(profile=profile).order_by('-answer_time')
         serializer = ProjectConfirmSerializer(answer, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-
 
     @extend_schema(summary="Просмотреть проекты, которые поддержал пользователь")
     @action(methods=['GET'], detail=True)

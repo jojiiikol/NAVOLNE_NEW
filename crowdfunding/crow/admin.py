@@ -93,3 +93,6 @@ class CommissionRulesAdmin(admin.ModelAdmin):
 class ModelNameAdmin(admin.ModelAdmin):
     pass
 
+@admin.register(IP)
+class IPAdmin(admin.ModelAdmin):
+    pass

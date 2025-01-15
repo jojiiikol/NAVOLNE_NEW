@@ -6,6 +6,11 @@ from django.urls import reverse
 from pytils.translit import slugify
 
 
+class IP(models.Model):
+    ip = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.ip
 
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)
@@ -69,6 +74,7 @@ class Project(models.Model):
     closure_type = models.CharField(blank=False, null=False, max_length=10, default="BY_AMOUNT", help_text="Тип закрытия проекта. BY_AMOUNT - закрытие сбора по определенной сумме, BY_TIME - закрытие сбора по истечении времени")
     status_code = models.ForeignKey(ProjectStatusCode, on_delete=models.CASCADE, null=True,  help_text="Статус код проекта. 0 - не поступил в работу, 1 - в работе, 2 - сбор приостановлен, 3 - в архиве")
     transfer_allowed = models.BooleanField(default=False, null=False, help_text="Поле для разрешения снятии средств с проекта")
+    views = models.ManyToManyField(IP, related_name='project_views')
 
     def __str__(self):
         return self.name
