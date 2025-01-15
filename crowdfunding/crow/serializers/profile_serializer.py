@@ -136,7 +136,7 @@ class ChangeProfileRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProfileChangeRequest
         fields = (
-            'username', 'image', 'first_name', 'last_name', 'about', 'sex', 'company', 'passport',
+            'pk', 'username', 'image', 'first_name', 'last_name', 'about', 'sex', 'company', 'passport',
             'document', 'group', 'city', 'description_for_change', 'user', 'create_date', 'url', 'answer_request'
         )
 
