@@ -21,5 +21,5 @@ def cash_out_project(project):
     project.user.money += actual_amount
     project.user.save()
 
-    project.collected_money = 0
+    project.transfer_allowed = False
     project.save()

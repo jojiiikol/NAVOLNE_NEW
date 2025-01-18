@@ -8,6 +8,39 @@ from crow.serializers import profile_serializer
 from crow.models import *
 
 
+def make_all_users():
+    non_confirmed_user = User.objects.create_user(
+        username='non_confirmed_user',
+        email='test@mail.ru',
+        password='123456aA',
+        first_name='first_name',
+        last_name='last_name',
+        confirmed=False
+    )
+
+    confirmed_user = User.objects.create_user(
+        username='confirmed_user',
+        email='test@mail.ru',
+        password='123456aA',
+        first_name='first_name',
+        last_name='last_name',
+        confirmed=False
+    )
+
+    admin_user = User.objects.create_user(
+        username='confirmed_user',
+        email='test@mail.ru',
+        password='123456aA',
+        first_name='first_name',
+        last_name='last_name',
+        confirmed=True,
+        is_staff=True,
+        is_superuser=True
+    )
+
+    return non_confirmed_user, confirmed_user, admin_user
+
+
 class ProfileTest(APITestCase):
     def setUp(self):
 
@@ -33,7 +66,7 @@ class ProfileTest(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)
 
     def test_registration(self):
-        registration_url = reverse('registration')
+        registration_url = reverse('user-list')
         answer = self.client.post(
             registration_url, data = {
                 'username': 'testusertwo',
@@ -45,6 +78,11 @@ class ProfileTest(APITestCase):
                 'groups': [self.group_1.pk]
             }, format='json'
         )
-        print(answer.data)
+
         self.assertEqual(answer.status_code, status.HTTP_201_CREATED)
+
+
+class TransactionTest(APITestCase):
+    def setUp(self):
+        non_confirmed_user, confirmed_user, admin_user = make_all_users()
 

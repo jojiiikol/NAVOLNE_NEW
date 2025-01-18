@@ -15,13 +15,14 @@ from crow.serializers.profile_serializer import *
 from crow.serializers.listings_serializer import *
 from .permissions import get_project_view_permissions, \
     get_project_change_request_view_permissions, get_profile_view_permissions, \
-    get_profile_change_request_view_permissions
+    get_profile_change_request_view_permissions, get_closure_request_view_permissions
 from .transactions import cash_out_project
 from .utils import check_token_timelife, change_transfer_status, get_client_ip, get_commission_rate
 from .tasks import send_message_verification_email
 
 
 # TODO: -------- ГЛАВНОЕ СЕЙЧАС ---------------
+# TODO: При удалении человеком заявки на вывод средств, нужно поменять проект в состоянии сбора денег
 # TODO: 1) Вывод средств с проекта ----> Куда отправлять коммиссию?
 # TODO: 3) Разобраться с cors для просмотра по фильтрам
 # TODO: -----------------------------------------------
@@ -32,9 +33,6 @@ from .tasks import send_message_verification_email
 
 
 # TODO: Ввод кеширования
-# TODO: Отрефачить поддержанные проекты view get_payment_projects
-# TODO: Перенести логику сброса пароля в utils
-# TODO: Добавить филтры поиска для админов в заявки
 
 # TODO: Что делать с деньгами на проекте, если их сняли? (пока в 0 ставлю)
 
@@ -489,6 +487,9 @@ class ProjectClosureRequestViewSet(mixins.ListModelMixin,
     queryset = ProjectClosureRequest.objects.all()
     serializer_class = AnswerProjectClosureRequestSerializer
 
+    def get_permissions(self):
+        return get_closure_request_view_permissions(self)
+
     @extend_schema(summary="Просмотр заявок на закрытие проекта",
                    description="Необходимо для админов",
                    )
@@ -499,10 +500,11 @@ class ProjectClosureRequestViewSet(mixins.ListModelMixin,
                    description="Доступно создателям проекта",
                    )
     def destroy(self, request, *args, **kwargs):
-        request = self.get_object()
-        if request.admin is not None:
-            return Response(data={'err': 'Содержит ответ админа'})  # TODO: Вынести в пермишн
+        req = self.get_object()
+        project = req.project
+        project.set_inwork_status()
         return super().destroy(request, *args, **kwargs)
+
 
     @extend_schema(summary="Просмотр своих заявок на закрытие проекта",
                    description="Необходимо для юзеров, создавших заявку",
