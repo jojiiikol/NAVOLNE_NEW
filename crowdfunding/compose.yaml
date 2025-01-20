@@ -3,6 +3,8 @@ services:
     image: postgres:16-alpine
     hostname: db
     container_name: db
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=205896
@@ -11,15 +13,27 @@ services:
     ports:
       - "5432:5432"
 
+  nginx:
+    build:
+      context: ./nginx
+    volumes:
+      - static_volume:/usr/src/app/staticfiles
+      - media_volume:/usr/src/app/mediafiles
+    ports:
+      - 1337:80
+    depends_on:
+      - web
+
   web:
     build:
       context: ../crowdfunding
     container_name: web
-    command: bash -c "sleep 10 && python manage.py migrate && gunicorn crowdfunding.wsgi:application --bind 0.0.0.0:8000"
+    command: bash -c "sleep 10 && python manage.py migrate && if [ ! -d '/usr/src/app/staticfiles' ] || [ -z \"$(ls -A /usr/src/app/staticfiles)\" ]; then python manage.py collectstatic --noinput; fi && gunicorn crowdfunding.wsgi:application --bind 0.0.0.0:8000"
     volumes:
-      - .:/app
-    ports:
-      - 8000:8000
+      - static_volume:/usr/src/app/staticfiles
+      - media_volume:/usr/src/app/mediafiles
+    expose:
+      - 8000
     depends_on:
       - db
     env_file:
@@ -82,3 +96,8 @@ services:
       - "./:/usr/src/app/frontend"
     depends_on:
       - web
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
