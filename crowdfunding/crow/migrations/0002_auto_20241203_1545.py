@@ -59,6 +59,6 @@ class Migration(migrations.Migration):
         ('crow', '0001_initial'),
     ]
 
-    # operations = [
-    #     migrations.RunPython(init_data),
-    # ]
+    operations = [
+        migrations.RunPython(init_data),
+    ]

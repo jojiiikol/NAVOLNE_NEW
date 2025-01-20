@@ -76,6 +76,9 @@ class Project(models.Model):
     transfer_allowed = models.BooleanField(default=False, null=False, help_text="Поле для разрешения снятии средств с проекта")
     views = models.ManyToManyField(IP, related_name='project_views')
 
+    class Meta:
+        ordering = ['pk']
+
     def __str__(self):
         return self.name
 
