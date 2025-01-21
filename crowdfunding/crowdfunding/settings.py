@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%%8+y#*6vnbj@krhqd^^b-)xf8^9%szn9=*d12@f*a^@d=l(^g'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -88,7 +88,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv("POSTGRES_DB"),
-        'USER': 'postgres',
+        'USER': os.getenv("POSTGRES_USER"),
         'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
         'HOST': os.getenv("POSTGRES_HOST"),
         'PORT': '5432',
@@ -214,6 +214,7 @@ CORS_ALLOWED_ORIGINS = [
 CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:1337', ]
 CORS_ALLOW_ALL_ORIGINS = True
 
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.yandex.ru'  # SMTP server host
 EMAIL_PORT = 465  # SMTP server port (587 for TLS, 465 for SSL)
@@ -232,21 +233,3 @@ CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': 'sql.log',
-        },
-    },
-    'loggers': {
-        'django.db.backends': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-    },
-}

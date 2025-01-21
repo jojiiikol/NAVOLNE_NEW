@@ -14,6 +14,13 @@ import datetime
 from crowdfunding.settings import EMAIL_HOST_USER
 from crow.tasks import send_reset_password_message
 
+import logging
+# Set the logging level to DEBUG
+logging.basicConfig(level=logging.DEBUG)
+# Create a logger
+logger = logging.getLogger(__name__)
+# Log a message
+
 
 class UserSerializer(serializers.ModelSerializer):
     user_url = serializers.SerializerMethodField()
