@@ -91,7 +91,7 @@ def get_project_view_permissions(view):
     if view.action == 'list':
         permission_classes = [AllowAny]
     if view.action == 'retrieve':
-        permission_classes = [IsOwnerOrReadOnly]
+        permission_classes = [AllowAny]
     if view.action == 'create':
         permission_classes = [IsAuthenticatedAndConfirmed]
     if view.action == 'change_request':
