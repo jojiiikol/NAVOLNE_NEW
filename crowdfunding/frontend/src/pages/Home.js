@@ -5,7 +5,7 @@ import MyCard from '../components/cards/CardComponent';
 import '../css/home.css';
 import footage from '../images/surgut.mp4';
 import { Link } from 'react-router-dom';
-
+import url from '../globalURL';
 class Home extends Component {
     constructor(props) {
         super(props);
@@ -15,7 +15,7 @@ class Home extends Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:8000/projects') // замените на URL вашего DRF API и ID проекта
+        fetch(url + '/projects') // замените на URL вашего DRF API и ID проекта
             .then((response) => response.json())
             .then((data) => {
                 this.setState({ project: data.results });

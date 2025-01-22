@@ -16,6 +16,7 @@ import EditProjectModal from '../components/forms/EditProjectModal';
 import ContactCard from '../components/cards/CardContactsComponent';
 import PaymentComponent from './PaymentComponent';
 import InfoProjectCard from './cards/InfoProjectCard';
+import url from '../globalURL';
 const ProjectPage = () => {
     const [showModal, setShowModal] = useState(false); // Состояние для отображения модального окна
     const openModal = () => setShowModal(true); // Функция для открытия модального окна
@@ -30,27 +31,21 @@ const ProjectPage = () => {
             const accessToken = localStorage.getItem('accessToken');
 
             if (accessToken != undefined) {
-                const response = await fetch(
-                    `http://localhost:8000/projects/${slug}/`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: 'Bearer ' + accessToken,
-                        },
-                    }
-                );
+                const response = await fetch(url + `/projects/${slug}/`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Bearer ' + accessToken,
+                    },
+                });
                 const data = await response.json();
                 setData(data);
                 console.log(data);
             } else {
-                const response = await fetch(
-                    `http://localhost:8000/projects/${slug}/`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                    }
-                );
+                const response = await fetch(url + `/projects/${slug}/`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
                 const data = await response.json();
                 setData(data);
                 console.log(data);

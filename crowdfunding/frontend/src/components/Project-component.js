@@ -11,13 +11,13 @@ import { Link } from 'react-router-dom';
 import '../css/home.css';
 import MyCard from '../components/cards/CardComponent.js';
 import PaymentComponent from '../components/PaymentComponent.js';
-
+import url from '../globalURL';
 const PaginationComponent = () => {
     const [data, setData] = useState([]);
     const [nextPage, setNextPage] = useState(null);
     const [prevPage, setPrevPage] = useState(null);
     useEffect(() => {
-        fetchData('http://localhost:8000/projects/');
+        fetchData(url + '/projects/');
     }, []);
 
     const fetchData = (url) => {
@@ -81,6 +81,7 @@ const PaginationComponent = () => {
                             small_description={item.small_description}
                             views={item.views}
                             image={item.image}
+                            code={item.status_code.code}
                         />
                     </Col>
                 ))}

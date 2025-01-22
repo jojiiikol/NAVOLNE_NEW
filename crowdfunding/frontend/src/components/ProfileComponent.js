@@ -15,6 +15,7 @@ import {
 } from 'react-bootstrap';
 import EditProfileModal from './forms/EditProfileModal';
 import MyCard from './cards/MiniProjectCard';
+import url from '../globalURL';
 
 const ProfileComponent = () => {
     // useEffect(() => {
@@ -43,7 +44,7 @@ const ProfileComponent = () => {
             const accessToken = localStorage.getItem('accessToken');
             if (localStorage.getItem('accessToken')) {
                 const response = await fetch(
-                    'http://localhost:8000/profiles/' + profilename + '/',
+                    url + '/profiles/' + profilename + '/',
                     {
                         headers: {
                             'Content-Type': 'application/json',
@@ -57,7 +58,7 @@ const ProfileComponent = () => {
             }
             if (!localStorage.getItem('accessToken')) {
                 const response = await fetch(
-                    'http://localhost:8000/profiles/' + profilename + '/',
+                    url + '/profiles/' + profilename + '/',
                     {
                         headers: {
                             'Content-Type': 'application/json',
@@ -68,7 +69,7 @@ const ProfileComponent = () => {
                 setData(data);
             }
             const response = await fetch(
-                'http://localhost:8000/profiles/' +
+                url+'/profiles/' +
                     profilename +
                     '/get_payment_projects/',
                 {
@@ -170,7 +171,21 @@ const ProfileComponent = () => {
                                     </Button>
                                 </div>
                             )}
+                            {data.is_admin && (
+                                <div
+                                    className="d-flex justify-content-center mt-2"
+                                    style={{}}
+                                >
+                                    <Button
+                                        variant="primary"
+                                        href="/profile_change_requests/"
+                                    >
+                                        Просмотреть заявки
+                                    </Button>
+                                </div>
+                            )}
                         </Col>
+
                         <Col sm={9}>
                             <Row className="g-5">
                                 <Col>

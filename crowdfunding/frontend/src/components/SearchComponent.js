@@ -1,31 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Container, Image, Row, Col, Button } from 'react-bootstrap'
+import { Container, Image, Row, Col, Button } from 'react-bootstrap';
 import ProgressBar from './progress-bar.component';
-
+import url from '../globalURL';
 const SearchComponent = () => {
+    const { slug } = useParams();
+    const [data, setData] = useState(null);
 
-	const { slug } = useParams();
-	const [data, setData] = useState(null);
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await fetch(
+                url+`/projects/all?search=${slug}`
+            );
+            const data = await response.json();
+            setData(data);
+        };
+        console.log(slug);
+        fetchData();
+    }, [slug]);
 
-
-	useEffect(() => {
-		const fetchData = async () => {
-			const response = await fetch(`http://localhost:8000/projects/all?search=${slug}`);
-			const data = await response.json();
-			setData(data);
-		};
-		console.log(slug);
-		fetchData();
-	}, [slug]);
-
-
-
-	return (
-
-		<Container style={{ marginTop: '80px' }}>
-
-				{/* {data && <div>
+    return (
+        <Container style={{ marginTop: '80px' }}>
+            {/* {data && <div>
 					<Image style={{ width: '100%', height: '200px', objectFit: 'cover' }} src="https://png.pngtree.com/back_origin_pic/00/02/16/cd1f6288c79730c5c2e50e9498dbb00b.jpg" rounded />
 
 					<Row xs={1} md={2} className='g-4 mt-3'>
@@ -70,13 +66,8 @@ const SearchComponent = () => {
 
 
  */}
-
-
-		</Container>
-
-
-	)
-
-}
+        </Container>
+    );
+};
 
 export default SearchComponent;

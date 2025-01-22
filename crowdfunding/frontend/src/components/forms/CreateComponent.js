@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Container, Row, Col, InputGroup } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import url from '../../globalURL';
 
 export default class Create extends Component {
     constructor(props) {
@@ -22,7 +23,7 @@ export default class Create extends Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:8000/additional/') // замените на URL вашего DRF API и ID проекта
+        fetch(url + '/additional/') // замените на URL вашего DRF API и ID проекта
             .then((response) => response.json())
             .then((data) => {
                 this.setState({ info_cat: data.category });
@@ -67,7 +68,7 @@ export default class Create extends Component {
             console.log(pair[0] + ': ' + pair[1]);
         }
         this.setState({ errorFlag: false });
-        fetch('http://localhost:8000/projects/', {
+        fetch(url + '/projects/', {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/json',

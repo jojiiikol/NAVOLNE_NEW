@@ -11,7 +11,7 @@ import Login from '../components/forms/Login';
 import { useState } from 'react';
 import footage from '../images/surgut.mp4';
 const AuthPage = () => {
-    const [authMode, setAuthMode] = useState(''); // По умолчанию показываем форму авторизации
+    const [authMode, setAuthMode] = useState('login'); // По умолчанию показываем форму авторизации
 
     const handleToggle = (newMode) => {
         setAuthMode(newMode); // Используем коллбэк для обновления состояния
@@ -20,7 +20,7 @@ const AuthPage = () => {
     let authComponent;
     if (authMode === 'register') {
         authComponent = <Registration />;
-    } else {
+    } else if (authMode === 'login') {
         authComponent = <Login />;
     }
 

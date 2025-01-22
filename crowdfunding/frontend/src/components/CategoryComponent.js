@@ -2,6 +2,7 @@ import React, { useEffect, useState, handleChange, handleSubmit } from 'react'
 import { Container, Row, Col, InputGroup } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
+import url from '../globalURL'
 
 const Category  = () => {
 			const[name, setName] = useState('');
@@ -23,7 +24,7 @@ const Category  = () => {
 		if (!localStorage.getItem('accessToken')) {
 			window.location.href = `/login`;
 		}
-		fetch('http://localhost:8000/') // замените на URL вашего DRF API и ID проекта
+		fetch(url+'/') // замените на URL вашего DRF API и ID проекта
 			.then(response => response.json())
 			.then(data => this.setState({ info_cat: data }));
 	}, []);
@@ -50,7 +51,7 @@ const Category  = () => {
 		for (var pair of formData.entries()) {
 			console.log(pair[0] + ', ' + pair[1]);
 		}
-		fetch('http://localhost:8000/projects/create', {
+		fetch(url+'/projects/create', {
 			method: 'POST',
 			headers: {
 				'Authorization': 'Bearer ' + accessToken

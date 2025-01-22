@@ -24,7 +24,7 @@ const MyCard = (props) => {
                         <div className="col-md-3">
                             <Card.Img
                                 className="rounded-5 "
-                                style={{ height: '100%', objectFit: 'cover' }}
+                                style={{ height: '12rem', objectFit: 'cover' }}
                                 variant="top"
                                 src={image}
                             />

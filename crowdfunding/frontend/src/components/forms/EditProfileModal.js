@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useEffect } from 'react';
+import url from '../../globalURL';
 const EditProfileModal = ({ show, onHide, username }) => {
     const [formData, setFormData] = useState({}); // Состояние данных формы
     const [isLoading, setIsLoading] = useState(false); // Состояние загрузки
@@ -9,7 +10,7 @@ const EditProfileModal = ({ show, onHide, username }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch('http://localhost:8000/additional/', {
+            const response = await fetch(url + '/additional/', {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -46,7 +47,7 @@ const EditProfileModal = ({ show, onHide, username }) => {
         //formDataObject.append('username', 'govno');
         const accessToken = localStorage.getItem('accessToken');
         try {
-            await fetch(`http://localhost:8000/profiles/${username}/change/`, {
+            await fetch(url + `/profiles/${username}/change/`, {
                 method: 'POST',
                 headers: {
                     //'Content-Type': 'multipart/form-data',

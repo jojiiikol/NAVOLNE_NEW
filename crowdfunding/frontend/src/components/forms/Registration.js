@@ -3,6 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import idea from '../../images/idea.png';
+import url from '../../globalURL';
 
 export default class Registration extends Component {
     constructor(props) {
@@ -21,12 +22,12 @@ export default class Registration extends Component {
         };
     }
     componentDidMount() {
-        fetch('http://localhost:8000/additional/') // замените на URL вашего DRF API и ID проекта
+        fetch(url + '/additional/') // замените на URL вашего DRF API и ID проекта
             .then((response) => response.json())
             .then((data) => {
                 this.setState({ info_cat: data.skills });
             });
-        fetch('http://localhost:8000/additional/') // замените на URL вашего DRF API и ID проекта
+        fetch(url + '/additional/') // замените на URL вашего DRF API и ID проекта
             .then((response) => response.json())
             .then((data) => {
                 this.setState({ info_groups: data.groups });
@@ -56,7 +57,7 @@ export default class Registration extends Component {
             skills,
             groups,
         } = this.state;
-        fetch('http://localhost:8000/profiles/', {
+        fetch(url + '/profiles/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

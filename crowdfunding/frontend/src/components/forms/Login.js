@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import url from '../../globalURL';
 export default class Login extends Component {
     constructor(props) {
         super(props);
@@ -27,7 +28,7 @@ export default class Login extends Component {
     handleSubmit = (event) => {
         event.preventDefault();
         const { username, password } = this.state;
-        fetch('http://localhost:8000/api/token/', {
+        fetch(url + '/api/token/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

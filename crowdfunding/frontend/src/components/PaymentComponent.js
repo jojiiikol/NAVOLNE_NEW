@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useEffect } from 'react';
+import url from '../globalURL';
 const PaymentComponent = ({ show, onHide, slug }) => {
     const [formData, setFormData] = useState({}); // Состояние данных формы
     const [isLoading, setIsLoading] = useState(false); // Состояние загрузки
@@ -36,7 +37,7 @@ const PaymentComponent = ({ show, onHide, slug }) => {
         //formDataObject.append('username', 'govno');
         const accessToken = localStorage.getItem('accessToken');
         try {
-            await fetch(`http://localhost:8000/projects/${slug}/payment/`, {
+            await fetch(url+`/projects/${slug}/payment/`, {
                 method: 'POST',
                 headers: {
                     //'Content-Type': 'multipart/form-data',

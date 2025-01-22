@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useEffect } from 'react';
+import url from '../../globalURL';
 
 const EditProjectModal = ({ show, onHide, slug }) => {
     const [formData, setFormData] = useState({}); // Состояние данных формы
@@ -10,7 +11,7 @@ const EditProjectModal = ({ show, onHide, slug }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch('http://localhost:8000/additional/', {
+            const response = await fetch(url + '/additional/', {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -46,17 +47,14 @@ const EditProjectModal = ({ show, onHide, slug }) => {
 
         const accessToken = localStorage.getItem('accessToken');
         try {
-            await fetch(
-                `http://localhost:8000/projects/${slug}/change_request/`,
-                {
-                    method: 'POST',
-                    headers: {
-                        //'Content-Type': 'application/json',
-                        Authorization: 'Bearer ' + accessToken,
-                    },
-                    body: formDataObject,
-                }
-            );
+            await fetch(url + `/projects/${slug}/change_request/`, {
+                method: 'POST',
+                headers: {
+                    //'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' + accessToken,
+                },
+                body: formDataObject,
+            });
             onHide();
         } catch (error) {
             console.error('Ошибка при отправке запроса на сервер:', error);
