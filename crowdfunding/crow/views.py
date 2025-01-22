@@ -34,6 +34,16 @@ from .tasks import send_message_verification_email
 # TODO: Ввод кеширования
 # TODO: Отрефачить логику попытки удаления заявки на изменения при ответе админа, перенести в пермишины
 
+<<<<<<< Updated upstream
+=======
+# TODO: ----------ДЕПЛОЙ----------
+# TODO: Почитать про restart docker 
+# TODO: Настроить логгирование SENTRY
+# TODO: Разобраться с workers gunicorn
+# TODO: Разобраться с конфигой nginx
+# TODO: Разобраться с SSL сертификатом
+
+>>>>>>> Stashed changes
 
 class ProjectViewSet(mixins.ListModelMixin,
                      mixins.RetrieveModelMixin,
