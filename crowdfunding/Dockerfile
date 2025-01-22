@@ -8,4 +8,7 @@ COPY requirements.txt ./
 
 RUN pip install -r requirements.txt
 
+RUN mkdir "staticfiles"
+RUN mkdir "mediafiles"
+
 COPY . .

@@ -39,7 +39,6 @@ class ProjectSerializer(serializers.ModelSerializer):
     end_date = serializers.DateField(read_only=True)
     confirmed = serializers.BooleanField(read_only=True)
     url = serializers.SerializerMethodField()
-    views = serializers.IntegerField(read_only=True)
     change_url = serializers.SerializerMethodField()
     is_owner = serializers.SerializerMethodField()
     confirm_url = serializers.SerializerMethodField()
@@ -50,8 +49,8 @@ class ProjectSerializer(serializers.ModelSerializer):
         fields = (
             'pk', 'slug', 'user', 'name', 'small_description', 'description', 'slug', 'need_money', 'collected_money',
             'start_date',
-            'end_date', 'category', 'image', 'project_images', 'confirmed', 'url', 'views', 'payment_url', 'change_url',
-            'is_owner', 'confirm_url', 'transfer_allowed', 'closure_type', 'status_code')
+            'end_date', 'category', 'image', 'project_images', 'confirmed', 'url', 'payment_url', 'change_url',
+            'is_owner', 'confirm_url', 'transfer_allowed', 'closure_type', 'status_code', 'views')
 
     def get_is_owner(self, obj):
         if obj.user.username == self.context.get('request').user.username:
@@ -69,10 +68,12 @@ class ProjectSerializer(serializers.ModelSerializer):
     def get_confirm_url(self, obj):
         return reverse('project-confirm-project', kwargs={'slug': obj.slug}, request=self.context['request'])
 
+
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         if (self.context['request'].user.is_superuser is False) and (self.context['request'].user != instance.user):
             representation.pop('transfer_allowed')
+        representation['views'] = instance.views.count()
         return representation
 
 
@@ -116,7 +117,7 @@ class ProjectSerializerCreate(serializers.ModelSerializer):
             raise serializers.ValidationError("Неверно введенная дата")
         return value
 
-    def validate_money(self, value):
+    def validate_need_money(self, value):
         if value < 1:
             raise serializers.ValidationError("Неверно введенные данные")
         return value
@@ -209,7 +210,6 @@ class AnswerProjectClosureRequestSerializer(serializers.ModelSerializer):
         project = request.project
         if validated_data['allowed'] is True:
             project.set_finish_status()
-            # тут нужно описать перевод денег на лк
         else:
             project.set_inwork_status()
         project.save()

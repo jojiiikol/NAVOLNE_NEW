@@ -8,33 +8,40 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import VerificationToken
+from .models import VerificationToken, IP
 from .paginators import AllProjectsPaginator
 from crow.serializers.project_serializer import *
 from crow.serializers.profile_serializer import *
 from crow.serializers.listings_serializer import *
 from .permissions import get_project_view_permissions, \
     get_project_change_request_view_permissions, get_profile_view_permissions, \
-    get_profile_change_request_view_permissions
-from .utils import check_token_timelife, change_transfer_status, get_client_ip
+    get_profile_change_request_view_permissions, get_closure_request_view_permissions
+from .transactions import cash_out_project
+from .utils import check_token_timelife, change_transfer_status, get_client_ip, get_commission_rate
 from .tasks import send_message_verification_email
 
 
 # TODO: -------- ГЛАВНОЕ СЕЙЧАС ---------------
-# TODO: 1) Высчитать процент коммиссии на момент сняти денег
-# TODO: 2) При потверждении закрытия по проценту сумма летит в ЛК создателю
+# TODO: 1) Вывод средств с проекта ----> Куда отправлять коммиссию?
 # TODO: 3) Разобраться с cors для просмотра по фильтрам
 # TODO: -----------------------------------------------
 
 # TODO: -------- Доп логика ---------------
-# TODO: 1) Система просмотров
-# TODO:     * Вывод популярных проектов за счет уникальных просмотров
 # TODO: 2) Вывод проектов по интересам пользователя
 # TODO: -----------------------------------------------
 
-# TODO: Отрефачить поддержанные проекты view get_payment_projects
-# TODO: Перенести логику сброса пароля в utils
-# TODO: Добавить филтры поиска для админов в заявки
+
+# TODO: Ввод кеширования
+# TODO: Отрефачить логику попытки удаления заявки на изменения при ответе админа, перенести в пермишины
+
+
+# TODO: ----------ДЕПЛОЙ----------
+# TODO: Почитать про restart docker 
+# TODO: Настроить логгирование SENTRY
+# TODO: Разобраться с workers gunicorn
+# TODO: Разобраться с конфигой nginx
+# TODO: Разобраться с SSL сертификатом
+
 
 
 class ProjectViewSet(mixins.ListModelMixin,
@@ -43,9 +50,10 @@ class ProjectViewSet(mixins.ListModelMixin,
                      viewsets.GenericViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter]
     search_fields = ['name']
-    filterset_fields = ['category']
+    filterset_fields = ['category', 'status_code']
+    ordering_fields = ['collected_money', 'views']
     lookup_field = 'slug'
     pagination_class = AllProjectsPaginator
 
@@ -53,7 +61,10 @@ class ProjectViewSet(mixins.ListModelMixin,
         return get_project_view_permissions(self)
 
     def retrieve(self, request, *args, **kwargs):
-        print(get_client_ip(request))
+        project = self.get_object()
+        request_ip = get_client_ip(request)
+        ip, _ = IP.objects.get_or_create(ip=request_ip)
+        project.views.add(ip)
         return super().retrieve(request, *args, **kwargs)
 
     # Просмотр подтвержденных проектов
@@ -62,7 +73,7 @@ class ProjectViewSet(mixins.ListModelMixin,
         description="Метод имеет фильтры с помощью которого проекты можно находить по категориям/названиям. Доступно всем"
     )
     def list(self, request, *args, **kwargs):
-        self.queryset = Project.objects.filter(confirmed=True)
+        self.queryset = Project.objects.exclude(status_code=ProjectStatusCode.objects.get(code=0))
         return super().list(request, *args, **kwargs)
 
     # Создание проекта
@@ -170,6 +181,19 @@ class ProjectViewSet(mixins.ListModelMixin,
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @extend_schema(summary="Снятие денег с проекта",
+                   description="Оно возможно, если проект имеет статус завершенного и запрос делает создатель проекта",
+                   )
+    @action(methods=['POST'], detail=True)
+    def cash_out(self, request, *args, **kwargs):
+        print(request.user)
+        project = self.get_object()
+        try:
+            cash_out_project(project)
+            return Response({"data": 'Операция выполнена'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'data': 'Операция невозможна'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ProjectChangeRequestViewSet(mixins.ListModelMixin,
                                   mixins.RetrieveModelMixin,
@@ -234,7 +258,6 @@ class ProjectChangeRequestViewSet(mixins.ListModelMixin,
         answer = AnswerProjectChangeRequest.objects.filter(change_request=change_request).order_by('-answer_date')
         serializer = AnswerChangeProjectRequestSerializer(answer, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
-
 
 
 class ProfileViewSet(mixins.ListModelMixin,
@@ -354,8 +377,6 @@ class ProfileViewSet(mixins.ListModelMixin,
         serializer = ProjectConfirmSerializer(answer, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
-
     @extend_schema(summary="Просмотреть проекты, которые поддержал пользователь")
     @action(methods=['GET'], detail=True)
     def get_payment_projects(self, request, *args, **kwargs):
@@ -473,6 +494,9 @@ class ProjectClosureRequestViewSet(mixins.ListModelMixin,
     queryset = ProjectClosureRequest.objects.all()
     serializer_class = AnswerProjectClosureRequestSerializer
 
+    def get_permissions(self):
+        return get_closure_request_view_permissions(self)
+
     @extend_schema(summary="Просмотр заявок на закрытие проекта",
                    description="Необходимо для админов",
                    )
@@ -483,10 +507,11 @@ class ProjectClosureRequestViewSet(mixins.ListModelMixin,
                    description="Доступно создателям проекта",
                    )
     def destroy(self, request, *args, **kwargs):
-        request = self.get_object()
-        if request.admin is not None:
-            return Response(data={'err': 'Содержит ответ админа'})  # TODO: Вынести в пермишн
+        req = self.get_object()
+        project = req.project
+        project.set_inwork_status()
         return super().destroy(request, *args, **kwargs)
+
 
     @extend_schema(summary="Просмотр своих заявок на закрытие проекта",
                    description="Необходимо для юзеров, создавших заявку",

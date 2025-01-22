@@ -21,16 +21,19 @@ def change_transfer_status(project):
 
 
 def get_commission_rate(project):
-    perecentage = get_sum_percentage(project)
+    percentage = get_sum_percentage(project)
     try:
         rule = CommissionRules.objects.get(
-            min_percentage__lte=perecentage,
-            max_percentage__gte=perecentage,
+            min_percentage__lte=percentage,
+            max_percentage__gte=percentage,
         )
         return rule.commission_rate
     except CommissionRules.DoesNotExist:
-        more_100_rule = CommissionRules.objects.get(max_percentage=None)
-        return more_100_rule.commission_rate
+        if percentage > 100:
+            more_100_rule = CommissionRules.objects.get(max_percentage=None)
+            return more_100_rule.commission_rate
+        else:
+            return None
 
 
 def check_transfer_possibility(project):

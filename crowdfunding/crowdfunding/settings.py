@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%%8+y#*6vnbj@krhqd^^b-)xf8^9%szn9=*d12@f*a^@d=l(^g'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -88,7 +88,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv("POSTGRES_DB"),
-        'USER': 'postgres',
+        'USER': os.getenv("POSTGRES_USER"),
         'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
         'HOST': os.getenv("POSTGRES_HOST"),
         'PORT': '5432',
@@ -134,6 +134,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -141,8 +142,8 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'crow.User'
 
-MEDIA_URL = '/frontend/media/'
-MEDIA_ROOT = BASE_DIR / 'frontend/media'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'mediafiles'
 
 
 REST_FRAMEWORK = {
@@ -202,12 +203,17 @@ SIMPLE_JWT = {
 
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
+    'http://127.0.0.1:1337'
 )
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
+    'http://127.0.0.1:1337'
                         ]
+
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:1337', ]
 CORS_ALLOW_ALL_ORIGINS = True
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.yandex.ru'  # SMTP server host
@@ -226,3 +232,4 @@ CELERY_TIMEZONE = 'Asia/Yekaterinburg'
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
+

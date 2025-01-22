@@ -13,6 +13,13 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
         return obj.user == request.user
 
+class AllowDestroyClosureRequest(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if (obj.admin is None):
+            return True
+        return False
+
+
 
 class IsOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
@@ -24,10 +31,12 @@ class IsOwner(permissions.BasePermission):
             return obj == request.user
         if isinstance(obj, ProfileChangeRequest):
             return obj.user == request.user
+        if isinstance(obj, ProjectClosureRequest):
+            return obj.project.user == request.user
         return False
 
 
-class IsPaymentIsAllowed(permissions.BasePermission):
+class IsProjectInWork(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if obj.status_code == ProjectStatusCode.objects.get(code="1"):
             return True
@@ -40,6 +49,11 @@ class IsTransferAllowed(permissions.BasePermission):
             return True
         return False
 
+class IsCashOutAllowed(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if obj.status_code == ProjectStatusCode.objects.get(code="3") and obj.transfer_allowed is True:
+            return True
+        return False
 
 class IsAuthenticatedAndConfirmed(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -77,15 +91,15 @@ def get_project_view_permissions(view):
     if view.action == 'list':
         permission_classes = [AllowAny]
     if view.action == 'retrieve':
-        permission_classes = [IsOwnerOrReadOnly]
+        permission_classes = [AllowAny]
     if view.action == 'create':
         permission_classes = [IsAuthenticatedAndConfirmed]
     if view.action == 'change_request':
-        permission_classes = [IsOwner]
+        permission_classes = [IsOwner & IsProjectInWork]
     if view.action == 'confirm_project':
         permission_classes = [IsAdminUser]
     if view.action == 'payment':
-        permission_classes = [IsAuthenticatedAndConfirmed & IsPaymentIsAllowed]
+        permission_classes = [IsAuthenticatedAndConfirmed & IsProjectInWork]
     if view.action == 'see_confirm_status':
         permission_classes = [IsOwner]
     if view.action == 'not_confirmed_projects':
@@ -93,9 +107,11 @@ def get_project_view_permissions(view):
     if view.action == 'remove_image':
         permission_classes = [IsAdminUser | IsOwner]
     if view.action == 'close_money_collection':
-        permission_classes = [IsOwner & IsTransferAllowed]
+        permission_classes = [IsOwner & IsTransferAllowed & IsProjectInWork]
     if view.action == 'answer':
         permission_classes = [IsAdminUser]
+    if view.action == 'cash_out':
+        permission_classes = [IsOwner & IsCashOutAllowed]
     return [permission() for permission in permission_classes]
 
 
@@ -138,4 +154,18 @@ def get_profile_change_request_view_permissions(view):
         permission_classes = [IsAdminUser]
     if view.action == 'see_admin_response':
         permission_classes = [IsOwner]
+    return [permission() for permission in permission_classes]
+
+def get_closure_request_view_permissions(view):
+    permission_classes = [AllowAny]
+    if view.action == 'list':
+        permission_classes = [IsAdminUser]
+    if view.action == 'retrieve':
+        permission_classes = [IsAdminUser | IsOwner]
+    if view.action == 'destroy':
+        permission_classes = [IsOwner & AllowDestroyClosureRequest]
+    if view.action == 'see_request':
+        permission_classes = [IsAuthenticated]
+    if view.action == 'answer':
+        permission_classes = [IsAdminUser]
     return [permission() for permission in permission_classes]
