@@ -34,9 +34,19 @@ services:
       - 8000
     depends_on:
       - db
+      - redis
+      - rabbitmq
     env_file:
       - .env
 
+  redis:
+    image: redis:7.4.2
+    container_name: redis
+    hostname: redis
+    expose:
+      - 6379
+    env_file:
+      - .env
 
   rabbitmq:
     image: rabbitmq:4.0.5
@@ -71,6 +81,7 @@ services:
       - web
       - rabbitmq
       - db
+      - celery_beat
 
   celery_beat:
     build:
@@ -82,7 +93,6 @@ services:
       - web
       - rabbitmq
       - db
-      - transfer_status_worker
 
   frontend:
     stdin_open: true
