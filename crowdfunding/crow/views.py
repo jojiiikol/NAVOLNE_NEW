@@ -32,7 +32,6 @@ from .tasks import send_message_verification_email
 # TODO: 2) Вывод проектов по интересам пользователя
 # TODO: -----------------------------------------------
 
-# TODO: Ввод кеширования
 # TODO: Разобраться как не подключаться к redis, если нет подключения
 
 
@@ -40,7 +39,7 @@ from .tasks import send_message_verification_email
 
 
 # TODO: ----------ДЕПЛОЙ----------
-# TODO: Почитать про restart docker 
+# TODO: Настроить SOCKET_TIMEOUT
 # TODO: Настроить логгирование SENTRY
 # TODO: Разобраться с workers gunicorn
 # TODO: Разобраться с конфигой nginx
