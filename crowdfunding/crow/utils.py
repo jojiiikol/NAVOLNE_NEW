@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 from rest_framework.response import Response
-from crow.models import VerificationToken, ProjectStatusCode, CommissionRules
+from crow.models import VerificationToken, ProjectStatusCode, CommissionRules, IP
 from crowdfunding.settings import EMAIL_HOST_USER, EMAIL_VERIFICATION_TOKEN_LIFETIME
 
 
@@ -47,6 +47,10 @@ def check_transfer_possibility(project):
 def get_sum_percentage(project):
     return project.collected_money / project.need_money * 100
 
+def save_ip_view(request, project):
+    request_ip = get_client_ip(request)
+    ip, _ = IP.objects.get_or_create(ip=request_ip)
+    project.views.add(ip)
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')

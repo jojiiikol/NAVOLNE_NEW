@@ -1,4 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
 from rest_framework import status, viewsets, filters, mixins
@@ -17,7 +19,7 @@ from .permissions import get_project_view_permissions, \
     get_project_change_request_view_permissions, get_profile_view_permissions, \
     get_profile_change_request_view_permissions, get_closure_request_view_permissions
 from .transactions import cash_out_project
-from .utils import check_token_timelife, change_transfer_status, get_client_ip, get_commission_rate
+from .utils import check_token_timelife, change_transfer_status, get_client_ip, get_commission_rate, save_ip_view
 from .tasks import send_message_verification_email
 
 
@@ -30,18 +32,18 @@ from .tasks import send_message_verification_email
 # TODO: 2) Вывод проектов по интересам пользователя
 # TODO: -----------------------------------------------
 
+# TODO: Разобраться как не подключаться к redis, если нет подключения
 
-# TODO: Ввод кеширования
+
 # TODO: Отрефачить логику попытки удаления заявки на изменения при ответе админа, перенести в пермишины
 
 
 # TODO: ----------ДЕПЛОЙ----------
-# TODO: Почитать про restart docker 
+# TODO: Настроить SOCKET_TIMEOUT
 # TODO: Настроить логгирование SENTRY
 # TODO: Разобраться с workers gunicorn
 # TODO: Разобраться с конфигой nginx
 # TODO: Разобраться с SSL сертификатом
-
 
 
 class ProjectViewSet(mixins.ListModelMixin,
@@ -60,11 +62,10 @@ class ProjectViewSet(mixins.ListModelMixin,
     def get_permissions(self):
         return get_project_view_permissions(self)
 
+    @method_decorator(cache_page(60 * 30, key_prefix='project_page'))
     def retrieve(self, request, *args, **kwargs):
         project = self.get_object()
-        request_ip = get_client_ip(request)
-        ip, _ = IP.objects.get_or_create(ip=request_ip)
-        project.views.add(ip)
+        save_ip_view(request, project)
         return super().retrieve(request, *args, **kwargs)
 
     # Просмотр подтвержденных проектов
@@ -72,6 +73,7 @@ class ProjectViewSet(mixins.ListModelMixin,
         summary="Вывод всех подтвержденных проектов",
         description="Метод имеет фильтры с помощью которого проекты можно находить по категориям/названиям. Доступно всем"
     )
+    @method_decorator(cache_page(60 * 3, key_prefix='all_projects_page'))
     def list(self, request, *args, **kwargs):
         self.queryset = Project.objects.exclude(status_code=ProjectStatusCode.objects.get(code=0))
         return super().list(request, *args, **kwargs)
@@ -277,6 +279,7 @@ class ProfileViewSet(mixins.ListModelMixin,
 
     @extend_schema(summary="Просмотр профиля юзера",
                    description="Вся информация о профиле доступна только админу и владельцу")
+    @method_decorator(cache_page(60 * 5, key_prefix='profile_page'))
     def retrieve(self, request, *args, **kwargs):
         if (self.get_object() == self.request.user) or (self.request.user.is_staff):
             self.serializer_class = AdditionalUserSerializerForOwner
@@ -511,7 +514,6 @@ class ProjectClosureRequestViewSet(mixins.ListModelMixin,
         project = req.project
         project.set_inwork_status()
         return super().destroy(request, *args, **kwargs)
-
 
     @extend_schema(summary="Просмотр своих заявок на закрытие проекта",
                    description="Необходимо для юзеров, создавших заявку",

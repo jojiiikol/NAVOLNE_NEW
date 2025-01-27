@@ -7,7 +7,7 @@ services:
       - ./postgres_data:/var/lib/postgresql/data/
     env_file:
       - .env
-    restart: on-failure
+    restart: always
     ports:
       - "5432:5432"
 
@@ -21,6 +21,7 @@ services:
       - 1337:80
     depends_on:
       - web
+    restart: always
 
   web:
     build:
@@ -34,9 +35,21 @@ services:
       - 8000
     depends_on:
       - db
+      - redis
+      - rabbitmq
     env_file:
       - .env
+    restart: always
 
+  redis:
+    image: redis:7.4.2
+    container_name: redis
+    hostname: redis
+    expose:
+      - 6379
+    env_file:
+      - .env
+    restart: always
 
   rabbitmq:
     image: rabbitmq:4.0.5
@@ -49,12 +62,13 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    restart: always
 
   email_worker:
     build:
       context: ../crowdfunding
     container_name: email_worker
-    restart: on-failure
+    restart: always
     command: celery -A crowdfunding.celery worker -l INFO -Q email_queue
     depends_on:
       - web
@@ -64,25 +78,25 @@ services:
   transfer_status_worker:
     build:
       context: ../crowdfunding
-    restart: on-failure
+    restart: always
     container_name: transfer_status_worker
     command: celery -A crowdfunding.celery worker -l INFO -Q transfer_status_queue
     depends_on:
       - web
       - rabbitmq
       - db
+      - celery_beat
 
   celery_beat:
     build:
       context: ../crowdfunding
-    restart: on-failure
+    restart: always
     container_name: celery_beat
     command: celery -A crowdfunding.celery beat -l INFO
     depends_on:
       - web
       - rabbitmq
       - db
-      - transfer_status_worker
 
   frontend:
     stdin_open: true
@@ -95,6 +109,7 @@ services:
       - "./:/usr/src/app/frontend"
     depends_on:
       - web
+    restart: always
 
 volumes:
   postgres_data:
