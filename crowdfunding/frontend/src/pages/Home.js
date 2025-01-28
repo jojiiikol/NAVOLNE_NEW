@@ -19,7 +19,8 @@ class Home extends Component {
             .then((response) => response.json())
             .then((data) => {
                 this.setState({ project: data.results });
-            });
+            })
+            .catch(error => console.error("Ошибка:", error));
     }
 
     render() {
