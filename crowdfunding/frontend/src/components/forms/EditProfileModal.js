@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useEffect } from 'react';
 import url from '../../globalURL';
+
 const EditProfileModal = ({ show, onHide, username }) => {
     const [formData, setFormData] = useState({}); // Состояние данных формы
     const [isLoading, setIsLoading] = useState(false); // Состояние загрузки

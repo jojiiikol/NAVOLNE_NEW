@@ -37,7 +37,7 @@ const PaymentComponent = ({ show, onHide, slug }) => {
         //formDataObject.append('username', 'govno');
         const accessToken = localStorage.getItem('accessToken');
         try {
-            await fetch(url+`/projects/${slug}/payment/`, {
+            await fetch(url + `/projects/${slug}/payment/`, {
                 method: 'POST',
                 headers: {
                     //'Content-Type': 'multipart/form-data',
