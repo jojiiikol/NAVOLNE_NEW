@@ -27,7 +27,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['navolnetest.ru', '158.255.6.248', 'localhost']
 
 # Application definition
 
@@ -209,15 +209,15 @@ CACHES = {
 
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
-    'http://127.0.0.1:1337'
+    'http://127.0.0.1:80'
 )
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
-    'http://127.0.0.1:1337'
+    'http://127.0.0.1:80'
 ]
 
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:1337', ]
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:80', ]
 CORS_ALLOW_ALL_ORIGINS = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

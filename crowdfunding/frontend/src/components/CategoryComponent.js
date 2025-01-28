@@ -28,6 +28,8 @@ const Category  = () => {
 			.then(response => response.json())
 			.then(data => this.setState({ info_cat: data }));
 	}, []);
+
+
 	handleChange = event => {
 		const { name, value } = event.target;
 		this.setState({ [name]: value });

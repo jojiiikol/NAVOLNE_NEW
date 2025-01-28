@@ -13,12 +13,12 @@ services:
 
   nginx:
     build:
-      context: ./nginx
+      context: ./frontend
     volumes:
       - static_volume:/usr/src/app/staticfiles
       - media_volume:/usr/src/app/mediafiles
     ports:
-      - 1337:80
+      - 80:80
     depends_on:
       - web
     restart: always
@@ -98,18 +98,6 @@ services:
       - rabbitmq
       - db
 
-  frontend:
-    stdin_open: true
-    build:
-      context: frontend
-    ports:
-      - "3000:3000"
-    volumes:
-      - "/usr/src/app/frontend/node_modules"
-      - "./:/usr/src/app/frontend"
-    depends_on:
-      - web
-    restart: always
 
 volumes:
   postgres_data:
