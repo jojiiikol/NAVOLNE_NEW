@@ -76,6 +76,9 @@ export default class Registration extends Component {
             .then((data) => {
                 console.log(data);
                 this.setState({ errorMessage: data });
+                alert(
+                    'На вашу почту выслано письмо, подтвердите свою регистрацию'
+                );
             })
 
             .catch((error) => {
@@ -88,7 +91,7 @@ export default class Registration extends Component {
 
         let value = target.type === 'checkbox' ? target.checked : target.value;
         this.setState({ info_cat: value });
-        console.log(this.state.info_cat);
+        // console.log(this.state.info_cat);
 
         this.state.groups.pop();
         this.state.groups.push(value);
