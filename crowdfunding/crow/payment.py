@@ -17,3 +17,6 @@ def create_payment(value, user):
         "description": f"Пополнение баланса для пользователя: {user.username}"
     }, idempotence_key)
     return payment, idempotence_key
+
+def get_payment_info(idempotence_key):
+    return yookassa_payment.Payment.find_one(idempotence_key)

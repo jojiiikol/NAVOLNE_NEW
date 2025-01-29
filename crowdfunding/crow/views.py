@@ -15,7 +15,7 @@ from .paginators import AllProjectsPaginator
 from crow.serializers.project_serializer import *
 from crow.serializers.profile_serializer import *
 from crow.serializers.listings_serializer import *
-from .payment import create_payment
+from .payment import create_payment, get_payment_info
 from .permissions import get_project_view_permissions, \
     get_project_change_request_view_permissions, get_profile_view_permissions, \
     get_profile_change_request_view_permissions, get_closure_request_view_permissions
@@ -33,13 +33,12 @@ from .tasks import send_message_verification_email
 # TODO: 2) Вывод проектов по интересам пользователя
 # TODO: -----------------------------------------------
 
-# TODO: Разобраться как не подключаться к redis, если нет подключения
-
-
 # TODO: Отрефачить логику попытки удаления заявки на изменения при ответе админа, перенести в пермишины
 # TODO: Пересоздать миграции
 
-
+# TODO: ----------ОПЛАТА----------
+# TODO: Сделать вебхук на изменение статуса платежа
+# TODO: Дальнейшая логика на бумаге
 
 # TODO: ----------ДЕПЛОЙ----------
 # TODO: Настроить SOCKET_TIMEOUT
@@ -115,6 +114,13 @@ class ProjectViewSet(mixins.ListModelMixin,
             self.serializer_class.save(idempotence_key=idempotence_key)
             return Response({"data": payment}, status=status.HTTP_200_OK)
         return Response(self.serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(methods=['GET'], detail=False)
+    def test_payment_show(self, request, *args, **kwargs):
+        data = request.data
+        key = data['idempotence_key']
+        payment = get_payment_info(key)
+        return Response(payment, status=status.HTTP_200_OK)
 
     # Поддать заявку на изменение
     @extend_schema(summary="Создание заявки на изменение проекта",

@@ -485,6 +485,9 @@ class RegistrationSerializer(serializers.ModelSerializer):
         [group.user_set.add(user) for group in validated_data['groups']]
         user.save()
 
-        send_message_verification_email.delay_on_commit(user.pk)
+        try:
+            send_message_verification_email.delay_on_commit(user.pk)
+        except:
+            pass
 
         return user
