@@ -69,9 +69,7 @@ const ProfileComponent = () => {
                 setData(data);
             }
             const response = await fetch(
-                url+'/profiles/' +
-                    profilename +
-                    '/get_payment_projects/',
+                url + '/profiles/' + profilename + '/get_payment_projects/',
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -279,23 +277,30 @@ const ProfileComponent = () => {
                                                                 </div>
                                                             </div>
                                                         )}
-
-                                                    {projects.length !== 0 &&
-                                                        projects.map(
-                                                            (project) => (
-                                                                <ListGroupItem
-                                                                    href={`/projects/${project.slug}`}
-                                                                    key={
-                                                                        project.url
-                                                                    }
-                                                                    action
-                                                                >
-                                                                    {
-                                                                        project.name
-                                                                    }
-                                                                </ListGroupItem>
-                                                            )
-                                                        )}
+                                                    <div
+                                                        style={{
+                                                            display: 'block',
+                                                        }}
+                                                    >
+                                                        {' '}
+                                                        {projects.length !==
+                                                            0 &&
+                                                            projects.map(
+                                                                (project) => (
+                                                                    <ListGroupItem
+                                                                        href={`/projects/${project.slug}`}
+                                                                        key={
+                                                                            project.url
+                                                                        }
+                                                                        action
+                                                                    >
+                                                                        {
+                                                                            project.name
+                                                                        }
+                                                                    </ListGroupItem>
+                                                                )
+                                                            )}
+                                                    </div>
                                                 </ListGroup>
                                             </Row>
                                         </CardBody>
@@ -417,9 +422,10 @@ const ProfileComponent = () => {
                             <Row md={12}>
                                 {data.projects.length !== 0 &&
                                     data.projects.map((project) => (
-                                        <Col>
+                                        <div className="mb-3">
+                                            {' '}
                                             <MyCard
-                                                className="mb-3"
+                                                className="mb-5"
                                                 key={project.pk}
                                                 slug={project.slug}
                                                 collected_money={
@@ -434,7 +440,7 @@ const ProfileComponent = () => {
                                                 views={project.views}
                                                 image={project.image}
                                             />
-                                        </Col>
+                                        </div>
                                     ))}
                             </Row>
                         </ListGroup>

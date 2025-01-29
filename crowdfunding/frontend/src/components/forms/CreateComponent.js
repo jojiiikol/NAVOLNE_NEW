@@ -19,6 +19,7 @@ export default class Create extends Component {
             image: '',
             info_cat: [],
             cat_meow: false,
+            closure_type: '',
         };
     }
 
@@ -51,6 +52,7 @@ export default class Create extends Component {
             end_date,
             category,
             image,
+            closure_type,
         } = this.state;
 
         const formData = new FormData();
@@ -63,6 +65,7 @@ export default class Create extends Component {
         formData.append('end_date', end_date);
         category.forEach((cat) => formData.append('category', cat));
         formData.append('image', event.target.image.files[0]);
+        formData.append('closure_type', closure_type);
 
         for (var pair of formData.entries()) {
             console.log(pair[0] + ': ' + pair[1]);
@@ -80,6 +83,7 @@ export default class Create extends Component {
             .then((data) => {
                 this.setState({ errorMessage: data });
                 console.log(data);
+                alert('Ваш проект находится на рассмотрении');
                 if (data.name == name) {
                     window.location.href =
                         '/profile/' + localStorage.getItem('user');
@@ -103,6 +107,7 @@ export default class Create extends Component {
 
         this.setState({ category: category });
     }
+
     render() {
         return (
             <Container style={{ marginTop: '60px' }}>
@@ -323,7 +328,28 @@ export default class Create extends Component {
                                     </Form.Text>
                                 )}
                             </Form.Group>
-
+                            <div>
+                                <Form.Check
+                                    name="closure_type"
+                                    type="radio"
+                                    value={'BY_AMOUNT'}
+                                    checked={
+                                        this.state.closure_type === 'BY_AMOUNT'
+                                    }
+                                    label={'По окончанию сбора средств'}
+                                    onChange={this.handleChange}
+                                />
+                                <Form.Check
+                                    name="closure_type"
+                                    type="radio"
+                                    value={'BY_TIME'}
+                                    checked={
+                                        this.state.closure_type === 'BY_TIME'
+                                    }
+                                    label={'По времени'}
+                                    onChange={this.handleChange}
+                                />
+                            </div>
                             <Form.Group
                                 className="mb-3"
                                 controlId="formBasicCheckbox"
