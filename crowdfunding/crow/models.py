@@ -247,3 +247,12 @@ class CommissionRules(models.Model):
     min_percentage = models.FloatField(null=True, blank=True)
     max_percentage = models.FloatField(null=True, blank=True)
     commission_rate = models.FloatField(null=True, blank=True)
+
+class AccountReplenishment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    amount = models.FloatField(null=False, blank=False)
+    status = models.BooleanField(null=True, blank=True)
+    idempotence_key = models.UUIDField(null=False, unique=True, blank=False)
+
+    def __str__(self):
+        return f"{self.user} + {self.amount}, key={self.idempotence_key}"

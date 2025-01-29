@@ -13,10 +13,14 @@ import os
 from datetime import timedelta
 from pathlib import Path
 from dotenv import load_dotenv
+import yookassa
 
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+yookassa_payment = yookassa
+yookassa_payment.Configuration.account_id = os.getenv("PAYMENT_SHOP_ID")
+yookassa_payment.Configuration.secret_key = os.getenv("PAYMENT_SECRET_KEY")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -251,6 +255,3 @@ CELERY_TIMEZONE = 'Asia/Yekaterinburg'
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
-
-PAYMENT_SHOP_ID = os.getenv("PAYMENT_SHOP_ID")
-PAYMENT_SECRET_KEY = os.getenv("PAYMENT_SECRET_KEY")

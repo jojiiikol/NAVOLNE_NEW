@@ -15,6 +15,7 @@ from .paginators import AllProjectsPaginator
 from crow.serializers.project_serializer import *
 from crow.serializers.profile_serializer import *
 from crow.serializers.listings_serializer import *
+from .payment import create_payment
 from .permissions import get_project_view_permissions, \
     get_project_change_request_view_permissions, get_profile_view_permissions, \
     get_profile_change_request_view_permissions, get_closure_request_view_permissions
@@ -102,6 +103,15 @@ class ProjectViewSet(mixins.ListModelMixin,
             return Response({"data": "Транзакция проведена"}, status=status.HTTP_200_OK)
         else:
             return Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(methods=['POST'], detail=False)
+    def test_payment(self, request, *args, **kwargs):
+        data = request.data
+        self.serializer_class = AccountReplenishmentSerializer(data=data)
+        if self.serializer_class.is_valid():
+            payment = create_payment()
+            return Response({"data": payment}, status=status.HTTP_200_OK)
+        return Response(self.serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
 
     # Поддать заявку на изменение
     @extend_schema(summary="Создание заявки на изменение проекта",

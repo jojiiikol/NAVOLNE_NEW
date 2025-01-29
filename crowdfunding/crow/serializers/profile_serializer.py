@@ -195,3 +195,11 @@ class ChangeCategoryAndSkillSerializer(serializers.ModelSerializer):
                                                help_text="Умения пользователя")
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), many=True, required=False,
                                                   help_text="Интересующие категории")
+
+class AccountReplenishmentSerializer(serializers.Serializer):
+    money = serializers.FloatField()
+
+    def validate(self, attrs):
+        if attrs['money'] <= 0:
+            raise serializers.ValidationError("Неверно введенное значение")
+        return attrs
