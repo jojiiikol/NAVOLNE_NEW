@@ -252,7 +252,7 @@ class AccountReplenishment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     amount = models.FloatField(null=False, blank=False)
     status = models.BooleanField(null=True, blank=True)
-    idempotence_key = models.UUIDField(null=False, unique=True, blank=False)
+    idempotence_key = models.UUIDField(null=True, unique=True, blank=True)
 
     def __str__(self):
         return f"{self.user} + {self.amount}, key={self.idempotence_key}"

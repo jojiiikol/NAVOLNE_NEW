@@ -107,9 +107,12 @@ class ProjectViewSet(mixins.ListModelMixin,
     @action(methods=['POST'], detail=False)
     def test_payment(self, request, *args, **kwargs):
         data = request.data
-        self.serializer_class = AccountReplenishmentSerializer(data=data)
+        self.serializer_class = AccountReplenishmentSerializer(data=data, context={'request': request})
         if self.serializer_class.is_valid():
-            payment = create_payment()
+            amount = self.serializer_class.validated_data['amount']
+            user = request.user
+            payment, idempotence_key = create_payment(value=amount, user=user)
+            self.serializer_class.save(idempotence_key=idempotence_key)
             return Response({"data": payment}, status=status.HTTP_200_OK)
         return Response(self.serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
 
