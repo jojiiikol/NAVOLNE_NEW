@@ -122,6 +122,14 @@ class ProjectViewSet(mixins.ListModelMixin,
     def test_payment_show(self, request, *args, **kwargs):
         return check_payment_status(request)
 
+    @action(methods=['POST'], detail=False)
+    def test_payment_show_status(self, request, *args, **kwargs):
+        idempotence_key = request.data['idempotence_key']
+        payment_status = check_payment_status(idempotence_key)
+        print(payment_status)
+        return Response({"status": str(payment_status)}, status=status.HTTP_200_OK)
+
+
     # Поддать заявку на изменение
     @extend_schema(summary="Создание заявки на изменение проекта",
                    request=ChangeProjectRequestSerializer,

@@ -253,6 +253,8 @@ class AccountReplenishment(models.Model):
     amount = models.FloatField(null=False, blank=False)
     status = models.BooleanField(null=True, blank=True)
     idempotence_key = models.UUIDField(null=True, unique=True, blank=True)
+    create_date = models.DateTimeField(null=True, blank=True)
+    change_status_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.user} + {self.amount}, key={self.idempotence_key}"

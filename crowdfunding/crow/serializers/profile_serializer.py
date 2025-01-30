@@ -208,3 +208,15 @@ class AccountReplenishmentSerializer(serializers.ModelSerializer):
         if attrs['amount'] <= 0:
             raise serializers.ValidationError("Неверно введенное значение")
         return attrs
+
+    def create(self, validated_data):
+        replenish = super().create(validated_data)
+        replenish.create_date = datetime.datetime.now()
+        replenish.save()
+        return replenish
+
+    def update(self, instance, validated_data):
+        instance.change_status_date = datetime.datetime.now()
+        instance.save()
+        return instance
+
