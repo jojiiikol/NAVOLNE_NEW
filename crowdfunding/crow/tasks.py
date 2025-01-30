@@ -1,3 +1,4 @@
+import json
 import uuid
 
 
@@ -5,9 +6,11 @@ from celery import shared_task
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.utils import timezone
+from django_celery_beat.models import IntervalSchedule, PeriodicTask
 from rest_framework.reverse import reverse
 
 from crow.models import VerificationToken, User, ResetPasswordToken, Project, ProjectStatusCode
+from crow.payment import check_payment_status, change_payment_status
 from crow.utils import check_transfer_possibility
 from crowdfunding.settings import EMAIL_HOST_USER
 from crowdfunding.celery import app
@@ -61,3 +64,21 @@ def send_reset_password_message(user_id):
         fail_silently=False,
     )
     ResetPasswordToken.objects.create(user=user, token=token)
+
+def create_check_payment_status_task(payment_id):
+    schedule, created = IntervalSchedule.objects.get_or_create(
+        every=1,
+        period=IntervalSchedule.MINUTES
+    )
+
+
+    PeriodicTask.objects.create(
+        interval=schedule,
+        name=payment_id,
+        task="crow.tasks.check_payment_status_task",
+        args=json.dumps([payment_id]),
+    )
+@shared_task(queue='check_payment_queue')
+def check_payment_status_task(payment_id):
+    print(payment_id)
+    change_payment_status(payment_id)

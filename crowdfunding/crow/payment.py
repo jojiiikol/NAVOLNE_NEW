@@ -2,6 +2,7 @@ import json
 import os
 import uuid
 
+from django_celery_beat.models import PeriodicTask
 from rest_framework import status
 from rest_framework.response import Response
 from yookassa import Configuration
@@ -13,14 +14,24 @@ from crow.utils import get_client_ip
 from crowdfunding.settings import yookassa_payment
 
 
+def change_payment_status(payment_id):
+    payment_object = AccountReplenishment.objects.get(payment_id=payment_id)
+    payment_info_status = check_payment_status(payment_id)
+    if payment_info_status is not None:
+        payment_object.status = payment_info_status
+        payment_object.save()
+        task = PeriodicTask.objects.get(name=payment_id)
+        task.delete()
+
+
+
 def check_payment_status(idempotence_key):
     payment_info = get_payment_info(idempotence_key)
-    payment_object = AccountReplenishment.objects.get(idempotence_key=idempotence_key)
     payment_status = payment_info['status']
     if payment_status == 'succeeded':
-        payment_object.status = True
+        return True
     elif payment_status == 'canceled':
-        payment_object.status = False
+        return False
     else:
         return None
 

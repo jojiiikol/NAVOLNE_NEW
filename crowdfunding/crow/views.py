@@ -23,7 +23,7 @@ from .permissions import get_project_view_permissions, \
     get_profile_change_request_view_permissions, get_closure_request_view_permissions
 from .transactions import cash_out_project
 from .utils import check_token_timelife, change_transfer_status, get_client_ip, get_commission_rate, save_ip_view
-from .tasks import send_message_verification_email
+from .tasks import send_message_verification_email, create_check_payment_status_task
 
 
 # TODO: -------- ГЛАВНОЕ СЕЙЧАС ---------------
@@ -39,7 +39,7 @@ from .tasks import send_message_verification_email
 # TODO: Пересоздать миграции
 
 # TODO: ----------ОПЛАТА----------
-# TODO: Сделать вебхук на изменение статуса платежа
+# TODO: Добавить нового воркера
 # TODO: Дальнейшая логика на бумаге
 # TODO: ПЕРМИШИНЫ!
 
@@ -114,7 +114,8 @@ class ProjectViewSet(mixins.ListModelMixin,
             amount = self.serializer_class.validated_data['amount']
             user = request.user
             payment, idempotence_key = create_payment(value=amount, user=user)
-            self.serializer_class.save(idempotence_key=idempotence_key)
+            self.serializer_class.save(idempotence_key=idempotence_key, payment_id=payment.id)
+            create_check_payment_status_task(payment.id)
             return Response({"data": payment}, status=status.HTTP_200_OK)
         return Response(self.serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
 

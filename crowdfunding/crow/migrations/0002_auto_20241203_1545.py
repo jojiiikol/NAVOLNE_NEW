@@ -53,6 +53,7 @@ def init_data(apps, schema_editor):
     CommissionRules.objects.create(min_percentage=50, max_percentage=90, commission_rate=15)
     CommissionRules.objects.create(min_percentage=90, max_percentage=100, commission_rate=10)
 
+
 class Migration(migrations.Migration):
 
     dependencies = [
