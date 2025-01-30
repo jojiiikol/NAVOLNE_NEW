@@ -57,7 +57,10 @@ const ProfileChangeRequests = () => {
                                 <td>{request.create_date}</td>
                                 <td>{request.user.username}</td>
                                 <td>
-                                    <Button onClick={handleClick} value={20}>
+                                    <Button
+                                        onClick={handleClick}
+                                        value={request.pk}
+                                    >
                                         Просмотреть заявку
                                     </Button>
                                 </td>
