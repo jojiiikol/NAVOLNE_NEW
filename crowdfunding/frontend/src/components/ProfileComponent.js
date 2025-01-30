@@ -79,7 +79,7 @@ const ProfileComponent = () => {
             );
             const data = await response.json();
             setProjects(data);
-            console.log(data);
+            //console.log(data);
         };
         fetchData();
     }, [profilename]);
