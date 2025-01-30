@@ -1,6 +1,6 @@
 import json
 import uuid
-
+from datetime import timedelta
 
 from celery import shared_task
 from django.contrib.auth.tokens import default_token_generator
@@ -71,14 +71,14 @@ def create_check_payment_status_task(payment_id):
         period=IntervalSchedule.MINUTES
     )
 
-
     PeriodicTask.objects.create(
         interval=schedule,
         name=payment_id,
         task="crow.tasks.check_payment_status_task",
+        start_time=timezone.now(),
         args=json.dumps([payment_id]),
     )
 @shared_task(queue='check_payment_queue')
 def check_payment_status_task(payment_id):
-    print(payment_id)
     change_payment_status(payment_id)
+

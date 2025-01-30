@@ -211,12 +211,12 @@ class AccountReplenishmentSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         replenish = super().create(validated_data)
-        replenish.create_date = datetime.datetime.now()
+        replenish.create_date = timezone.now()
         replenish.save()
         return replenish
 
     def update(self, instance, validated_data):
-        instance.change_status_date = datetime.datetime.now()
+        instance.change_status_date = timezone.now()
         instance.save()
         return instance
 

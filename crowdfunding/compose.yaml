@@ -87,12 +87,23 @@ services:
       - db
       - celery_beat
 
+  payment_status_worker:
+    build:
+      context: ../crowdfunding
+    restart: always
+    container_name: payment_status_worker
+    command: celery -A crowdfunding.celery worker -l INFO -Q check_payment_queue
+    depends_on:
+      - web
+      - rabbitmq
+      - celery_beat
+
   celery_beat:
     build:
       context: ../crowdfunding
     restart: always
     container_name: celery_beat
-    command: celery -A crowdfunding.celery beat -l INFO
+    command: celery -A crowdfunding.celery beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
     depends_on:
       - web
       - rabbitmq

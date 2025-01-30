@@ -1,7 +1,9 @@
 import json
 import os
 import uuid
+from datetime import timedelta
 
+from django.utils import timezone
 from django_celery_beat.models import PeriodicTask
 from rest_framework import status
 from rest_framework.response import Response
@@ -17,12 +19,17 @@ from crowdfunding.settings import yookassa_payment
 def change_payment_status(payment_id):
     payment_object = AccountReplenishment.objects.get(payment_id=payment_id)
     payment_info_status = check_payment_status(payment_id)
+    task = PeriodicTask.objects.get(name=payment_id)
     if payment_info_status is not None:
         payment_object.status = payment_info_status
         payment_object.save()
-        task = PeriodicTask.objects.get(name=payment_id)
         task.delete()
+    delete_payment_task_on_time(task)
 
+
+def delete_payment_task_on_time(task):
+    if timezone.now() - task.start_time >= timedelta(minutes=15):
+        task.delete()
 
 
 def check_payment_status(idempotence_key):
@@ -34,7 +41,6 @@ def check_payment_status(idempotence_key):
         return False
     else:
         return None
-
 
 
 def create_payment(value, user):

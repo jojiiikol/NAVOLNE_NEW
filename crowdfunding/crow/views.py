@@ -39,7 +39,8 @@ from .tasks import send_message_verification_email, create_check_payment_status_
 # TODO: Пересоздать миграции
 
 # TODO: ----------ОПЛАТА----------
-# TODO: Добавить нового воркера
+# TODO: Думать как двигать деньги на аккаунт
+# TODO: Транзакция!
 # TODO: Дальнейшая логика на бумаге
 # TODO: ПЕРМИШИНЫ!
 
