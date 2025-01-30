@@ -1,3 +1,5 @@
+import json
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
@@ -15,7 +17,7 @@ from .paginators import AllProjectsPaginator
 from crow.serializers.project_serializer import *
 from crow.serializers.profile_serializer import *
 from crow.serializers.listings_serializer import *
-from .payment import create_payment, get_payment_info
+from .payment import create_payment, get_payment_info, check_payment_status
 from .permissions import get_project_view_permissions, \
     get_project_change_request_view_permissions, get_profile_view_permissions, \
     get_profile_change_request_view_permissions, get_closure_request_view_permissions
@@ -115,12 +117,9 @@ class ProjectViewSet(mixins.ListModelMixin,
             return Response({"data": payment}, status=status.HTTP_200_OK)
         return Response(self.serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(methods=['GET'], detail=False)
+    @action(methods=['POST'], detail=False)
     def test_payment_show(self, request, *args, **kwargs):
-        data = request.data
-        key = data['idempotence_key']
-        payment = get_payment_info(key)
-        return Response(payment, status=status.HTTP_200_OK)
+        return check_payment_status(request)
 
     # Поддать заявку на изменение
     @extend_schema(summary="Создание заявки на изменение проекта",
@@ -487,6 +486,8 @@ class ProfileChangeRequestViewSet(mixins.ListModelMixin,
             serializer_data.save(profile=profile_request)
             if serializer_data['confirmed'].value:
                 serializer_data.update_profile(profile_request.profile, profile_request)
+            profile_request = self.get_object()
+            print(profile_request)
             return Response(serializer_data.data, status=status.HTTP_200_OK)
         return Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
 

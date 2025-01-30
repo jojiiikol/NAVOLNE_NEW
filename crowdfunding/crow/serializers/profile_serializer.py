@@ -109,7 +109,7 @@ class AnswerChangeProfileSerializer(serializers.ModelSerializer):
         )
 
     admin = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    answer_description = serializers.CharField(help_text="Ответ админа на заявку")
+    answer_description = serializers.CharField(help_text="Ответ админа на заявку", required=False)
     confirmed = serializers.BooleanField(required=True,
                                          help_text="true/false. В случае передачи true - в профиль вносятся изменения")
     answer_date = serializers.DateTimeField(required=False, default=timezone.now(),

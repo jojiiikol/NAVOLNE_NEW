@@ -360,7 +360,7 @@ class AdditionalUserSerializerForOwner(serializers.ModelSerializer):
         model = User
         fields = (
             'username', 'image', 'first_name', 'last_name', 'birthday', 'about', 'skill', 'sex', 'company', 'passport',
-            'document', 'money', 'total_money_sent', 'confirmed', 'category', 'date_joined', 'projects', 'groups',
+            'document', 'money', 'total_money_sent', 'city', 'confirmed', 'category', 'date_joined', 'projects', 'groups',
             'email_verified', 'is_owner', 'is_admin')
 
     username = serializers.CharField(read_only=True)
@@ -421,7 +421,7 @@ class AdditionalUserSerializerForOther(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'image', 'about', 'birthday', 'last_name', 'sex', 'company', 'document',
-                  'total_money_sent', 'projects', 'category', 'skill', 'date_joined', 'groups', 'confirmed')
+                  'total_money_sent', 'projects', 'category', 'skill', 'date_joined', 'groups', 'city', 'confirmed')
 
     category = serializers.StringRelatedField(many=True)
     image = serializers.ImageField()
