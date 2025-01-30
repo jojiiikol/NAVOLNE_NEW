@@ -41,6 +41,7 @@ from .tasks import send_message_verification_email
 # TODO: ----------ОПЛАТА----------
 # TODO: Сделать вебхук на изменение статуса платежа
 # TODO: Дальнейшая логика на бумаге
+# TODO: ПЕРМИШИНЫ!
 
 # TODO: ----------ДЕПЛОЙ----------
 # TODO: Настроить SOCKET_TIMEOUT

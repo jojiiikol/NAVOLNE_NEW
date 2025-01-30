@@ -1,4 +1,5 @@
 import json
+import os
 import uuid
 
 from rest_framework import status
@@ -74,7 +75,7 @@ def create_payment(value, user):
         },
         "confirmation": {
             "type": "redirect",
-            "return_url": "http://localhost:8000/projects/1"
+            "return_url": os.getenv("URL")
         },
         "capture": True,
         "description": f"Пополнение баланса для пользователя: {user.username}"
