@@ -209,21 +209,21 @@ LOGGING = {
     },
 }
 
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django_redis.cache.RedisCache",
-#         "LOCATION": os.environ.get("REDIS_URL"),
-#         "OPTIONS": {
-#             "IGNORE_EXCEPTIONS": True,
-#             "SOCKET_CONNECT_TIMEOUT": 1,
-#             "SOCKET_TIMEOUT": 1,
-#         },
-#         "FALLBACK": "dummy"
-#     },
-#     "dummy": {
-#         "BACKEND": "django.core.cache.backends.dummy.DummyCache",
-#     },
-# }
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": os.environ.get("REDIS_URL"),
+        "OPTIONS": {
+            "IGNORE_EXCEPTIONS": True,
+            "SOCKET_CONNECT_TIMEOUT": 1,
+            "SOCKET_TIMEOUT": 1,
+        },
+        "FALLBACK": "dummy"
+    },
+    "dummy": {
+        "BACKEND": "django.core.cache.backends.dummy.DummyCache",
+    },
+}
 
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
