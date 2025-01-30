@@ -96,3 +96,8 @@ class ModelNameAdmin(admin.ModelAdmin):
 @admin.register(IP)
 class IPAdmin(admin.ModelAdmin):
     pass
+
+@admin.register(AccountReplenishment)
+class AccountReplenishmentAdmin(admin.ModelAdmin):
+    pass
+

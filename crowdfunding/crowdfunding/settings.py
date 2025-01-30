@@ -13,10 +13,14 @@ import os
 from datetime import timedelta
 from pathlib import Path
 from dotenv import load_dotenv
+import yookassa
 
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+yookassa_payment = yookassa
+yookassa_payment.Configuration.account_id = os.getenv("PAYMENT_SHOP_ID")
+yookassa_payment.Configuration.secret_key = os.getenv("PAYMENT_SECRET_KEY")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/

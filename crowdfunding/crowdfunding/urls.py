@@ -20,6 +20,7 @@ from django.urls import path, include
 
 from crowdfunding import settings
 
+
 urlpatterns = [
     path('api/admin/', admin.site.urls),
     path('api/', include('crow.urls'))

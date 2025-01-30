@@ -360,7 +360,7 @@ class AdditionalUserSerializerForOwner(serializers.ModelSerializer):
         model = User
         fields = (
             'username', 'image', 'first_name', 'last_name', 'birthday', 'about', 'skill', 'sex', 'company', 'passport',
-            'document', 'money', 'total_money_sent', 'confirmed', 'category', 'date_joined', 'projects', 'groups',
+            'document', 'money', 'total_money_sent', 'city', 'confirmed', 'category', 'date_joined', 'projects', 'groups',
             'email_verified', 'is_owner', 'is_admin')
 
     username = serializers.CharField(read_only=True)
@@ -421,7 +421,7 @@ class AdditionalUserSerializerForOther(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'image', 'about', 'birthday', 'last_name', 'sex', 'company', 'document',
-                  'total_money_sent', 'projects', 'category', 'skill', 'date_joined', 'groups', 'confirmed')
+                  'total_money_sent', 'projects', 'category', 'skill', 'date_joined', 'groups', 'city', 'confirmed')
 
     category = serializers.StringRelatedField(many=True)
     image = serializers.ImageField()
@@ -485,6 +485,9 @@ class RegistrationSerializer(serializers.ModelSerializer):
         [group.user_set.add(user) for group in validated_data['groups']]
         user.save()
 
-        send_message_verification_email.delay_on_commit(user.pk)
+        try:
+            send_message_verification_email.delay_on_commit(user.pk)
+        except:
+            pass
 
         return user

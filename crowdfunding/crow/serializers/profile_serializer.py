@@ -9,7 +9,7 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 from rest_framework.validators import UniqueValidator
 from crow.models import User, ResetPasswordToken, ProfileChangeRequest, Skill, Category, AnswerProfileChangeRequest, \
-    ProfileConfirmAnswer
+    ProfileConfirmAnswer, AccountReplenishment
 import datetime
 from crowdfunding.settings import EMAIL_HOST_USER
 from crow.tasks import send_reset_password_message
@@ -109,7 +109,7 @@ class AnswerChangeProfileSerializer(serializers.ModelSerializer):
         )
 
     admin = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    answer_description = serializers.CharField(help_text="Ответ админа на заявку")
+    answer_description = serializers.CharField(help_text="Ответ админа на заявку", required=False)
     confirmed = serializers.BooleanField(required=True,
                                          help_text="true/false. В случае передачи true - в профиль вносятся изменения")
     answer_date = serializers.DateTimeField(required=False, default=timezone.now(),
@@ -195,3 +195,16 @@ class ChangeCategoryAndSkillSerializer(serializers.ModelSerializer):
                                                help_text="Умения пользователя")
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), many=True, required=False,
                                                   help_text="Интересующие категории")
+
+class AccountReplenishmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AccountReplenishment
+        fields = ['user', 'amount']
+
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    amount = serializers.FloatField()
+
+    def validate(self, attrs):
+        if attrs['amount'] <= 0:
+            raise serializers.ValidationError("Неверно введенное значение")
+        return attrs
