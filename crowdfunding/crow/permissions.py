@@ -36,6 +36,12 @@ class IsOwner(permissions.BasePermission):
         return False
 
 
+class IsProjectInWorkOrInNotConfirmed(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if obj.status_code == ProjectStatusCode.objects.get(code="1") or obj.status_code == ProjectStatusCode.objects.get(code="0"):
+            return True
+        return False
+
 class IsProjectInWork(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if obj.status_code == ProjectStatusCode.objects.get(code="1"):
@@ -95,7 +101,7 @@ def get_project_view_permissions(view):
     if view.action == 'create':
         permission_classes = [IsAuthenticatedAndConfirmed]
     if view.action == 'change_request':
-        permission_classes = [IsOwner & IsProjectInWork]
+        permission_classes = [IsOwner & IsProjectInWorkOrInNotConfirmed]
     if view.action == 'confirm_project':
         permission_classes = [IsAdminUser]
     if view.action == 'payment':

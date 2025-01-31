@@ -294,7 +294,7 @@ class NewImageToProjectSerializer(serializers.ModelSerializer):
 class ChangeProjectRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectChangeRequest
-        fields = ('name', 'small_description', 'description', 'need_money',
+        fields = ('pk', 'name', 'small_description', 'description', 'need_money',
                   'end_date', 'category', 'image', 'add_image', 'description_for_change', 'user', 'create_date',
                   'answer_change_requests_project',
                   'project_url', 'url')
