@@ -26,6 +26,7 @@ import Category from './CategoryComponent';
 import NotFoundComponent from './NotFoundComponent';
 import AuthPage from '../pages/AuthPage';
 import ProfileChangeRequests from './requests/ProfilesChangeRequests.';
+import AdminComponent from './AdminComponent';
 export default class header extends Component {
     render() {
         return (
@@ -141,6 +142,10 @@ export default class header extends Component {
                         <Route path="/projects/:slug" component={ProjectPage} />
                         <Route path="/search/" component={SearchComponent} />
                         <Route path="/category/" component={Category} />
+                        <Route
+                            path="/admin/:profilename"
+                            component={AdminComponent}
+                        />
                         <Route
                             path="/profile_change_requests/"
                             component={ProfileChangeRequests}
