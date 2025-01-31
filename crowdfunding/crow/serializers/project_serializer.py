@@ -336,6 +336,7 @@ class ChangeProjectRequestSerializer(serializers.ModelSerializer):
         representation = super().to_representation(instance)
         representation['user'] = UserSerializer((instance.user), context={"request": self.context.get('request')}).data
         representation['create_date'] = instance.create_date
+        representation['slug'] = instance.project.slug
         return representation
 
     def get_project_url(self, obj):
@@ -353,6 +354,8 @@ class ChangeProjectRequestSerializer(serializers.ModelSerializer):
             for image in new_images:
                 NewImageToProject.objects.create(project_change_request=change_request, image=image['image'])
         return change_request
+
+
 
 
 class AdditionalUserSerializerForOwner(serializers.ModelSerializer):
