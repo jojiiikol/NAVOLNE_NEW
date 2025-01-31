@@ -176,9 +176,9 @@ const ProfileComponent = () => {
                                 >
                                     <Button
                                         variant="primary"
-                                        href="/profile_change_requests/"
+                                        href={'/admin/' + profilename}
                                     >
-                                        Просмотреть заявки
+                                        Админ панель
                                     </Button>
                                 </div>
                             )}
