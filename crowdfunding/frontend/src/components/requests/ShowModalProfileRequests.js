@@ -3,7 +3,7 @@ import { Button, Form, Modal, ListGroup } from 'react-bootstrap';
 import { useEffect } from 'react';
 import url from '../../globalURL';
 import EditedBlock from './EditedBlockProfile';
-const ProfileModalRequest = ({ show, onHide, id }) => {
+const ModalProfileShowRequest = ({ show, onHide, id }) => {
     const [formData, setFormData] = useState({}); // Состояние данных формы
     const [isLoading, setIsLoading] = useState(false); // Состояние загрузки
     const [data, setData] = useState();
@@ -26,7 +26,7 @@ const ProfileModalRequest = ({ show, onHide, id }) => {
                 setIsLoading(true); // Включаем индикатор загрузки
                 const accessToken = localStorage.getItem('accessToken');
                 const response = await fetch(
-                    url + `/profile_change_requests/${id}/`,
+                    url + `/profile_change_requests/${id}/see_admin_response`,
                     {
                         headers: {
                             'Content-Type': 'application/json',
@@ -86,85 +86,16 @@ const ProfileModalRequest = ({ show, onHide, id }) => {
 
                     <Modal.Body>
                         <Form>
-                            <Form.Group className="mb-4">
-                                <a href={`/profile/${data.user.username}`}>
-                                    Ссылка на пользователя
-                                </a>
-                            </Form.Group>
                             <Form.Group className="">
-                                <Form.Label className="fs-3">
-                                    Измененные данные:
-                                </Form.Label>
+                                <Form.Label className="fs-3">Ответ:</Form.Label>
                             </Form.Group>
-                            <EditedBlock name={'About'} data={data.about} />
-                            <EditedBlock name={'City'} data={data.city} />
-                            <EditedBlock name={'Company'} data={data.company} />
                             <EditedBlock
-                                name={'Document'}
-                                data={data.document}
+                                name={'Описание от админа: '}
+                                data={data[0].answer_description}
                             />
-                            <EditedBlock
-                                name={'first_name'}
-                                data={data.first_name}
-                            />
-                            <EditedBlock
-                                name={'last_name'}
-                                data={data.last_name}
-                            />
-                            <EditedBlock name={'group'} data={data.group} />
-
-                            <EditedBlock
-                                name={'passport'}
-                                data={data.passport}
-                            />
-                            <EditedBlock name={'sex'} data={data.sex} />
-                            {data.image && (
-                                <div>
-                                    <div>Image</div>
-                                    <img
-                                        src={data.image}
-                                        style={{
-                                            width: '150px',
-                                            height: '150px',
-                                        }}
-                                    />
-                                </div>
-                            )}
                         </Form>
 
-                        <Modal.Footer className="mt-4"></Modal.Footer>
-                        <Form onSubmit={handleSubmit}>
-                            <Form.Group className="mb-2">
-                                <Form.Label className="fs-3">
-                                    Ответ на изменения
-                                </Form.Label>
-                                <Form.Control
-                                    as="textarea"
-                                    rows={3}
-                                    name="answer_description"
-                                    value={formData.answer_description || ''}
-                                    onChange={handleChange}
-                                />
-                            </Form.Group>
-                            <Form.Group className="mb-2">
-                                <Form.Check
-                                    type="checkbox"
-                                    value={true}
-                                    name={'confirmed'}
-                                    onChange={handleChangeConfirmed}
-                                    label={'confirmed'}
-                                />
-                            </Form.Group>
-                        </Form>
                         <Modal.Footer className="">
-                            <Button
-                                variant="primary"
-                                type="submit"
-                                disabled={isLoading}
-                                onClick={handleSubmit}
-                            >
-                                Сохранить
-                            </Button>
                             <Button variant="secondary" onClick={onHide}>
                                 Отменить
                             </Button>
@@ -176,4 +107,4 @@ const ProfileModalRequest = ({ show, onHide, id }) => {
     );
 };
 
-export default ProfileModalRequest;
+export default ModalProfileShowRequest;

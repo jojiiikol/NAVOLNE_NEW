@@ -79,21 +79,22 @@ const AdminComponent = () => {
                         Админ панель
                     </h1>
                     <Row>
-                        <Col sm={3}>
-                            {data.is_admin && (
-                                <div
-                                    className="d-flex justify-content-center mt-2"
-                                    style={{}}
+                        {data.is_admin && (
+                            <div className="d-flex justify-content-between mt-2">
+                                <Button
+                                    variant="primary"
+                                    href="/profile_change_requests/"
                                 >
-                                    <Button
-                                        variant="primary"
-                                        href="/profile_change_requests/"
-                                    >
-                                        Просмотреть заявки на изменения профиля
-                                    </Button>
-                                </div>
-                            )}
-                        </Col>
+                                    Просмотреть заявки на изменения профиля
+                                </Button>
+                                <Button
+                                    variant="primary"
+                                    href="/project_change_requests/"
+                                >
+                                    Просмотреть заявки на изменения проекта
+                                </Button>
+                            </div>
+                        )}
                     </Row>
                 </div>
             )}

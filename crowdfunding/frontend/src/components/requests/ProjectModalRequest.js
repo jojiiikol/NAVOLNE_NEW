@@ -3,7 +3,7 @@ import { Button, Form, Modal, ListGroup } from 'react-bootstrap';
 import { useEffect } from 'react';
 import url from '../../globalURL';
 import EditedBlock from './EditedBlockProfile';
-const ProfileModalRequest = ({ show, onHide, id }) => {
+const ProjectModalRequest = ({ show, onHide, id }) => {
     const [formData, setFormData] = useState({}); // Состояние данных формы
     const [isLoading, setIsLoading] = useState(false); // Состояние загрузки
     const [data, setData] = useState();
@@ -26,7 +26,7 @@ const ProfileModalRequest = ({ show, onHide, id }) => {
                 setIsLoading(true); // Включаем индикатор загрузки
                 const accessToken = localStorage.getItem('accessToken');
                 const response = await fetch(
-                    url + `/profile_change_requests/${id}/`,
+                    url + `/project_change_requests/${id}/`,
                     {
                         headers: {
                             'Content-Type': 'application/json',
@@ -58,8 +58,8 @@ const ProfileModalRequest = ({ show, onHide, id }) => {
         //formDataObject.append('username', 'govno');
         const accessToken = localStorage.getItem('accessToken');
         try {
-            await fetch(url + `/profile_change_requests/${data.pk}/answer/`, {
-                method: 'POST',
+            await fetch(url + `/project_change_requests/${data.pk}/`, {
+                method: 'PUT',
                 headers: {
                     //'Content-Type': 'multipart/form-data',
                     Authorization: 'Bearer ' + accessToken,
@@ -87,8 +87,8 @@ const ProfileModalRequest = ({ show, onHide, id }) => {
                     <Modal.Body>
                         <Form>
                             <Form.Group className="mb-4">
-                                <a href={`/profile/${data.user.username}`}>
-                                    Ссылка на пользователя
+                                <a href={`/projects/${data.slug}`}>
+                                    Ссылка на проект
                                 </a>
                             </Form.Group>
                             <Form.Group className="">
@@ -96,33 +96,41 @@ const ProfileModalRequest = ({ show, onHide, id }) => {
                                     Измененные данные:
                                 </Form.Label>
                             </Form.Group>
-                            <EditedBlock name={'About'} data={data.about} />
-                            <EditedBlock name={'City'} data={data.city} />
-                            <EditedBlock name={'Company'} data={data.company} />
                             <EditedBlock
-                                name={'Document'}
-                                data={data.document}
+                                name={'Description'}
+                                data={data.description}
                             />
                             <EditedBlock
-                                name={'first_name'}
-                                data={data.first_name}
+                                name={'end_date'}
+                                data={data.end_date}
+                            />
+                            <EditedBlock name={'name'} data={data.name} />
+                            <EditedBlock
+                                name={'need_money'}
+                                data={data.need_money}
                             />
                             <EditedBlock
-                                name={'last_name'}
-                                data={data.last_name}
+                                name={'small_description'}
+                                data={data.small_description}
                             />
-                            <EditedBlock name={'group'} data={data.group} />
 
-                            <EditedBlock
-                                name={'passport'}
-                                data={data.passport}
-                            />
-                            <EditedBlock name={'sex'} data={data.sex} />
                             {data.image && (
                                 <div>
                                     <div>Image</div>
                                     <img
                                         src={data.image}
+                                        style={{
+                                            width: '150px',
+                                            height: '150px',
+                                        }}
+                                    />
+                                </div>
+                            )}
+                            {data.add_image && (
+                                <div>
+                                    <div>add_image</div>
+                                    <img
+                                        src={data.add_image.image}
                                         style={{
                                             width: '150px',
                                             height: '150px',
@@ -176,4 +184,4 @@ const ProfileModalRequest = ({ show, onHide, id }) => {
     );
 };
 
-export default ProfileModalRequest;
+export default ProjectModalRequest;

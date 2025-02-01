@@ -25,7 +25,7 @@ const ProfileComponent = () => {
     const { profilename } = useParams();
     const [data, setData] = useState(null);
     const [projects, setProjects] = useState(null);
-
+    const [showRequests, setShowRequests] = useState(null);
     const [isCleared, setIsCleared] = useState(false);
 
     const clearLocalStorage = () => {
@@ -140,33 +140,48 @@ const ProfileComponent = () => {
                             )} */}
 
                             {data.is_owner && (
-                                <div
-                                    className="d-flex justify-content-between me-5"
-                                    style={{}}
-                                >
-                                    <Button
-                                        variant="danger"
-                                        onClick={clearLocalStorage}
+                                <div>
+                                    {' '}
+                                    <div
+                                        className="d-flex justify-content-between me-5"
+                                        style={{}}
                                     >
-                                        Выйти
-                                    </Button>
-                                    <Button
-                                        variant="secondary"
-                                        onClick={openModal}
-                                    >
-                                        Редактировать
-                                    </Button>
-                                    {showModal && (
-                                        <EditProfileModal
-                                            show={true}
-                                            onHide={closeModal}
-                                            username={profilename}
-                                            skills_base={data.skill}
-                                        />
-                                    )}
-                                    <Button variant="primary" href="/create">
-                                        Создать
-                                    </Button>
+                                        <Button
+                                            variant="danger"
+                                            onClick={clearLocalStorage}
+                                        >
+                                            Выйти
+                                        </Button>
+                                        <Button
+                                            variant="secondary"
+                                            onClick={openModal}
+                                        >
+                                            Редактировать
+                                        </Button>
+                                        {showModal && (
+                                            <EditProfileModal
+                                                show={true}
+                                                onHide={closeModal}
+                                                username={profilename}
+                                                skills_base={data.skill}
+                                            />
+                                        )}
+                                        <Button
+                                            variant="primary"
+                                            href="/create"
+                                        >
+                                            Создать
+                                        </Button>
+                                    </div>
+                                    <div className="d-flex justify-content-center mt-2">
+                                        {' '}
+                                        <Button
+                                            variant="primary"
+                                            href={'/show_profile_requests/'}
+                                        >
+                                            Посмотреть заявки на изменения
+                                        </Button>
+                                    </div>
                                 </div>
                             )}
                             {data.is_admin && (

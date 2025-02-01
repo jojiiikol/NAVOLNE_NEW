@@ -8,7 +8,7 @@ const EditProjectModal = ({ show, onHide, slug }) => {
     const [isLoading, setIsLoading] = useState(false); // Состояние загрузки
     const [data, setData] = useState(null);
     const [category2, setCategory] = useState([]);
-
+    const [add_images2, setImages] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
             const response = await fetch(url + '/additional/', {
@@ -40,6 +40,11 @@ const EditProjectModal = ({ show, onHide, slug }) => {
                         formDataObject.append('category', cat)
                     );
                 }
+            } else if (key == 'image2') {
+                formDataObject.append(
+                    'add_image.image',
+                    event.target.image2.files[0]
+                );
             } else {
                 formDataObject.append(key, formData[key]);
             }
@@ -79,6 +84,15 @@ const EditProjectModal = ({ show, onHide, slug }) => {
             setFormData({ ...formData, category: category2 });
         }
     };
+    // const handleChangePhotos = (e) => {
+    //     const add_images = add_images2;
+    //     add_images.push(e.target.files[0]);
+    //     setImages(add_images);
+    //     if (category2.length !== 0) {
+    //         setFormData({ ...formData, add_image: add_images2 });
+    //     }
+    //     console.log(add_images2);
+    // };
 
     return (
         <Modal show={show} onHide={onHide}>
@@ -146,6 +160,17 @@ const EditProjectModal = ({ show, onHide, slug }) => {
                             name="image"
                             type="file"
                             value={formData.image || ''}
+                            onChange={handleChange}
+                        />
+                    </Form.Group>
+
+                    <Form.Group className="mb-2">
+                        <Form.Label>Фотография на шапку:</Form.Label>
+                        <Form.Control
+                            accept="image/jpeg,image/png,image/gif"
+                            name="image2"
+                            type="file"
+                            value={formData.image2 || ''}
                             onChange={handleChange}
                         />
                     </Form.Group>

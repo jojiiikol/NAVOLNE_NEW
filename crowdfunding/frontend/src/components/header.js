@@ -27,6 +27,8 @@ import NotFoundComponent from './NotFoundComponent';
 import AuthPage from '../pages/AuthPage';
 import ProfileChangeRequests from './requests/ProfilesChangeRequests.';
 import AdminComponent from './AdminComponent';
+import ProjectChangeRequests from './requests/ProjectChangeRequest';
+import ShowProfileRequests from './requests/ShowProfileRequests';
 export default class header extends Component {
     render() {
         return (
@@ -149,6 +151,14 @@ export default class header extends Component {
                         <Route
                             path="/profile_change_requests/"
                             component={ProfileChangeRequests}
+                        />
+                        <Route
+                            path="/project_change_requests/"
+                            component={ProjectChangeRequests}
+                        />
+                        <Route
+                            path="/show_profile_requests/"
+                            component={ShowProfileRequests}
                         />
                         <Route exact path="*" component={NotFoundComponent} />
                     </Switch>
