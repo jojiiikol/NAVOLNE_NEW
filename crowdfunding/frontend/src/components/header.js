@@ -29,6 +29,7 @@ import ProfileChangeRequests from './requests/ProfilesChangeRequests.';
 import AdminComponent from './AdminComponent';
 import ProjectChangeRequests from './requests/ProjectChangeRequest';
 import ShowProfileRequests from './requests/ShowProfileRequests';
+import ConfirmedProjects from './requests/ConfirmedProjects';
 export default class header extends Component {
     render() {
         return (
@@ -159,6 +160,10 @@ export default class header extends Component {
                         <Route
                             path="/show_profile_requests/"
                             component={ShowProfileRequests}
+                        />
+                        <Route
+                            path="/not_confirmed_projects/"
+                            component={ConfirmedProjects}
                         />
                         <Route exact path="*" component={NotFoundComponent} />
                     </Switch>

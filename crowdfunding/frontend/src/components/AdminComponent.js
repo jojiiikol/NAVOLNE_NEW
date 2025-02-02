@@ -93,6 +93,12 @@ const AdminComponent = () => {
                                 >
                                     Просмотреть заявки на изменения проекта
                                 </Button>
+                                <Button
+                                    variant="primary"
+                                    href="/not_confirmed_projects/"
+                                >
+                                    Показать неподтвержденные проекты
+                                </Button>
                             </div>
                         )}
                     </Row>

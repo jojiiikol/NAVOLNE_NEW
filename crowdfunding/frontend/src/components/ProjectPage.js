@@ -16,11 +16,17 @@ import EditProjectModal from '../components/forms/EditProjectModal';
 import ContactCard from '../components/cards/CardContactsComponent';
 import PaymentComponent from './PaymentComponent';
 import InfoProjectCard from './cards/InfoProjectCard';
+import ConfirmModalProject from './requests/ConfirmModalProject';
 import url from '../globalURL';
 const ProjectPage = () => {
+    const [showModalConfirm, setShowModalConfirm] = useState(false); // Состояние для отображения модального окна
+    const openModalConfirm = () => setShowModalConfirm(true); // Функция для открытия модального окна
+    const closeModalConfirm = () => setShowModalConfirm(false); // Функция для закрытия модального окна
+
     const [showModal, setShowModal] = useState(false); // Состояние для отображения модального окна
     const openModal = () => setShowModal(true); // Функция для открытия модального окна
     const closeModal = () => setShowModal(false); // Функция для закрытия модального окна
+
     const [showModalPayment, setShowModalPayment] = useState(false); // Состояние для отображения модального окна
     const openModalPayment = () => setShowModalPayment(true); // Функция для открытия модального окна
     const closeModalPayment = () => setShowModalPayment(false); // Функция для закрытия модального окна
@@ -150,6 +156,24 @@ const ProjectPage = () => {
                                             <EditProjectModal
                                                 show={true}
                                                 onHide={closeModal}
+                                                slug={slug}
+                                            />
+                                        )}
+                                    </div>
+                                )}
+                                {data.is_admin && (
+                                    <div className="mt-1" style={{}}>
+                                        <Button
+                                            size="lg"
+                                            variant="primary"
+                                            onClick={openModalConfirm}
+                                        >
+                                            Подтвердить проект
+                                        </Button>
+                                        {showModalConfirm && (
+                                            <ConfirmModalProject
+                                                show={true}
+                                                onHide={closeModalConfirm}
                                                 slug={slug}
                                             />
                                         )}

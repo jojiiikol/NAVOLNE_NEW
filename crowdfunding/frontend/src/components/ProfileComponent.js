@@ -454,6 +454,7 @@ const ProfileComponent = () => {
                                                 }
                                                 views={project.views}
                                                 image={project.image}
+                                                confirmed="true"
                                             />
                                         </div>
                                     ))}

@@ -1,21 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Card } from 'react-bootstrap';
-import ProgressBar from '../progress-bar.component';
 const MyCard = (props) => {
-    const {
-        slug,
-        collected_money,
-        need_money,
-        name,
-        category,
-        small_description,
-        views,
-        image,
-    } = props;
+    const { slug, name, small_description, image, confirmed } = props;
+    let adress = `/projects/${slug}`;
+
     return (
         <div>
-            <a href={`/projects/${slug}`} className="text-decoration-none ">
+            <a href={adress} className="text-decoration-none ">
                 <Card
                     className="border-0 rounded-5 shadow row g-0 "
                     style={{ backgroundColor: '#FFFFFF' }}
