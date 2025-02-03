@@ -34,8 +34,6 @@ from .tasks import send_message_verification_email, create_check_payment_status_
 
 
 # TODO: ----------ОПЛАТА----------
-# TODO: Думать как двигать деньги на аккаунт
-# TODO: Транзакция!
 # TODO: Дальнейшая логика на бумаге
 # TODO: ПЕРМИШИНЫ!
 
@@ -102,29 +100,8 @@ class ProjectViewSet(mixins.ListModelMixin,
         else:
             return Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(methods=['POST'], detail=False)
-    def test_payment(self, request, *args, **kwargs):
-        data = request.data
-        self.serializer_class = AccountReplenishmentSerializer(data=data, context={'request': request})
-        if self.serializer_class.is_valid():
-            amount = self.serializer_class.validated_data['amount']
-            user = request.user
-            payment, idempotence_key = create_payment(value=amount, user=user)
-            self.serializer_class.save(idempotence_key=idempotence_key, payment_id=payment.id)
-            create_check_payment_status_task(payment.id)
-            return Response({"data": payment}, status=status.HTTP_200_OK)
-        return Response(self.serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(methods=['POST'], detail=False)
-    def test_payment_show(self, request, *args, **kwargs):
-        return check_payment_status(request)
 
-    @action(methods=['POST'], detail=False)
-    def test_payment_show_status(self, request, *args, **kwargs):
-        idempotence_key = request.data['idempotence_key']
-        payment_status = check_payment_status(idempotence_key)
-        print(payment_status)
-        return Response({"status": str(payment_status)}, status=status.HTTP_200_OK)
 
 
     # Поддать заявку на изменение
@@ -332,6 +309,22 @@ class ProfileViewSet(mixins.ListModelMixin,
             data.save()
             return Response(data.data, status=status.HTTP_200_OK)
         return Response(data.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @extend_schema(summary="Пополнение баланса",
+                   description="Пополнение баланса через ЮКассу. пользователю необходимо передать с ответа ссылку с поля confirmation_url",
+                   request=AccountReplenishmentSerializer)
+    @action(methods=['POST'], detail=False)
+    def replenishment(self, request, *args, **kwargs):
+        data = request.data
+        self.serializer_class = AccountReplenishmentSerializer(data=data, context={'request': request})
+        if self.serializer_class.is_valid():
+            amount = self.serializer_class.validated_data['amount']
+            user = request.user
+            payment, idempotence_key = create_payment(value=amount, user=user)
+            self.serializer_class.save(idempotence_key=idempotence_key, payment_id=payment.id)
+            create_check_payment_status_task(payment.id)
+            return Response({"data": payment}, status=status.HTTP_200_OK)
+        return Response(self.serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @extend_schema(summary="Эндпоинт для сброса пароля",
                    description="В случае, если юзер забыл пароль, то на введенную им почту приходит сообщение для "

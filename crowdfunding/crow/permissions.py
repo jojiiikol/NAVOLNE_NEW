@@ -145,6 +145,8 @@ def get_profile_view_permissions(view):
         permission_classes = [IsOwner]
     if view.action == 'show_requests':
         permission_classes = [IsOwner | IsAdminUser]
+    if view.action == 'replenishment':
+        permission_classes = [IsAuthenticatedAndConfirmed]
     return [permission() for permission in permission_classes]
 
 

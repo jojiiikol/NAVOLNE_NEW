@@ -3,28 +3,39 @@ import os
 import uuid
 from datetime import timedelta
 
+from django.db import transaction
 from django.utils import timezone
 from django_celery_beat.models import PeriodicTask
-from rest_framework import status
-from rest_framework.response import Response
-from yookassa import Configuration
-from yookassa.domain.common import SecurityHelper
-from yookassa.domain.notification import WebhookNotificationFactory, WebhookNotificationEventType
 
 from crow.models import AccountReplenishment
-from crow.utils import get_client_ip
 from crowdfunding.settings import yookassa_payment
 
 
-def change_payment_status(payment_id):
-    payment_object = AccountReplenishment.objects.get(payment_id=payment_id)
+def account_replenishment(payment_id):
     payment_info_status = check_payment_status(payment_id)
     task = PeriodicTask.objects.get(name=payment_id)
     if payment_info_status is not None:
-        payment_object.status = payment_info_status
-        payment_object.save()
-        task.delete()
+        account_replenishment_atomic(payment_id, payment_info_status, task)
     delete_payment_task_on_time(task)
+
+
+@transaction.atomic
+def account_replenishment_atomic(payment_id, payment_info_status, task):
+    payment_object = change_payment_status(payment_id, payment_info_status)
+    amount = payment_object.amount
+    if payment_info_status:
+        user_profile = payment_object.user
+        user_profile.money += amount
+        user_profile.save()
+
+    task.delete()
+
+
+def change_payment_status(payment_id, payment_info_status):
+    payment_object = AccountReplenishment.objects.get(payment_id=payment_id)
+    payment_object.status = payment_info_status
+    payment_object.save()
+    return payment_object
 
 
 def delete_payment_task_on_time(task):

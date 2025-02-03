@@ -10,7 +10,7 @@ from django_celery_beat.models import IntervalSchedule, PeriodicTask
 from rest_framework.reverse import reverse
 
 from crow.models import VerificationToken, User, ResetPasswordToken, Project, ProjectStatusCode
-from crow.payment import check_payment_status, change_payment_status
+from crow.payment import check_payment_status, change_payment_status, account_replenishment
 from crow.utils import check_transfer_possibility
 from crowdfunding.settings import EMAIL_HOST_USER
 from crowdfunding.celery import app
@@ -80,5 +80,5 @@ def create_check_payment_status_task(payment_id):
     )
 @shared_task(queue='check_payment_queue')
 def check_payment_status_task(payment_id):
-    change_payment_status(payment_id)
+    account_replenishment(payment_id)
 
