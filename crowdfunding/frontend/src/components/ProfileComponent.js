@@ -41,7 +41,7 @@ const ProfileComponent = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const accessToken = localStorage.getItem('accessToken');
+            let accessToken = localStorage.getItem('accessToken');
             if (localStorage.getItem('accessToken')) {
                 const response = await fetch(
                     url + '/profiles/' + profilename + '/',
@@ -53,8 +53,45 @@ const ProfileComponent = () => {
                     }
                 );
                 const data = await response.json();
-                setData(data);
-                console.log(data);
+                if (data.code != 'token_not_valid') {
+                    setData(data);
+                    console.log(data);
+                }
+                if (data.code == 'token_not_valid') {
+                    const formData = new FormData();
+                    formData.append(
+                        'refresh',
+                        localStorage.getItem('refreshToken')
+                    );
+                    const token_response = await fetch(
+                        url + '/api/token/refresh/',
+                        {
+                            method: 'POST',
+                            headers: {
+                                // 'Content-Type': 'application/json',
+                            },
+                            body: formData,
+                        }
+                    );
+                    const token_data = await token_response.json();
+                    localStorage.setItem('accessToken', token_data.access);
+
+                    if (token_data) {
+                        fetch(url + '/profiles/' + profilename + '/', {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                Authorization:
+                                    'Bearer ' +
+                                    localStorage.getItem('accessToken'),
+                            },
+                        })
+                            .then((response) => response.json())
+                            .then((data) => {
+                                setData(data);
+                                console.log(data);
+                            });
+                    }
+                }
             }
             if (!localStorage.getItem('accessToken')) {
                 const response = await fetch(
@@ -86,7 +123,7 @@ const ProfileComponent = () => {
 
     return (
         <Container style={{ marginTop: '80px' }}>
-            {data && projects && (
+            {data && projects && data.code != 'token_not_valid' && (
                 <div>
                     <Row>
                         <Col sm={3}>
