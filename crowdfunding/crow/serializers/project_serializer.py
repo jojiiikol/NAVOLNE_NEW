@@ -41,6 +41,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
     change_url = serializers.SerializerMethodField()
     is_owner = serializers.SerializerMethodField()
+    is_admin = serializers.SerializerMethodField()
     confirm_url = serializers.SerializerMethodField()
     status_code = ProjectStatusCodeSerializer(read_only=True)
 
@@ -50,10 +51,14 @@ class ProjectSerializer(serializers.ModelSerializer):
             'pk', 'slug', 'user', 'name', 'small_description', 'description', 'slug', 'need_money', 'collected_money',
             'start_date',
             'end_date', 'category', 'image', 'project_images', 'confirmed', 'url', 'payment_url', 'change_url',
-            'is_owner', 'confirm_url', 'transfer_allowed', 'closure_type', 'status_code', 'views')
+            'is_owner', 'is_admin', 'confirm_url', 'transfer_allowed', 'closure_type', 'status_code', 'views')
 
     def get_is_owner(self, obj):
         if obj.user.username == self.context.get('request').user.username:
+            return True
+
+    def get_is_admin(self, obj):
+        if self.context.get('request').user.is_superuser:
             return True
 
     def get_payment_url(self, obj):
@@ -67,7 +72,6 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     def get_confirm_url(self, obj):
         return reverse('project-confirm-project', kwargs={'slug': obj.slug}, request=self.context['request'])
-
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -177,12 +181,14 @@ class ConfirmProjectSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+
 class ProjectClosureRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectClosureRequest
-        fields = ('date', )
+        fields = ('date',)
 
     date = serializers.DateTimeField(default=timezone.now())
+
 
 class AnswerProjectClosureRequestSerializer(serializers.ModelSerializer):
     class Meta:
@@ -200,7 +206,8 @@ class AnswerProjectClosureRequestSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['project'] = ProjectSerializer(instance.project, context={"request": self.context.get('request')}).data
+        representation['project'] = ProjectSerializer(instance.project,
+                                                      context={"request": self.context.get('request')}).data
         representation['admin'] = UserSerializer(instance.admin, context={"request": self.context.get('request')}).data
         return representation
 
@@ -356,14 +363,13 @@ class ChangeProjectRequestSerializer(serializers.ModelSerializer):
         return change_request
 
 
-
-
 class AdditionalUserSerializerForOwner(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
             'username', 'image', 'first_name', 'last_name', 'birthday', 'about', 'skill', 'sex', 'company', 'passport',
-            'document', 'money', 'total_money_sent', 'city', 'confirmed', 'category', 'date_joined', 'projects', 'groups',
+            'document', 'money', 'total_money_sent', 'city', 'confirmed', 'category', 'date_joined', 'projects',
+            'groups',
             'email_verified', 'is_owner', 'is_admin')
 
     username = serializers.CharField(read_only=True)
