@@ -47,10 +47,11 @@ const TokenCheck = () => {
                         .then((response) => response.json())
                         .then((data) => {
                             localStorage.setItem('accessToken', data.access);
-                            //console.log('token refreshed');
+                            window.location.reload();
+                            console.log('token refreshed');
                         });
                     console.log('token refreshed');
-                    //window.location.reload();
+                    //
                 }
             });
     }
