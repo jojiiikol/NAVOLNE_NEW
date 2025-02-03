@@ -19,6 +19,12 @@ def change_transfer_status(project):
         if check_transfer_possibility(project):
             project.set_allowed_transfer_status()
 
+def result_amount_with_commission(project):
+    money = project.collected_money
+    commission = get_commission_rate(project)
+    commission_amount = money / 100 * commission
+    actual_amount = money - commission_amount
+    return actual_amount
 
 def get_commission_rate(project):
     percentage = get_sum_percentage(project)

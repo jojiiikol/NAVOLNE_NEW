@@ -1,8 +1,4 @@
-import json
-
 from django.core.exceptions import ObjectDoesNotExist
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
 from rest_framework import status, viewsets, filters, mixins
@@ -12,18 +8,19 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import VerificationToken, IP
+from .models import VerificationToken
 from .paginators import AllProjectsPaginator
 from crow.serializers.project_serializer import *
 from crow.serializers.profile_serializer import *
 from crow.serializers.listings_serializer import *
-from .payment import create_payment, get_payment_info, check_payment_status
+from crow.yookassa_crow.payment import create_payment
 from .permissions import get_project_view_permissions, \
     get_project_change_request_view_permissions, get_profile_view_permissions, \
     get_profile_change_request_view_permissions, get_closure_request_view_permissions
 from .transactions import cash_out_project
-from .utils import check_token_timelife, change_transfer_status, get_client_ip, get_commission_rate, save_ip_view
+from .utils import check_token_timelife, change_transfer_status, save_ip_view
 from .tasks import send_message_verification_email, create_check_payment_status_task
+from .yookassa_crow.payout import create_payout
 
 
 # TODO: Отрефачить логику попытки удаления заявки на изменения при ответе админа, перенести в пермишины
@@ -34,6 +31,7 @@ from .tasks import send_message_verification_email, create_check_payment_status_
 
 
 # TODO: ----------ОПЛАТА----------
+# TODO: Добавить префиксы выплата/оплата в бд на таски!
 # TODO: Дальнейшая логика на бумаге
 # TODO: ПЕРМИШИНЫ!
 
@@ -99,9 +97,6 @@ class ProjectViewSet(mixins.ListModelMixin,
             return Response({"data": "Транзакция проведена"}, status=status.HTTP_200_OK)
         else:
             return Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-
 
 
     # Поддать заявку на изменение
@@ -190,13 +185,30 @@ class ProjectViewSet(mixins.ListModelMixin,
                    )
     @action(methods=['POST'], detail=True)
     def cash_out(self, request, *args, **kwargs):
-        print(request.user)
+        # print(request.user)
+        # project = self.get_object()
+        # try:
+        #     cash_out_project(project)
+        #     return Response({"data": 'Операция выполнена'}, status=status.HTTP_200_OK)
+        # except Exception as e:
+        #     return Response({'data': 'Операция невозможна'}, status=status.HTTP_400_BAD_REQUEST)
+        user = self.request.user
+        data = request.data
         project = self.get_object()
-        try:
-            cash_out_project(project)
-            return Response({"data": 'Операция выполнена'}, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({'data': 'Операция невозможна'}, status=status.HTTP_400_BAD_REQUEST)
+        self.serializer_class = PayoutSerializer(data=data, context={'request': request})
+        if self.serializer_class.is_valid():
+            bank_card = self.serializer_class.validated_data['bank_card']
+            payout, idempotence_key = create_payout(bank_card, project)
+            payout_id = payout.id
+            self.serializer_class.save(idempotence_key=idempotence_key, payout_id=payout_id, project=project)
+            return Response({"data": payout}, status=status.HTTP_200_OK)
+        return Response(self.serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+    @action(methods=['POST'], detail=True)
+    def test_payout(self, request, *args, **kwargs):
+        pass
 
 
 class ProjectChangeRequestViewSet(mixins.ListModelMixin,
@@ -311,7 +323,7 @@ class ProfileViewSet(mixins.ListModelMixin,
         return Response(data.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @extend_schema(summary="Пополнение баланса",
-                   description="Пополнение баланса через ЮКассу. пользователю необходимо передать с ответа ссылку с поля confirmation_url",
+                   description="Пополнение баланса через ЮКассу. Пользователю необходимо передать с ответа ссылку с поля confirmation_url",
                    request=AccountReplenishmentSerializer)
     @action(methods=['POST'], detail=False)
     def replenishment(self, request, *args, **kwargs):

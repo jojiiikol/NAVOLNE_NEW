@@ -12,11 +12,12 @@ from rest_framework.validators import UniqueValidator
 
 from crow.models import Project, Category, Transaction, ProjectChangeRequest, User, AnswerProjectChangeRequest, \
     ProjectConfirmAnswer, ProjectImages, \
-    NewImageToProject, ProjectStatusCode, ProjectClosureRequest
+    NewImageToProject, ProjectStatusCode, ProjectClosureRequest, CashingOutProject
 from crow.serializers.listings_serializer import CategoryListing, SkillListing, GroupSerializerForAdditionalView, \
     ProjectStatusCodeSerializer
 from crow.serializers.profile_serializer import UserSerializer
 from crow.tasks import send_message_verification_email
+from crow.utils import result_amount_with_commission
 from crow.validators import SpecialCharactersValidator, OnlyTextValidator, ProjectNameValidator
 
 
@@ -221,6 +222,28 @@ class AnswerProjectClosureRequestSerializer(serializers.ModelSerializer):
             project.set_inwork_status()
         project.save()
         return instance
+
+class PayoutSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CashingOutProject
+        fields = ['bank_card', 'user']
+
+    bank_card = serializers.CharField()
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    def validate(self, attrs):
+        if len(attrs["bank_card"]) != 16:
+            raise serializers.ValidationError("Номер банковской карты имеет 16 цифр")
+        if not attrs["bank_card"].isdigit():
+            raise serializers.ValidationError("Номер банковской карты состоит только из цифр")
+        return attrs
+
+    def create(self, validated_data):
+        validated_data["money"] = validated_data['project'].collected_money
+        validated_data["actual_amount"] = result_amount_with_commission(validated_data['project'])
+        validated_data['created_date'] = timezone.now()
+        return CashingOutProject.objects.create(**validated_data)
+
 
 
 class PaymentSerializer(serializers.ModelSerializer):

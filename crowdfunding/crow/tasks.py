@@ -1,6 +1,5 @@
 import json
 import uuid
-from datetime import timedelta
 
 from celery import shared_task
 from django.contrib.auth.tokens import default_token_generator
@@ -10,7 +9,7 @@ from django_celery_beat.models import IntervalSchedule, PeriodicTask
 from rest_framework.reverse import reverse
 
 from crow.models import VerificationToken, User, ResetPasswordToken, Project, ProjectStatusCode
-from crow.payment import check_payment_status, change_payment_status, account_replenishment
+from crow.yookassa_crow.payment import account_replenishment
 from crow.utils import check_transfer_possibility
 from crowdfunding.settings import EMAIL_HOST_USER
 from crowdfunding.celery import app
@@ -73,7 +72,7 @@ def create_check_payment_status_task(payment_id):
 
     PeriodicTask.objects.create(
         interval=schedule,
-        name=payment_id,
+        name="Payment " + payment_id,
         task="crow.tasks.check_payment_status_task",
         start_time=timezone.now(),
         args=json.dumps([payment_id]),

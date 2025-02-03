@@ -13,7 +13,8 @@ from crowdfunding.settings import yookassa_payment
 
 def account_replenishment(payment_id):
     payment_info_status = check_payment_status(payment_id)
-    task = PeriodicTask.objects.get(name=payment_id)
+    payment_name = "Payment " + str(payment_id)
+    task = PeriodicTask.objects.get(name=payment_name)
     if payment_info_status is not None:
         account_replenishment_atomic(payment_id, payment_info_status, task)
     delete_payment_task_on_time(task)

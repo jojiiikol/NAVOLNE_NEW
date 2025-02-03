@@ -129,6 +129,12 @@ class CashingOutProject(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='cashing_out_user')
     money = models.FloatField(null=False, default=0)
     actual_amount = models.FloatField(null=False, default=0)
+    idempotence_key = models.UUIDField(null=True, blank=True, unique=True)
+    create_date = models.DateTimeField(null=True, blank=True)
+    change_status_date = models.DateTimeField(null=True, blank=True)
+    payout_id = models.UUIDField(null=True, blank=True)
+    status = models.BooleanField(null=True, blank=True)
+
 
 
 class ProjectChangeRequest(models.Model):
