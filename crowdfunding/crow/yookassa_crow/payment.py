@@ -1,15 +1,22 @@
 import json
-import os
 import uuid
 from datetime import timedelta
+
 
 from django.db import transaction
 from django.utils import timezone
 from django_celery_beat.models import PeriodicTask
 
 from crow.models import AccountReplenishment
-from crowdfunding.settings import yookassa_payment
+import yookassa
 
+from crowdfunding.settings import PAYMENT_SHOP_ID, PAYMENT_SECRET_KEY
+
+
+
+def yookassa_authorization():
+    yookassa.Configuration.account_id = PAYMENT_SHOP_ID
+    yookassa.Configuration.secret_key = PAYMENT_SECRET_KEY
 
 def account_replenishment(payment_id):
     payment_info_status = check_payment_status(payment_id)
@@ -56,15 +63,16 @@ def check_payment_status(idempotence_key):
 
 
 def create_payment(value, user):
+    yookassa_authorization()
     idempotence_key = uuid.uuid4()
-    payment = yookassa_payment.Payment.create({
+    payment = yookassa.Payment.create({
         "amount": {
             "value": value,
             "currency": "RUB"
         },
         "confirmation": {
             "type": "redirect",
-            "return_url": os.getenv("URL")
+            "return_url": 'http://navolnetest.ru/'
         },
         "capture": True,
         "description": f"Пополнение баланса для пользователя: {user.username}"
@@ -73,4 +81,5 @@ def create_payment(value, user):
 
 
 def get_payment_info(idempotence_key):
-    return yookassa_payment.Payment.find_one(idempotence_key)
+    yookassa_authorization()
+    return yookassa.Payment.find_one(idempotence_key)
