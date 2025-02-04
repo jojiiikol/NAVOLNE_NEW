@@ -30,6 +30,7 @@ import AdminComponent from './AdminComponent';
 import ProjectChangeRequests from './requests/ProjectChangeRequest';
 import ShowProfileRequests from './requests/ShowProfileRequests';
 import ConfirmedProjects from './requests/ConfirmedProjects';
+import ShowClosureAllProjects from './requests/ShowClosureAllProjects';
 export default class header extends Component {
     render() {
         return (
@@ -164,6 +165,10 @@ export default class header extends Component {
                         <Route
                             path="/not_confirmed_projects/"
                             component={ConfirmedProjects}
+                        />
+                        <Route
+                            path="/project_closure_requests/"
+                            component={ShowClosureAllProjects}
                         />
                         <Route exact path="*" component={NotFoundComponent} />
                     </Switch>

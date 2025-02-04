@@ -16,7 +16,7 @@ import {
 import EditProfileModal from './forms/EditProfileModal';
 import MyCard from './cards/MiniProjectCard';
 import url from '../globalURL';
-import TokenCheck from './TokenCheck';
+import MoneyWithdrawal from './payment/MoneyWithdrawal';
 
 const ProfileComponent = () => {
     const { profilename } = useParams();
@@ -36,6 +36,9 @@ const ProfileComponent = () => {
     const openModal = () => setShowModal(true); // Функция для открытия модального окна
     const closeModal = () => setShowModal(false); // Функция для закрытия модального окна
 
+    const [showModalWithdrawal, setShowModalWithdrawal] = useState(false); // Состояние для отображения модального окна
+    const openModalWithdrawal = () => setShowModalWithdrawal(true); // Функция для открытия модального окна
+    const closeModalWithdrawal = () => setShowModalWithdrawal(false); // Функция для закрытия модального окна
     useEffect(() => {
         const fetchData = async () => {
             if (localStorage.getItem('accessToken')) {
@@ -50,44 +53,8 @@ const ProfileComponent = () => {
                     }
                 );
                 const data = await response.json();
-
                 setData(data);
                 console.log(data);
-
-                if (data.code == 'token_not_valid') {
-                    // const formData = new FormData();
-                    // formData.append(
-                    //     'refresh',
-                    //     localStorage.getItem('refreshToken')
-                    // );
-                    // const token_response = await fetch(
-                    //     url + '/api/token/refresh/',
-                    //     {
-                    //         method: 'POST',
-                    //         headers: {
-                    //             // 'Content-Type': 'application/json',
-                    //         },
-                    //         body: formData,
-                    //     }
-                    // );
-                    // const token_data = await token_response.json();
-                    // localStorage.setItem('accessToken', token_data.access);
-                    // if (token_data) {
-                    //     fetch(url + '/profiles/' + profilename + '/', {
-                    //         headers: {
-                    //             'Content-Type': 'application/json',
-                    //             Authorization:
-                    //                 'Bearer ' +
-                    //                 localStorage.getItem('accessToken'),
-                    //         },
-                    //     })
-                    //         .then((response) => response.json())
-                    //         .then((data) => {
-                    //             setData(data);
-                    //             console.log(data);
-                    //         });
-                    // }
-                }
             }
             if (!localStorage.getItem('accessToken')) {
                 const response = await fetch(
@@ -207,13 +174,18 @@ const ProfileComponent = () => {
                                         </Button>
                                     </div>
                                     <div className="d-flex justify-content-center mt-2">
-                                        {' '}
                                         <Button
                                             variant="primary"
-                                            href={'/show_profile_requests/'}
+                                            onClick={openModalWithdrawal}
                                         >
-                                            Посмотреть заявки на изменения
+                                            Вывод средств
                                         </Button>
+                                        {showModalWithdrawal && (
+                                            <MoneyWithdrawal
+                                                show={true}
+                                                onHide={closeModalWithdrawal}
+                                            />
+                                        )}
                                     </div>
                                 </div>
                             )}

@@ -80,25 +80,35 @@ const AdminComponent = () => {
                     </h1>
                     <Row>
                         {data.is_admin && (
-                            <div className="d-flex justify-content-between mt-2">
-                                <Button
-                                    variant="primary"
-                                    href="/profile_change_requests/"
-                                >
-                                    Просмотреть заявки на изменения профиля
-                                </Button>
-                                <Button
-                                    variant="primary"
-                                    href="/project_change_requests/"
-                                >
-                                    Просмотреть заявки на изменения проекта
-                                </Button>
-                                <Button
-                                    variant="primary"
-                                    href="/not_confirmed_projects/"
-                                >
-                                    Показать неподтвержденные проекты
-                                </Button>
+                            <div>
+                                <div className="d-flex justify-content-between mt-2">
+                                    <Button
+                                        variant="primary"
+                                        href="/project_change_requests/"
+                                    >
+                                        Просмотреть заявки на изменения проекта
+                                    </Button>
+                                    <Button
+                                        variant="primary"
+                                        href="/project_closure_requests/"
+                                    >
+                                        Просмотреть заявки на закрытие сбора
+                                    </Button>
+                                    <Button
+                                        variant="primary"
+                                        href="/not_confirmed_projects/"
+                                    >
+                                        Показать неподтвержденные проекты
+                                    </Button>
+                                </div>
+                                <div className="d-flex justify-content-between mt-2">
+                                    <Button
+                                        variant="primary"
+                                        href="/profile_change_requests/"
+                                    >
+                                        Просмотреть заявки на изменения профиля
+                                    </Button>
+                                </div>
                             </div>
                         )}
                     </Row>

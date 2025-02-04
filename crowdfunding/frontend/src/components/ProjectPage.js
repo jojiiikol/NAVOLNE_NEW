@@ -18,10 +18,15 @@ import PaymentComponent from './PaymentComponent';
 import InfoProjectCard from './cards/InfoProjectCard';
 import ConfirmModalProject from './requests/ConfirmModalProject';
 import url from '../globalURL';
+import ModalClosureMoney from './requests/ModalClosureMoney';
 const ProjectPage = () => {
     const [showModalConfirm, setShowModalConfirm] = useState(false); // Состояние для отображения модального окна
     const openModalConfirm = () => setShowModalConfirm(true); // Функция для открытия модального окна
     const closeModalConfirm = () => setShowModalConfirm(false); // Функция для закрытия модального окна
+
+    const [showModalClosure, setShowModalClosure] = useState(false); // Состояние для отображения модального окна
+    const openModalClosure = () => setShowModalClosure(true); // Функция для открытия модального окна
+    const closeModalClosure = () => setShowModalClosure(false); // Функция для закрытия модального окна
 
     const [showModal, setShowModal] = useState(false); // Состояние для отображения модального окна
     const openModal = () => setShowModal(true); // Функция для открытия модального окна
@@ -161,7 +166,25 @@ const ProjectPage = () => {
                                         )}
                                     </div>
                                 )}
-                                {data.is_admin && (
+                                {data.is_owner && data.transfer_allowed && (
+                                    <div className="mt-1 me-1" style={{}}>
+                                        <Button
+                                            size="lg"
+                                            variant="primary"
+                                            onClick={openModalClosure}
+                                        >
+                                            Закрыть сбор
+                                        </Button>
+                                        {showModalClosure && (
+                                            <ModalClosureMoney
+                                                show={true}
+                                                onHide={closeModalClosure}
+                                                slug={slug}
+                                            />
+                                        )}
+                                    </div>
+                                )}
+                                {data.is_admin && !data.confirmed && (
                                     <div className="mt-1" style={{}}>
                                         <Button
                                             size="lg"
