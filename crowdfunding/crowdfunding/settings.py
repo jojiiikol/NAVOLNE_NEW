@@ -12,16 +12,16 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from datetime import timedelta
 from pathlib import Path
+
 from dotenv import load_dotenv
-import yookassa
+
 import sentry_sdk
 
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-yookassa_payment = yookassa
-yookassa_payment.Configuration.account_id = os.getenv("PAYMENT_SHOP_ID")
-yookassa_payment.Configuration.secret_key = os.getenv("PAYMENT_SECRET_KEY")
+
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -211,6 +211,22 @@ LOGGING = {
     },
 }
 
+sentry_sdk.init(
+    dsn="https://a03d91b870ce7fe223886bf49be86319@o4508754827345920.ingest.us.sentry.io/4508754834030592",
+    # Add data like request headers and IP for users,
+    # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
+    send_default_pii=True,
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for tracing.
+    traces_sample_rate=1.0,
+    _experiments={
+        # Set continuous_profiling_auto_start to True
+        # to automatically start the profiler on when
+        # possible.
+        "continuous_profiling_auto_start": True,
+    },
+)
+
 # CACHES = {
 #     "default": {
 #         "BACKEND": "django_redis.cache.RedisCache",
@@ -258,18 +274,9 @@ CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
 
-sentry_sdk.init(
-    dsn="https://a03d91b870ce7fe223886bf49be86319@o4508754827345920.ingest.us.sentry.io/4508754834030592",
-    # Add data like request headers and IP for users,
-    # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
-    send_default_pii=True,
-    # Set traces_sample_rate to 1.0 to capture 100%
-    # of transactions for tracing.
-    traces_sample_rate=1.0,
-    _experiments={
-        # Set continuous_profiling_auto_start to True
-        # to automatically start the profiler on when
-        # possible.
-        "continuous_profiling_auto_start": True,
-    },
-)
+PAYMENT_SHOP_ID = os.getenv("PAYMENT_SHOP_ID")
+PAYMENT_SECRET_KEY = os.getenv("PAYMENT_SECRET_KEY")
+
+PAYOUT_AGENT_ID = os.getenv("PAYOUT_AGENT_ID")
+PAYOUT_SECRET_KEY = os.getenv("PAYOUT_SECRET_KEY")
+
