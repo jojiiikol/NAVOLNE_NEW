@@ -31,10 +31,7 @@ from .yookassa_crow.payout import create_payout
 
 
 # TODO: ----------ОПЛАТА----------
-# TODO: Добавить префиксы выплата/оплата в бд на таски!
-# TODO: Дальнейшая логика на бумаге
 # TODO: ПЕРМИШИНЫ!
-# TODO: Вынести перевод средста на проект в транзакцию (сейчас она в сериалайзере payment)
 
 # TODO: ----------ДЕПЛОЙ----------
 # TODO: Настроить SOCKET_TIMEOUT
@@ -324,6 +321,9 @@ class ProfileViewSet(mixins.ListModelMixin,
             return Response({"data": payment}, status=status.HTTP_200_OK)
         return Response(self.serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @extend_schema(summary="Выплата средств с профиля",
+                   description="Выплата баланса через ЮКассу. Необходимо быть авторизированным и подтвержденным",
+                   request=PayoutSerializer)
     @action(methods=['POST'], detail=False)
     def payout(self, request, *args, **kwargs):
         data = request.data

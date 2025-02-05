@@ -116,8 +116,8 @@ def get_project_view_permissions(view):
         permission_classes = [IsOwner & IsTransferAllowed & IsProjectInWork]
     if view.action == 'answer':
         permission_classes = [IsAdminUser]
-    # if view.action == 'cash_out':
-    #     permission_classes = [IsOwner & IsCashOutAllowed]
+    if view.action == 'cash_out':
+        permission_classes = [IsOwner & IsCashOutAllowed]
     return [permission() for permission in permission_classes]
 
 
@@ -146,6 +146,8 @@ def get_profile_view_permissions(view):
     if view.action == 'show_requests':
         permission_classes = [IsOwner | IsAdminUser]
     if view.action == 'replenishment':
+        permission_classes = [IsAuthenticatedAndConfirmed]
+    if view.action == 'payout':
         permission_classes = [IsAuthenticatedAndConfirmed]
     return [permission() for permission in permission_classes]
 
