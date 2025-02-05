@@ -101,3 +101,8 @@ class IPAdmin(admin.ModelAdmin):
 class AccountReplenishmentAdmin(admin.ModelAdmin):
     pass
 
+@admin.register(Payout)
+class PayoutAdmin(admin.ModelAdmin):
+    pass
+
+

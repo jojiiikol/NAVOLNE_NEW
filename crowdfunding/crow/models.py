@@ -129,11 +129,8 @@ class CashingOutProject(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='cashing_out_user')
     money = models.FloatField(null=False, default=0)
     actual_amount = models.FloatField(null=False, default=0)
-    idempotence_key = models.UUIDField(null=True, blank=True, unique=True)
     create_date = models.DateTimeField(null=True, blank=True)
-    change_status_date = models.DateTimeField(null=True, blank=True)
-    payout_id = models.UUIDField(null=True, blank=True)
-    status = models.BooleanField(null=True, blank=True)
+
 
 
 
@@ -265,3 +262,15 @@ class AccountReplenishment(models.Model):
 
     def __str__(self):
         return f"{self.user} + {self.amount}, id={self.payment_id}"
+
+class Payout(models.Model):
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    amount = models.FloatField(null=True, blank=True)
+    payout_token = models.CharField(null=True, blank=True)
+    payout_id = models.CharField(null=True, blank=True)
+    status = models.BooleanField(null=True, blank=True)
+    created_date = models.DateTimeField(null=True, blank=True)
+    update_date = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user} - {self.amount}р, id={self.payout_token}"

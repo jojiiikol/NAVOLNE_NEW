@@ -11,6 +11,7 @@ from rest_framework.reverse import reverse
 from crow.models import VerificationToken, User, ResetPasswordToken, Project, ProjectStatusCode
 from crow.yookassa_crow.payment import account_replenishment
 from crow.utils import check_transfer_possibility
+from crow.yookassa_crow.payout import do_payout
 from crowdfunding.settings import EMAIL_HOST_USER
 from crowdfunding.celery import app
 
@@ -77,7 +78,25 @@ def create_check_payment_status_task(payment_id):
         start_time=timezone.now(),
         args=json.dumps([payment_id]),
     )
+
+def create_check_payout_status_task(payout_id):
+    schedule, created = IntervalSchedule.objects.get_or_create(
+        every=1,
+        period=IntervalSchedule.MINUTES
+    )
+
+    PeriodicTask.objects.create(
+        interval=schedule,
+        name="Payout " + payout_id,
+        task="crow.tasks.check_payout_status_task",
+        start_time=timezone.now(),
+        args=json.dumps([payout_id]),
+    )
 @shared_task(queue='check_payment_queue')
 def check_payment_status_task(payment_id):
     account_replenishment(payment_id)
+
+@shared_task(queue='check_payment_queue')
+def check_payout_status_task(payout_id):
+    do_payout(payout_id)
 

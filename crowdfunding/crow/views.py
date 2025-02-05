@@ -19,7 +19,7 @@ from .permissions import get_project_view_permissions, \
     get_profile_change_request_view_permissions, get_closure_request_view_permissions
 from .transactions import cash_out_project
 from .utils import check_token_timelife, change_transfer_status, save_ip_view
-from .tasks import send_message_verification_email, create_check_payment_status_task
+from .tasks import send_message_verification_email, create_check_payment_status_task, create_check_payout_status_task
 from .yookassa_crow.payout import create_payout
 
 
@@ -34,6 +34,7 @@ from .yookassa_crow.payout import create_payout
 # TODO: Добавить префиксы выплата/оплата в бд на таски!
 # TODO: Дальнейшая логика на бумаге
 # TODO: ПЕРМИШИНЫ!
+# TODO: Вынести перевод средста на проект в транзакцию (сейчас она в сериалайзере payment)
 
 # TODO: ----------ДЕПЛОЙ----------
 # TODO: Настроить SOCKET_TIMEOUT
@@ -186,29 +187,14 @@ class ProjectViewSet(mixins.ListModelMixin,
     @action(methods=['POST'], detail=True)
     def cash_out(self, request, *args, **kwargs):
         # print(request.user)
-        # project = self.get_object()
-        # try:
-        #     cash_out_project(project)
-        #     return Response({"data": 'Операция выполнена'}, status=status.HTTP_200_OK)
-        # except Exception as e:
-        #     return Response({'data': 'Операция невозможна'}, status=status.HTTP_400_BAD_REQUEST)
-        user = self.request.user
-        data = request.data
         project = self.get_object()
-        self.serializer_class = PayoutSerializer(data=data, context={'request': request})
-        if self.serializer_class.is_valid():
-            bank_card = self.serializer_class.validated_data['bank_card']
-            payout, idempotence_key = create_payout(bank_card, project)
-            payout_id = payout.id
-            self.serializer_class.save(idempotence_key=idempotence_key, payout_id=payout_id, project=project)
-            return Response({"data": payout}, status=status.HTTP_200_OK)
-        return Response(self.serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            cash_out_project(project)
+            return Response({"data": 'Операция выполнена'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'data': 'Операция невозможна'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-    @action(methods=['POST'], detail=True)
-    def test_payout(self, request, *args, **kwargs):
-        pass
 
 
 class ProjectChangeRequestViewSet(mixins.ListModelMixin,
@@ -337,6 +323,23 @@ class ProfileViewSet(mixins.ListModelMixin,
             create_check_payment_status_task(payment.id)
             return Response({"data": payment}, status=status.HTTP_200_OK)
         return Response(self.serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(methods=['POST'], detail=False)
+    def payout(self, request, *args, **kwargs):
+        data = request.data
+        print(data)
+        serializer = PayoutSerializer(data=data, context={'request': request})
+        if serializer.is_valid():
+            payout = create_payout(
+                payout_token=serializer.validated_data['payout_token'],
+                amount=serializer.validated_data['amount'],
+                username=request.user.username
+            )
+            serializer.save(payout_id=payout.id)
+            create_check_payout_status_task(payout.id)
+            return Response(payout, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
     @extend_schema(summary="Эндпоинт для сброса пароля",
                    description="В случае, если юзер забыл пароль, то на введенную им почту приходит сообщение для "

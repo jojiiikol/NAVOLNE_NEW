@@ -10,7 +10,7 @@ from django_celery_beat.models import PeriodicTask
 from crow.models import AccountReplenishment
 import yookassa
 
-from crowdfunding.settings import PAYMENT_SHOP_ID, PAYMENT_SECRET_KEY
+from crowdfunding.settings import PAYMENT_SHOP_ID, PAYMENT_SECRET_KEY, SERVER_URL
 
 
 
@@ -51,8 +51,8 @@ def delete_payment_task_on_time(task):
         task.delete()
 
 
-def check_payment_status(idempotence_key):
-    payment_info = get_payment_info(idempotence_key)
+def check_payment_status(payment_id):
+    payment_info = get_payment_info(payment_id)
     payment_status = payment_info['status']
     if payment_status == 'succeeded':
         return True
@@ -72,7 +72,7 @@ def create_payment(value, user):
         },
         "confirmation": {
             "type": "redirect",
-            "return_url": 'http://navolnetest.ru/'
+            "return_url": SERVER_URL
         },
         "capture": True,
         "description": f"Пополнение баланса для пользователя: {user.username}"
@@ -80,6 +80,6 @@ def create_payment(value, user):
     return payment, idempotence_key
 
 
-def get_payment_info(idempotence_key):
+def get_payment_info(payment_id):
     yookassa_authorization()
-    return yookassa.Payment.find_one(idempotence_key)
+    return yookassa.Payment.find_one(payment_id)

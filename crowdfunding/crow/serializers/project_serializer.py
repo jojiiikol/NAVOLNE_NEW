@@ -12,7 +12,7 @@ from rest_framework.validators import UniqueValidator
 
 from crow.models import Project, Category, Transaction, ProjectChangeRequest, User, AnswerProjectChangeRequest, \
     ProjectConfirmAnswer, ProjectImages, \
-    NewImageToProject, ProjectStatusCode, ProjectClosureRequest, CashingOutProject
+    NewImageToProject, ProjectStatusCode, ProjectClosureRequest, CashingOutProject, Payout
 from crow.serializers.listings_serializer import CategoryListing, SkillListing, GroupSerializerForAdditionalView, \
     ProjectStatusCodeSerializer
 from crow.serializers.profile_serializer import UserSerializer
@@ -225,24 +225,29 @@ class AnswerProjectClosureRequestSerializer(serializers.ModelSerializer):
 
 class PayoutSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CashingOutProject
-        fields = ['bank_card', 'user']
+        model = Payout
+        fields = ['payout_token', 'user', 'amount']
 
-    bank_card = serializers.CharField()
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    amount = serializers.FloatField(required=True)
+    payout_token = serializers.CharField(required=True)
 
     def validate(self, attrs):
-        if len(attrs["bank_card"]) != 16:
-            raise serializers.ValidationError("Номер банковской карты имеет 16 цифр")
-        if not attrs["bank_card"].isdigit():
-            raise serializers.ValidationError("Номер банковской карты состоит только из цифр")
+        if attrs['amount'] < 5:
+            raise serializers.ValidationError("Сумма выплаты не может составлять меньше 5р")
+        if attrs['amount'] > 500000:
+            raise serializers.ValidationError("Сумма выплаты не может составлять свыше 500000р")
+        if attrs['user'].money < attrs['amount']:
+            raise serializers.ValidationError("На вашем балансе недостаточно средств для проведения выплаты")
         return attrs
 
     def create(self, validated_data):
-        validated_data["money"] = validated_data['project'].collected_money
-        validated_data["actual_amount"] = result_amount_with_commission(validated_data['project'])
         validated_data['created_date'] = timezone.now()
-        return CashingOutProject.objects.create(**validated_data)
+        payout = Payout.objects.create(**validated_data)
+        user = validated_data['user']
+        user.money -= validated_data['amount']
+        user.save()
+        return payout
 
 
 
