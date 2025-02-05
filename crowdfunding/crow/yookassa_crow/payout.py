@@ -23,7 +23,16 @@ def do_payout(payout_id):
     task = PeriodicTask.objects.get(name=payout_name)
     if payout_info_status is not None:
         do_payout_atomic(payout_id, payout_info_status, task)
+        if not payout_info_status:
+            return_money_to_account(payout_id)
     delete_payment_task_on_time(task)
+
+def return_money_to_account(payout_id):
+    payout_obj = PayoutModel.objects.get(payout_id=payout_id)
+    user = payout_obj.user
+    amount = payout_obj.amount
+    user.money += amount
+    user.save()
 
 
 @transaction.atomic
@@ -40,7 +49,10 @@ def change_payout_status(payout_id, payout_info_status):
 
 def delete_payment_task_on_time(task):
     if timezone.now() - task.start_time >= timedelta(minutes=15):
+        payout_id = task.name.split(' ')[1]
+        return_money_to_account(payout_id)
         task.delete()
+
 def check_payout_status(payout_id):
     payout_info = get_payout_info(payout_id)
     payout_status = payout_info['status']

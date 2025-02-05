@@ -1,7 +1,8 @@
 from django.db import transaction
+from django.utils import timezone
 from django_celery_beat.models import PeriodicTask
 
-from crow.models import CashingOutProject, AccountReplenishment
+from crow.models import CashingOutProject, AccountReplenishment, Payout
 from crow.utils import get_commission_rate
 
 
@@ -25,5 +26,13 @@ def cash_out_project(project):
     project.transfer_allowed = False
     project.save()
 
+@transaction.atomic
+def make_payout_object(validated_data):
+    validated_data['created_date'] = timezone.now()
+    payout = Payout.objects.create(**validated_data)
+    user = validated_data['user']
+    user.money -= validated_data['amount']
+    user.save()
+    return payout
 
 

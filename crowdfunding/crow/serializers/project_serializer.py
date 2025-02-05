@@ -17,6 +17,7 @@ from crow.serializers.listings_serializer import CategoryListing, SkillListing, 
     ProjectStatusCodeSerializer
 from crow.serializers.profile_serializer import UserSerializer
 from crow.tasks import send_message_verification_email
+from crow.transactions import make_payout_object
 from crow.utils import result_amount_with_commission
 from crow.validators import SpecialCharactersValidator, OnlyTextValidator, ProjectNameValidator
 
@@ -242,11 +243,7 @@ class PayoutSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        validated_data['created_date'] = timezone.now()
-        payout = Payout.objects.create(**validated_data)
-        user = validated_data['user']
-        user.money -= validated_data['amount']
-        user.save()
+        payout = make_payout_object(validated_data)
         return payout
 
 
