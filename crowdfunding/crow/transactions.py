@@ -35,4 +35,13 @@ def make_payout_object(validated_data):
     user.save()
     return payout
 
+@transaction.atomic
+def payment_to_project(validated_data):
+    user = validated_data['user']
+    user.money -= validated_data['money']
+    user.save()
+
+    project = validated_data['project']
+    project.collected_money += validated_data['money']
+    project.save()
 
