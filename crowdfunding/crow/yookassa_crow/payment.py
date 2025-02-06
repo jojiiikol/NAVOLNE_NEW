@@ -35,13 +35,13 @@ def account_replenishment_atomic(payment_id, payment_info_status, task):
         user_profile = payment_object.user
         user_profile.money += amount
         user_profile.save()
-
     task.delete()
 
 
 def change_payment_status(payment_id, payment_info_status):
     payment_object = AccountReplenishment.objects.get(payment_id=payment_id)
     payment_object.status = payment_info_status
+    payment_object.change_status_date = timezone.now()
     payment_object.save()
     return payment_object
 

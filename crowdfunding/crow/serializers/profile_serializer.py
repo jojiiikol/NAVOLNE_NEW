@@ -9,8 +9,10 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 from rest_framework.validators import UniqueValidator
 from crow.models import User, ResetPasswordToken, ProfileChangeRequest, Skill, Category, AnswerProfileChangeRequest, \
-    ProfileConfirmAnswer, AccountReplenishment
+    ProfileConfirmAnswer, AccountReplenishment, Payout
 import datetime
+
+from crow.transactions import make_payout_object
 from crowdfunding.settings import EMAIL_HOST_USER
 from crow.tasks import send_reset_password_message
 
@@ -217,6 +219,34 @@ class AccountReplenishmentSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.change_status_date = timezone.now()
+        instance.save()
+        return instance
+
+
+class PayoutSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payout
+        fields = ['payout_token', 'user', 'amount']
+
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    amount = serializers.FloatField(required=True)
+    payout_token = serializers.CharField(required=True)
+
+    def validate(self, attrs):
+        if attrs['amount'] < 5:
+            raise serializers.ValidationError("Сумма выплаты не может составлять меньше 5р")
+        if attrs['amount'] > 500000:
+            raise serializers.ValidationError("Сумма выплаты не может составлять свыше 500000р")
+        if attrs['user'].money < attrs['amount']:
+            raise serializers.ValidationError("На вашем балансе недостаточно средств для проведения выплаты")
+        return attrs
+
+    def create(self, validated_data):
+        payout = make_payout_object(validated_data)
+        return payout
+
+    def update(self, instance, validated_data):
+        instance.update_date = timezone.now()
         instance.save()
         return instance
 

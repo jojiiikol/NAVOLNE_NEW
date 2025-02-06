@@ -30,9 +30,6 @@ from .yookassa_crow.payout import create_payout
 # TODO: Ускорение путем удаления при добавлении/изменении
 
 
-# TODO: ----------ОПЛАТА----------
-# TODO: ПЕРМИШИНЫ!
-
 # TODO: ----------ДЕПЛОЙ----------
 # TODO: Настроить SOCKET_TIMEOUT
 # TODO: Настроить логгирование SENTRY
@@ -327,7 +324,6 @@ class ProfileViewSet(mixins.ListModelMixin,
     @action(methods=['POST'], detail=False)
     def payout(self, request, *args, **kwargs):
         data = request.data
-        print(data)
         serializer = PayoutSerializer(data=data, context={'request': request})
         if serializer.is_valid():
             payout = create_payout(

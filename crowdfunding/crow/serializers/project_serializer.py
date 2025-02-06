@@ -224,28 +224,6 @@ class AnswerProjectClosureRequestSerializer(serializers.ModelSerializer):
         project.save()
         return instance
 
-class PayoutSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Payout
-        fields = ['payout_token', 'user', 'amount']
-
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    amount = serializers.FloatField(required=True)
-    payout_token = serializers.CharField(required=True)
-
-    def validate(self, attrs):
-        if attrs['amount'] < 5:
-            raise serializers.ValidationError("Сумма выплаты не может составлять меньше 5р")
-        if attrs['amount'] > 500000:
-            raise serializers.ValidationError("Сумма выплаты не может составлять свыше 500000р")
-        if attrs['user'].money < attrs['amount']:
-            raise serializers.ValidationError("На вашем балансе недостаточно средств для проведения выплаты")
-        return attrs
-
-    def create(self, validated_data):
-        payout = make_payout_object(validated_data)
-        return payout
-
 
 
 class PaymentSerializer(serializers.ModelSerializer):

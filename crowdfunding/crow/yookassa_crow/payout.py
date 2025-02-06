@@ -5,10 +5,8 @@ from django.utils import timezone
 from django_celery_beat.models import PeriodicTask
 from yookassa import Payout
 from crow.models import Payout as PayoutModel
-from crow.utils import result_amount_with_commission
 import uuid
 import yookassa
-from yookassa.domain.models.currency import Currency
 
 from crowdfunding.settings import PAYOUT_AGENT_ID, PAYOUT_SECRET_KEY
 
@@ -43,6 +41,7 @@ def do_payout_atomic(payout_id, payout_info_status, task):
 def change_payout_status(payout_id, payout_info_status):
     payout_object = PayoutModel.objects.get(payout_id=payout_id)
     payout_object.status = payout_info_status
+    payout_object.update_date = timezone.now()
     payout_object.save()
     return payout_object
 
