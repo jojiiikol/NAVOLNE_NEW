@@ -92,7 +92,7 @@ services:
       context: ../crowdfunding
     restart: always
     container_name: payment_status_worker
-    command: celery -A crowdfunding.celery worker -l INFO -Q check_payment_queue
+    command: celery -A crowdfunding.celery worker -l INFO -Q yookassa_queue
     depends_on:
       - web
       - rabbitmq

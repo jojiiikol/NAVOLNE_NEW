@@ -19,7 +19,7 @@ from crowdfunding.celery import app
 app.conf.beat_schedule = {
     'check_transfer_status': {
         'task': 'time_check_transfer_status',
-        'schedule': 60,
+        'schedule': 60*60,
     },
 }
 
@@ -92,11 +92,11 @@ def create_check_payout_status_task(payout_id):
         start_time=timezone.now(),
         args=json.dumps([payout_id]),
     )
-@shared_task(queue='check_payment_queue')
+@shared_task(queue='yookassa_queue')
 def check_payment_status_task(payment_id):
     account_replenishment(payment_id)
 
-@shared_task(queue='check_payment_queue')
+@shared_task(queue='yookassa_queue')
 def check_payout_status_task(payout_id):
     do_payout(payout_id)
 
