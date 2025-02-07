@@ -17,7 +17,6 @@ import EditProfileModal from './forms/EditProfileModal';
 import MyCard from './cards/MiniProjectCard';
 import url from '../globalURL';
 import MoneyWithdrawal from './payment/MoneyWithdrawal';
-import MoneyWidget from './payment/MoneyWidget';
 
 const ProfileComponent = () => {
     const { profilename } = useParams();
@@ -186,6 +185,7 @@ const ProfileComponent = () => {
                                             <MoneyWithdrawal
                                                 show={true}
                                                 onHide={closeModalWithdrawal}
+                                                totalmoney={data.money}
                                             />
                                         )}
                                     </div>
