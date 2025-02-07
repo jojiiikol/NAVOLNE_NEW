@@ -51,6 +51,7 @@ const MoneyWithdrawal = ({ show, onHide, totalmoney }) => {
 
                 body: formDataObject,
             });
+            alert('Деньги скоро поступят на вашу карту.');
             onHide();
             // Закрываем модальное окно после успешного сохранения
         } catch (error) {
