@@ -17,7 +17,7 @@ const MoneyWithdrawal = ({ show, onHide, totalmoney }) => {
 
         const payoutsData = new window.PayoutsData({
             type: 'payout',
-            account_id: '507757',
+            account_id: process.env.REACT_APP_AGENT_ID,
             success_callback: function (data) {
                 console.log(data);
                 setPayout_token(data.payout_token);
