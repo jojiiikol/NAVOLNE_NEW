@@ -17,6 +17,7 @@ import EditProfileModal from './forms/EditProfileModal';
 import MyCard from './cards/MiniProjectCard';
 import url from '../globalURL';
 import MoneyWithdrawal from './payment/MoneyWithdrawal';
+import MoneyWidget from './payment/MoneyWidget';
 
 const ProfileComponent = () => {
     const { profilename } = useParams();
@@ -88,6 +89,7 @@ const ProfileComponent = () => {
         <Container style={{ marginTop: '80px' }}>
             {data && projects && data.code != 'token_not_valid' && (
                 <div>
+                    {/* <MoneyWidget /> */}
                     <Row>
                         <Col sm={3}>
                             <Image

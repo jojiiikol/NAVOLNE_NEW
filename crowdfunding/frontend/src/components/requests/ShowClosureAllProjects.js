@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Container, Table, Modal } from 'react-bootstrap';
-import ProjectModalRequest from './ProjectModalRequest';
+import ConfirmModalProject from './ConfirmModalProject';
+
 import url from '../../globalURL';
+import ModalShowClosure from './ModalShowClosure';
 const ShowClosureAllProjects = () => {
     const [showModal, setShowModal] = useState(false); // Состояние для отображения модального окна
 
@@ -49,7 +51,7 @@ const ShowClosureAllProjects = () => {
                 {data && (
                     <tbody>
                         {showModal && (
-                            <ProjectModalRequest
+                            <ModalShowClosure
                                 show={true}
                                 onHide={closeModal}
                                 id={modalValue}

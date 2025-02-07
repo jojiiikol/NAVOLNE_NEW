@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-const MoneyWidget = () => {
+const MoneyWidget = (show) => {
     const containerRef = useRef(null);
 
     useEffect(() => {
@@ -8,24 +8,24 @@ const MoneyWidget = () => {
 
         const payoutsData = new window.PayoutsData({
             type: 'payout',
-            account_id: '<507757>',
+            account_id: '507757',
             success_callback: function (data) {
-                // Обработка ответа с токеном карты
+                console.log(data);
             },
             error_callback: function (error) {
-                // Обработка ошибок при получении токена карты
+                console.error(error);
             },
         });
 
-        payoutsData.render(containerRef.current);
+        payoutsData.render('widget');
 
         return () => {
             // Очистка при размонтаже компонента
-            payoutsData.destroy();
+            // payoutsData.destroy();
         };
     }, []);
 
-    return <div ref={containerRef}></div>;
+    return <div id="widget"></div>;
 };
 
 export default MoneyWidget;

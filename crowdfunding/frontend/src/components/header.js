@@ -130,13 +130,9 @@ export default class header extends Component {
                         <Route exact path="/projects" component={Projects} />
                         <Route exact path="/Courses" component={Courses} />
                         <Route exact path="/About" component={About} />
-                        <Route exact path="/Login" component={Login} />
+
                         <Route exact path="/Auth" component={AuthPage} />
-                        <Route
-                            exact
-                            path="/Registration"
-                            component={Registration}
-                        />
+
                         <Route exact path="/Home" component={Home} />
                         <Route exact path="/Create" component={Create} />
                         <Route

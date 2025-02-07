@@ -76,9 +76,12 @@ export default class Registration extends Component {
             .then((data) => {
                 console.log(data);
                 this.setState({ errorMessage: data });
-                alert(
-                    'На вашу почту выслано письмо, подтвердите свою регистрацию'
-                );
+                if (data.email == this.state.email) {
+                    alert(
+                        'На вашу почту выслано письмо, подтвердите свою регистрацию'
+                    );
+                    window.location.href = `/auth/`;
+                }
             })
 
             .catch((error) => {

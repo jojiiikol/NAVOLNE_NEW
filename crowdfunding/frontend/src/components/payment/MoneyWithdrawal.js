@@ -13,7 +13,9 @@ const MoneyWithdrawal = ({ show, onHide }) => {
         <div>
             <Modal show={show} onHide={onHide}>
                 <Modal.Body>
-                    <MoneyWidget></MoneyWidget>
+                    <div id="paymentwindget"></div>
+                    <MoneyWidget show={show}></MoneyWidget>
+
                     <Modal.Footer className="">
                         <Button
                             variant="primary"

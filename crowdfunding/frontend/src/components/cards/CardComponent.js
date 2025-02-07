@@ -29,6 +29,18 @@ const MyCard = (props) => {
                             src={image}
                         />
                     )}
+                    {code == 2 && (
+                        <Card.Img
+                            className="rounded-5 "
+                            style={{
+                                height: 200,
+                                objectFit: 'cover',
+                                filter: 'saturate(20%)',
+                            }}
+                            variant="top"
+                            src={image}
+                        />
+                    )}
                     {code == 3 && (
                         <Card.Img
                             className="rounded-5 "
@@ -59,6 +71,9 @@ const MyCard = (props) => {
                         </Card.Text>
                         <div style={{ marginTop: 'auto' }}>
                             {code == 1 && <Card.Text>Собрано:</Card.Text>}
+                            {code == 2 && (
+                                <Card.Text>Сбор приостановлен</Card.Text>
+                            )}
                             {code == 3 && <Card.Text>Сбор окончен</Card.Text>}
                             <ProgressBar
                                 completed={Math.round(
