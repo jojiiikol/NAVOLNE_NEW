@@ -21,8 +21,6 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -245,15 +243,17 @@ CACHES = {
 
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
-    'http://127.0.0.1:80'
+    'http://127.0.0.1:80',
+    'https://navolnetest.ru'
 )
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
-    'http://127.0.0.1:80'
+    'http://127.0.0.1:80',
+    'https://navolnetest.ru',
 ]
 
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:80', ]
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:80', 'https://navolnetest.ru']
 CORS_ALLOW_ALL_ORIGINS = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
