@@ -2,25 +2,22 @@ import React, { useState, useRef } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import url from '../../globalURL';
 
-const ConfirmModalProject = ({ show, onHide, slug }) => {
+const ModalShowClosure = ({ show, onHide, slug, id }) => {
     const [formData, setFormData] = useState({}); // Состояние данных формы
     const [isLoading, setIsLoading] = useState(false); // Состояние загрузки
     const [data, setData] = useState();
     const handleChange = (event) => {
         setFormData({ ...formData, [event.target.name]: event.target.value });
-        //console.log(event.target.name, ':', event.target.value);
     };
     const handleChangeConfirmed = (e) => {
         if (e.target.checked) {
-            setFormData({ ...formData, confirmed: true });
+            setFormData({ ...formData, allowed: true });
         } else {
-            setFormData({ ...formData, confirmed: false });
+            setFormData({ ...formData, allowed: false });
         }
     };
-    const { current: myArray } = useRef(['one', 'two', 'three']);
 
     const handleSubmit = async (event) => {
-        //formData.username = localStorage.getItem('user');
         event.preventDefault();
         setIsLoading(true);
         const formDataObject = new FormData();
@@ -28,11 +25,11 @@ const ConfirmModalProject = ({ show, onHide, slug }) => {
             formDataObject.append(key, formData[key]);
             console.log(key, ':', formData[key]);
         });
-        //formDataObject.append('username', 'govno');
+
         const accessToken = localStorage.getItem('accessToken');
         try {
-            await fetch(url + `/projects/${slug}/confirm_project/`, {
-                method: 'POST',
+            await fetch(url + `/project_closure_requests/${id}/answer/`, {
+                method: 'PUT',
                 headers: {
                     //'Content-Type': 'multipart/form-data',
                     Authorization: 'Bearer ' + accessToken,
@@ -53,15 +50,21 @@ const ConfirmModalProject = ({ show, onHide, slug }) => {
             <Modal show={show} onHide={onHide}>
                 <Modal.Body>
                     <Form onSubmit={handleSubmit}>
+                        <Form.Label className="fs-5">
+                            <a className="fs-5" href={`/projects/${slug}`}>
+                                Ссылка на проект
+                            </a>
+                        </Form.Label>
                         <Form.Group className="mb-2">
                             <Form.Label className="fs-3">
                                 Ответ по проекту
                             </Form.Label>
+
                             <Form.Control
                                 as="textarea"
                                 rows={3}
-                                name="answer"
-                                value={formData.answer || ''}
+                                name="description"
+                                value={formData.description || ''}
                                 onChange={handleChange}
                             />
                         </Form.Group>
@@ -69,7 +72,7 @@ const ConfirmModalProject = ({ show, onHide, slug }) => {
                             <Form.Check
                                 type="checkbox"
                                 value={true}
-                                name={'confirmed'}
+                                name={'allowed'}
                                 onChange={handleChangeConfirmed}
                                 label={'confirmed'}
                             />
@@ -94,4 +97,4 @@ const ConfirmModalProject = ({ show, onHide, slug }) => {
     );
 };
 
-export default ConfirmModalProject;
+export default ModalShowClosure;

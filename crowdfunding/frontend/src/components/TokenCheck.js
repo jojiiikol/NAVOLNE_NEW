@@ -47,8 +47,12 @@ const TokenCheck = () => {
                         .then((response) => response.json())
                         .then((data) => {
                             localStorage.setItem('accessToken', data.access);
+
+                            console.log(data);
+                            if (data.code == 'token_not_valid') {
+                                localStorage.clear();
+                            }
                             window.location.reload();
-                            console.log('token refreshed');
                         });
                     console.log('token refreshed');
                     //

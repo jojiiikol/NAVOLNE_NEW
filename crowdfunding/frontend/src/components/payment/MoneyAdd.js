@@ -1,37 +1,28 @@
 import React, { useState, useRef } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, Form, Modal, ListGroup } from 'react-bootstrap';
+import { useEffect } from 'react';
 import url from '../../globalURL';
+import { WindowSidebar } from 'react-bootstrap-icons';
 
-const ConfirmModalProject = ({ show, onHide, slug }) => {
+const MoneyAdd = ({ show, onHide, totalmoney }) => {
     const [formData, setFormData] = useState({}); // Состояние данных формы
     const [isLoading, setIsLoading] = useState(false); // Состояние загрузки
-    const [data, setData] = useState();
-    const handleChange = (event) => {
-        setFormData({ ...formData, [event.target.name]: event.target.value });
-        //console.log(event.target.name, ':', event.target.value);
-    };
-    const handleChangeConfirmed = (e) => {
-        if (e.target.checked) {
-            setFormData({ ...formData, confirmed: true });
-        } else {
-            setFormData({ ...formData, confirmed: false });
-        }
-    };
-    const { current: myArray } = useRef(['one', 'two', 'three']);
+    const [money, setMoney] = useState();
+    const [flag, setFlag] = useState();
+    const [formShow, setFormShow] = useState(false);
+    useEffect(() => {
+        setIsLoading(true);
+    }, []);
 
     const handleSubmit = async (event) => {
         //formData.username = localStorage.getItem('user');
         event.preventDefault();
         setIsLoading(true);
         const formDataObject = new FormData();
-        Object.keys(formData).forEach((key) => {
-            formDataObject.append(key, formData[key]);
-            console.log(key, ':', formData[key]);
-        });
-        //formDataObject.append('username', 'govno');
+        formDataObject.append('amount', money);
         const accessToken = localStorage.getItem('accessToken');
         try {
-            await fetch(url + `/projects/${slug}/confirm_project/`, {
+            await fetch(url + `/profiles/replenishment/`, {
                 method: 'POST',
                 headers: {
                     //'Content-Type': 'multipart/form-data',
@@ -39,13 +30,29 @@ const ConfirmModalProject = ({ show, onHide, slug }) => {
                 },
 
                 body: formDataObject,
-            });
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data.data.confirmation.confirmation_url);
+                    if (data.data.confirmation.confirmation_url)
+                        window.location.href =
+                            data.data.confirmation.confirmation_url;
+                });
             onHide();
-            // Закрываем модальное окно после успешного сохранения
         } catch (error) {
             console.error('Ошибка при отправке запроса на сервер:', error);
         } finally {
             setIsLoading(false);
+        }
+    };
+    const handleChange = (event) => {
+        setFormData({ ...formData, [event.target.name]: event.target.value });
+        setMoney(event.target.value);
+        if (event.target.value > 10) {
+            setIsLoading(false);
+        }
+        if (event.target.value < 10) {
+            setIsLoading(true);
         }
     };
     return (
@@ -53,28 +60,27 @@ const ConfirmModalProject = ({ show, onHide, slug }) => {
             <Modal show={show} onHide={onHide}>
                 <Modal.Body>
                     <Form onSubmit={handleSubmit}>
-                        <Form.Group className="mb-2">
-                            <Form.Label className="fs-3">
-                                Ответ по проекту
+                        <Form.Label className="fs-2 fw-bold">
+                            Внести деньги
+                        </Form.Label>
+
+                        <Form.Group className="">
+                            <div className="d-flex fs-5 fw-bolder">
+                                <p>Ваш баланс: {totalmoney}</p>
+                            </div>
+                            <Form.Label className="fs-4">
+                                Введите сумму
                             </Form.Label>
                             <Form.Control
-                                as="textarea"
-                                rows={3}
-                                name="answer"
-                                value={formData.answer || ''}
+                                name="amount"
+                                value={money || ''}
                                 onChange={handleChange}
-                            />
-                        </Form.Group>
-                        <Form.Group className="mb-2">
-                            <Form.Check
-                                type="checkbox"
-                                value={true}
-                                name={'confirmed'}
-                                onChange={handleChangeConfirmed}
-                                label={'confirmed'}
+                                type="number"
+                                placeholder="Введите сумму"
                             />
                         </Form.Group>
                     </Form>
+
                     <Modal.Footer className="">
                         <Button
                             variant="primary"
@@ -82,7 +88,7 @@ const ConfirmModalProject = ({ show, onHide, slug }) => {
                             disabled={isLoading}
                             onClick={handleSubmit}
                         >
-                            Сохранить
+                            Далее
                         </Button>
                         <Button variant="secondary" onClick={onHide}>
                             Отменить
@@ -94,4 +100,4 @@ const ConfirmModalProject = ({ show, onHide, slug }) => {
     );
 };
 
-export default ConfirmModalProject;
+export default MoneyAdd;

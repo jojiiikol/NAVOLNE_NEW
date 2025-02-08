@@ -17,6 +17,7 @@ import EditProfileModal from './forms/EditProfileModal';
 import MyCard from './cards/MiniProjectCard';
 import url from '../globalURL';
 import MoneyWithdrawal from './payment/MoneyWithdrawal';
+import MoneyAdd from './payment/MoneyAdd';
 
 const ProfileComponent = () => {
     const { profilename } = useParams();
@@ -39,6 +40,10 @@ const ProfileComponent = () => {
     const [showModalWithdrawal, setShowModalWithdrawal] = useState(false); // Состояние для отображения модального окна
     const openModalWithdrawal = () => setShowModalWithdrawal(true); // Функция для открытия модального окна
     const closeModalWithdrawal = () => setShowModalWithdrawal(false); // Функция для закрытия модального окна
+
+    const [showModalMoneyAdd, setShowModalMoneyAdd] = useState(false); // Состояние для отображения модального окна
+    const openModalMoneyAdd = () => setShowModalMoneyAdd(true); // Функция для открытия модального окна
+    const closeModalMoneyAdd = () => setShowModalMoneyAdd(false); // Функция для закрытия модального окна
     useEffect(() => {
         const fetchData = async () => {
             if (localStorage.getItem('accessToken')) {
@@ -88,6 +93,7 @@ const ProfileComponent = () => {
         <Container style={{ marginTop: '80px' }}>
             {data && projects && data.code != 'token_not_valid' && (
                 <div>
+                    {/* <MoneyWidget /> */}
                     <Row>
                         <Col sm={3}>
                             <Image
@@ -184,6 +190,20 @@ const ProfileComponent = () => {
                                             <MoneyWithdrawal
                                                 show={true}
                                                 onHide={closeModalWithdrawal}
+                                                totalmoney={data.money}
+                                            />
+                                        )}
+                                        <Button
+                                            variant="primary"
+                                            onClick={openModalMoneyAdd}
+                                        >
+                                            Пополнить баланс
+                                        </Button>
+                                        {showModalMoneyAdd && (
+                                            <MoneyAdd
+                                                show={true}
+                                                onHide={closeModalMoneyAdd}
+                                                totalmoney={data.money}
                                             />
                                         )}
                                     </div>
