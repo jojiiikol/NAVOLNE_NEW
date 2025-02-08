@@ -1,2 +1,2 @@
-const url = 'https://navolnetest.ru:8000/api';
+const url = 'https://navolnetest.ru/api';
 export default url;
