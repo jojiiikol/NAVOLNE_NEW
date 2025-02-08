@@ -14,7 +14,7 @@ from crow.utils import check_transfer_possibility
 from crow.yookassa_crow.payout import do_payout
 from crowdfunding.settings import EMAIL_HOST_USER
 from crowdfunding.celery import app
-
+from crowdfunding.settings import SERVER_URL
 
 app.conf.beat_schedule = {
     'check_transfer_status': {
@@ -43,7 +43,7 @@ def send_message_verification_email(user_id):
     email_verification_url = reverse('email_verification', args=[email_verification_token])
     send_mail(
         'Подтверждение почты NAVOLNE',
-        f'Привет, для подтверждения электронной почты, просим перейти по ссылке: http://localhost:8000{email_verification_url}',
+        f'Привет, для подтверждения электронной почты, просим перейти по ссылке: {SERVER_URL + email_verification_url}',
         EMAIL_HOST_USER,
         [user_email],
         fail_silently=False,
@@ -58,7 +58,7 @@ def send_reset_password_message(user_id):
     reset_url = reverse('reset_password', args=[token])
     send_mail(
         'NAVOLNE. Изменение пароля',
-        f'Для сброса пароля перейдите по этой ссылке: http://localhost:8000{reset_url}',
+        f'Для сброса пароля перейдите по этой ссылке: {SERVER_URL + reset_url}',
         EMAIL_HOST_USER,
         [user.email],
         fail_silently=False,
