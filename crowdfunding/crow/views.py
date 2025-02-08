@@ -1,6 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
+# from django.views.decorators.cache import cache_page
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
 from rest_framework import status, viewsets, filters, mixins
@@ -54,7 +54,7 @@ class ProjectViewSet(mixins.ListModelMixin,
     def get_permissions(self):
         return get_project_view_permissions(self)
 
-    @method_decorator(cache_page(60 * 30, key_prefix='project_page'))
+    # @method_decorator(cache_page(60 * 30, key_prefix='project_page'))
     def retrieve(self, request, *args, **kwargs):
         project = self.get_object()
         save_ip_view(request, project)
@@ -65,7 +65,7 @@ class ProjectViewSet(mixins.ListModelMixin,
         summary="Вывод всех подтвержденных проектов",
         description="Метод имеет фильтры с помощью которого проекты можно находить по категориям/названиям. Доступно всем"
     )
-    @method_decorator(cache_page(60 * 3, key_prefix='all_projects_page'))
+    # @method_decorator(cache_page(60 * 3, key_prefix='all_projects_page'))
     def list(self, request, *args, **kwargs):
         self.queryset = Project.objects.exclude(status_code=ProjectStatusCode.objects.get(code=0))
         return super().list(request, *args, **kwargs)
@@ -274,7 +274,7 @@ class ProfileViewSet(mixins.ListModelMixin,
 
     @extend_schema(summary="Просмотр профиля юзера",
                    description="Вся информация о профиле доступна только админу и владельцу")
-    @method_decorator(cache_page(60 * 5, key_prefix='profile_page'))
+    # @method_decorator(cache_page(60 * 5, key_prefix='profile_page'))
     def retrieve(self, request, *args, **kwargs):
 
         if (self.get_object() == self.request.user) or (self.request.user.is_staff):

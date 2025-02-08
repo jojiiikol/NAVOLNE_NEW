@@ -31,6 +31,7 @@ import ProjectChangeRequests from './requests/ProjectChangeRequest';
 import ShowProfileRequests from './requests/ShowProfileRequests';
 import ConfirmedProjects from './requests/ConfirmedProjects';
 import ShowClosureAllProjects from './requests/ShowClosureAllProjects';
+import Verify from './VerifyEmail';
 import ConfirmUsers from './requests/ConfirmUsers';
 export default class header extends Component {
     render() {
@@ -140,6 +141,7 @@ export default class header extends Component {
                             path="/profile/:profilename"
                             component={ProfileComponent}
                         />
+                        <Route path="/verify/:token" component={Verify} />
                         <Route path="/projects/:slug" component={ProjectPage} />
                         <Route path="/search/" component={SearchComponent} />
                         <Route path="/category/" component={Category} />
