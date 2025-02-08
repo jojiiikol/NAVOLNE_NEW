@@ -19,5 +19,8 @@ FROM nginx:1.27.3-alpine
 RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/conf.d
 
+COPY navolnetest.key /etc/ssl
+COPY navolnetest.crt /etc/ssl
+
 COPY --from=build /usr/src/app/build /usr/share/nginx/html/
 

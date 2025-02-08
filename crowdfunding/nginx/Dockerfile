@@ -2,6 +2,8 @@ FROM node:alpine AS build
 
 WORKDIR /usr/src/app
 
+ENV TZ="Asia/Yekaterinburg"
+
 # copy package.json to work directory, so that we install npm dependencies
 COPY ../frontend/package.json /usr/src/app
 COPY ../frontend/package-lock.json /usr/src/app

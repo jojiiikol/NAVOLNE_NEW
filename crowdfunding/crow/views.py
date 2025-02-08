@@ -33,8 +33,7 @@ from .yookassa_crow.payout import create_payout
 # TODO: ----------ДЕПЛОЙ----------
 # TODO: Настроить SOCKET_TIMEOUT
 # TODO: Настроить логгирование SENTRY
-# TODO: Разобраться с workers gunicorn
-# TODO: Разобраться с SSL сертификатом
+# TODO: Разобраться с SSL сертификатом ---> certbot?
 
 
 class ProjectViewSet(mixins.ListModelMixin,
