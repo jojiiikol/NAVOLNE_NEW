@@ -426,16 +426,15 @@ class EmailVerification(APIView):
     @extend_schema(summary="Эндпоинт подтверждения почты",
                    description="При переходе на ссылку с почты - подтверждается почта")
     def get(self, request, token, *args, **kwargs):
-        print("fff")
         try:
             db_token = VerificationToken.objects.get(token=token)
             user = db_token.user
             user.email_verified = True
             user.save()
             db_token.delete()
-            return Response(data={"Email был активирован"}, status=status.HTTP_200_OK)
+            return Response(data={"code": "success"}, status=status.HTTP_200_OK)
         except ObjectDoesNotExist:
-            return Response(data={"Токен не найден"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={"code": "failure"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ResetPassword(APIView):
