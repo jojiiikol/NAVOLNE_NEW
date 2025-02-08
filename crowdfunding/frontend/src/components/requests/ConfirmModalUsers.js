@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import url from '../../globalURL';
 
-const ConfirmModalProject = ({ show, onHide, slug }) => {
+const ConfirmModalUser = ({ show, onHide, slug }) => {
     const [formData, setFormData] = useState({}); // Состояние данных формы
     const [isLoading, setIsLoading] = useState(false); // Состояние загрузки
     const [data, setData] = useState();
@@ -31,8 +31,8 @@ const ConfirmModalProject = ({ show, onHide, slug }) => {
         //formDataObject.append('username', 'govno');
         const accessToken = localStorage.getItem('accessToken');
         try {
-            await fetch(url + `/projects/${slug}/confirm_project/`, {
-                method: 'POST',
+            await fetch(url + `/profiles/${slug}/confirm_user/`, {
+                method: 'PATCH',
                 headers: {
                     //'Content-Type': 'multipart/form-data',
                     Authorization: 'Bearer ' + accessToken,
@@ -40,9 +40,7 @@ const ConfirmModalProject = ({ show, onHide, slug }) => {
 
                 body: formDataObject,
             });
-            window.location.reload();
             onHide();
-
             // Закрываем модальное окно после успешного сохранения
         } catch (error) {
             console.error('Ошибка при отправке запроса на сервер:', error);
@@ -57,7 +55,7 @@ const ConfirmModalProject = ({ show, onHide, slug }) => {
                     <Form onSubmit={handleSubmit}>
                         <Form.Group className="mb-2">
                             <Form.Label className="fs-3">
-                                Ответ по проекту
+                                Ответ по пользователю
                             </Form.Label>
                             <Form.Control
                                 as="textarea"
@@ -96,4 +94,4 @@ const ConfirmModalProject = ({ show, onHide, slug }) => {
     );
 };
 
-export default ConfirmModalProject;
+export default ConfirmModalUser;

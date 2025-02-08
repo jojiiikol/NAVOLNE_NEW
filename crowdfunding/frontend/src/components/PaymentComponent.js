@@ -45,7 +45,11 @@ const PaymentComponent = ({ show, onHide, slug }) => {
                 },
 
                 body: formDataObject,
-            });
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                });
             onHide();
             console.log();
             // Закрываем модальное окно после успешного сохранения

@@ -8,7 +8,9 @@ const EditProjectModal = ({ show, onHide, slug }) => {
     const [isLoading, setIsLoading] = useState(false); // Состояние загрузки
     const [data, setData] = useState(null);
     const [category2, setCategory] = useState([]);
-    const [add_images2, setImages] = useState([]);
+
+    const [files, setFiles] = useState([]);
+
     useEffect(() => {
         const fetchData = async () => {
             const response = await fetch(url + '/additional/', {
@@ -18,38 +20,52 @@ const EditProjectModal = ({ show, onHide, slug }) => {
             });
             const data = await response.json();
             setData(data.category);
-            console.log(data.category);
         };
         fetchData();
     }, []);
-
+    const handleFileChange = (event) => {
+        // Получаем все файлы из input
+        const newFiles = Array.from(event.target.files);
+        setFiles(newFiles);
+    };
     const handleChange = (event) => {
         setFormData({ ...formData, [event.target.name]: event.target.value });
     };
+    // Состояние для хранения массива объектов
+    const [images, setImages] = useState([]);
 
+    // Функция для преобразования массива файлов в массив объектов
+    const createImageObjects = (files) => {
+        return files.map((file) => ({ image: file }));
+    };
     const handleSubmit = async (event) => {
         event.preventDefault();
         setIsLoading(true);
         const formDataObject = new FormData();
+        if (files) {
+            const imageObjects = createImageObjects(files);
+            setImages(imageObjects);
+            console.log(imageObjects);
+            formDataObject.append('add_image', imageObjects);
+            // console.log(result);
+        }
         Object.keys(formData).forEach((key) => {
             if (key == 'image') {
                 formDataObject.append(key, event.target.image.files[0]);
+                console.log(event.target.image.files[0]);
             } else if (key == 'category') {
                 if (category2.length !== 0) {
                     category2.forEach((cat) =>
                         formDataObject.append('category', cat)
                     );
                 }
-            } else if (key == 'image2') {
-                formDataObject.append(
-                    'add_image.image',
-                    event.target.image2.files[0]
-                );
             } else {
                 formDataObject.append(key, formData[key]);
             }
         });
-
+        for (var pair of formDataObject.entries()) {
+            console.log(pair[0] + ', ' + pair[1]);
+        }
         const accessToken = localStorage.getItem('accessToken');
         try {
             await fetch(url + `/projects/${slug}/change_request/`, {
@@ -59,7 +75,11 @@ const EditProjectModal = ({ show, onHide, slug }) => {
                     Authorization: 'Bearer ' + accessToken,
                 },
                 body: formDataObject,
-            });
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                });
             onHide();
         } catch (error) {
             console.error('Ошибка при отправке запроса на сервер:', error);
@@ -167,11 +187,11 @@ const EditProjectModal = ({ show, onHide, slug }) => {
                     <Form.Group className="mb-2">
                         <Form.Label>Фотография на шапку:</Form.Label>
                         <Form.Control
+                            multiple
                             accept="image/jpeg,image/png,image/gif"
                             name="image2"
                             type="file"
-                            value={formData.image2 || ''}
-                            onChange={handleChange}
+                            onChange={handleFileChange}
                         />
                     </Form.Group>
 

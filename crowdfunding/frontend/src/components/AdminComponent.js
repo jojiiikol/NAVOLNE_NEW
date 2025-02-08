@@ -108,6 +108,12 @@ const AdminComponent = () => {
                                     >
                                         Просмотреть заявки на изменения профиля
                                     </Button>
+                                    <Button
+                                        variant="primary"
+                                        href="/not_confirmed_users/"
+                                    >
+                                        Показать неподтвержденных юзеров
+                                    </Button>
                                 </div>
                             </div>
                         )}
