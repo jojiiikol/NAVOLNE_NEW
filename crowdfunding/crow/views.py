@@ -425,6 +425,7 @@ class EmailVerification(APIView):
     @extend_schema(summary="Эндпоинт подтверждения почты",
                    description="При переходе на ссылку с почты - подтверждается почта")
     def get(self, request, token, *args, **kwargs):
+        print("fff")
         try:
             db_token = VerificationToken.objects.get(token=token)
             user = db_token.user

@@ -7,7 +7,7 @@ const Verify = () => {
     useEffect(() => {
         if (!token) return;
 
-        fetch(url + `/verify/${token}/`, {
+        fetch(url + `/verify/${token}`, {
             method: 'GET',
         })
             .then((response) => response.json())

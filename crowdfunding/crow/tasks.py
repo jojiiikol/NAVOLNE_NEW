@@ -40,25 +40,26 @@ def send_message_verification_email(user_id):
     user = User.objects.get(pk=user_id)
     user_email = user.email
     email_verification_token = uuid.uuid4()
-    email_verification_url = reverse('email_verification', args=[email_verification_token])
+    email_verification_url = SERVER_URL + '/verify/' + str(email_verification_token)
+    a = VerificationToken.objects.create(user=user, token=email_verification_token)
+    print(a)
     send_mail(
         'Подтверждение почты NAVOLNE',
-        f'Привет, для подтверждения электронной почты, просим перейти по ссылке: {SERVER_URL + email_verification_url}',
+        f'Привет, для подтверждения электронной почты, просим перейти по ссылке: {email_verification_url}',
         EMAIL_HOST_USER,
         [user_email],
         fail_silently=False,
     )
-    VerificationToken.objects.create(user=user, token=email_verification_token)
 
 
 @shared_task(queue='email_queue')
 def send_reset_password_message(user_id):
     user = User.objects.get(pk=user_id)
     token = default_token_generator.make_token(user)
-    reset_url = reverse('reset_password', args=[token])
+    reset_url = SERVER_URL + '/reset_password/' + str(token)
     send_mail(
         'NAVOLNE. Изменение пароля',
-        f'Для сброса пароля перейдите по этой ссылке: {SERVER_URL + reset_url}',
+        f'Для сброса пароля перейдите по этой ссылке: {reset_url}',
         EMAIL_HOST_USER,
         [user.email],
         fail_silently=False,

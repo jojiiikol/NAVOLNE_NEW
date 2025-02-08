@@ -14,7 +14,7 @@ urlpatterns = [
                   path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
                   path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
                   path('additional/', AdditionalTag.as_view(), name='additionals'),
-                  path('verification/<uuid:token>', EmailVerification.as_view(), name='email_verification'),
+                  path('verify/<uuid:token>', EmailVerification.as_view(), name='email_verification'),
                   path('reset_password/<str:token>', ResetPassword.as_view(), name='reset_password'),
                   path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
                   path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
