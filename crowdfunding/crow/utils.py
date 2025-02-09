@@ -33,6 +33,7 @@ def get_commission_rate(project):
             min_percentage__lte=percentage,
             max_percentage__gte=percentage,
         )
+
         return rule.commission_rate
     except CommissionRules.DoesNotExist:
         if percentage > 100:

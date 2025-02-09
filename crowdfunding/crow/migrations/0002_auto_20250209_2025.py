@@ -50,8 +50,8 @@ def init_data(apps, schema_editor):
     Group.objects.create(name="Инвестор")
 
     CommissionRules = apps.get_model("crow", "CommissionRules")
-    CommissionRules.objects.create(min_percentage=50, max_percentage=90, commission_rate=15)
-    CommissionRules.objects.create(min_percentage=90, max_percentage=100, commission_rate=10)
+    CommissionRules.objects.create(min_percentage=50, max_percentage=89.999, commission_rate=15)
+    CommissionRules.objects.create(min_percentage=90, max_percentage=None, commission_rate=10)
 
 
 class Migration(migrations.Migration):
