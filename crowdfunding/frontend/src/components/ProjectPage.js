@@ -155,24 +155,25 @@ const ProjectPage = () => {
                             </div>
 
                             <div className="d-flex flex-row-reverse">
-                                {data.is_owner && (
-                                    <div className="mt-1" style={{}}>
-                                        <Button
-                                            size="lg"
-                                            variant="secondary"
-                                            onClick={openModal}
-                                        >
-                                            Редактировать
-                                        </Button>
-                                        {showModal && (
-                                            <EditProjectModal
-                                                show={true}
-                                                onHide={closeModal}
-                                                slug={slug}
-                                            />
-                                        )}
-                                    </div>
-                                )}
+                                {data.is_owner &&
+                                    data.status_code.code == 1 && (
+                                        <div className="mt-1" style={{}}>
+                                            <Button
+                                                size="lg"
+                                                variant="secondary"
+                                                onClick={openModal}
+                                            >
+                                                Редактировать
+                                            </Button>
+                                            {showModal && (
+                                                <EditProjectModal
+                                                    show={true}
+                                                    onHide={closeModal}
+                                                    slug={slug}
+                                                />
+                                            )}
+                                        </div>
+                                    )}
                                 {data.is_owner &&
                                     data.transfer_allowed &&
                                     data.status_code.code != 3 && (

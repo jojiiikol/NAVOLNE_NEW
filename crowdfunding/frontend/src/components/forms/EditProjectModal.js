@@ -48,7 +48,7 @@ const EditProjectModal = ({ show, onHide, slug }) => {
             console.log(imageObjects);
             imageObjects.forEach((image, index) => {
                 formDataObject.append(
-                    `add_image[${index}]`,
+                    `add_image[${index}]image`,
                     event.target.image2.files[index]
                 );
             });

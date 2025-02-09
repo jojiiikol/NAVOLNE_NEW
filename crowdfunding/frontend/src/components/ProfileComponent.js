@@ -103,20 +103,6 @@ const ProfileComponent = () => {
                                 rounded
                                 roundedCircle
                             />
-                            {/* {data.skill.length !== 0 && (
-                                <div className="d-flex ">
-                                    {data.skill.map((skill, index) => (
-                                        <h5>
-                                            <Badge
-                                                key={index}
-                                                className="ms-1 mt-1"
-                                            >
-                                                {skill}
-                                            </Badge>
-                                        </h5>
-                                    ))}
-                                </div>
-                            )} */}
 
                             <div className="d-flex justify-content-between me-5">
                                 <p
@@ -172,41 +158,47 @@ const ProfileComponent = () => {
                                                 skills_base={data.skill}
                                             />
                                         )}
-                                        <Button
-                                            variant="primary"
-                                            href="/create"
-                                        >
-                                            Создать
-                                        </Button>
-                                    </div>
-                                    <div className="d-flex justify-content-center mt-2">
-                                        <Button
-                                            variant="primary"
-                                            onClick={openModalWithdrawal}
-                                        >
-                                            Вывод средств
-                                        </Button>
-                                        {showModalWithdrawal && (
-                                            <MoneyWithdrawal
-                                                show={true}
-                                                onHide={closeModalWithdrawal}
-                                                totalmoney={data.money}
-                                            />
-                                        )}
-                                        <Button
-                                            variant="primary"
-                                            onClick={openModalMoneyAdd}
-                                        >
-                                            Пополнить баланс
-                                        </Button>
-                                        {showModalMoneyAdd && (
-                                            <MoneyAdd
-                                                show={true}
-                                                onHide={closeModalMoneyAdd}
-                                                totalmoney={data.money}
-                                            />
+                                        {data.confirmed && (
+                                            <Button
+                                                variant="primary"
+                                                href="/create"
+                                            >
+                                                Создать
+                                            </Button>
                                         )}
                                     </div>
+                                    {data.confirmed && (
+                                        <div className="d-flex justify-content-center mt-2">
+                                            <Button
+                                                variant="primary"
+                                                onClick={openModalWithdrawal}
+                                            >
+                                                Вывод средств
+                                            </Button>
+                                            {showModalWithdrawal && (
+                                                <MoneyWithdrawal
+                                                    show={true}
+                                                    onHide={
+                                                        closeModalWithdrawal
+                                                    }
+                                                    totalmoney={data.money}
+                                                />
+                                            )}
+                                            <Button
+                                                variant="primary"
+                                                onClick={openModalMoneyAdd}
+                                            >
+                                                Пополнить баланс
+                                            </Button>
+                                            {showModalMoneyAdd && (
+                                                <MoneyAdd
+                                                    show={true}
+                                                    onHide={closeModalMoneyAdd}
+                                                    totalmoney={data.money}
+                                                />
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                             )}
                             {data.is_admin && (

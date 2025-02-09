@@ -20,6 +20,7 @@ export default class Create extends Component {
             info_cat: [],
             cat_meow: false,
             closure_type: '',
+            files: [],
         };
     }
 
@@ -38,6 +39,11 @@ export default class Create extends Component {
         const { name, value } = event.target;
         this.setState({ [name]: value });
     };
+    handleFileChange = (event) => {
+        // Получаем все файлы из input
+        const newFiles = Array.from(event.target.files);
+        this.setState({ ['files']: newFiles });
+    };
 
     handleSubmit = (event) => {
         event.preventDefault();
@@ -53,9 +59,22 @@ export default class Create extends Component {
             category,
             image,
             closure_type,
+            files,
         } = this.state;
 
         const formData = new FormData();
+        if (this.state.files) {
+            const imageObjects = files.map((file) => ({ image: file }));
+
+            console.log(imageObjects);
+            imageObjects.forEach((image, index) => {
+                formData.append(
+                    `project_images[${index}]image`,
+                    event.target.image2.files[index]
+                );
+            });
+            // console.log(result);
+        }
         formData.append('name', name);
         formData.append('small_description', small_description);
         formData.append('description', description);
@@ -84,7 +103,7 @@ export default class Create extends Component {
                 this.setState({ errorMessage: data });
                 console.log(data);
                 alert('Ваш проект находится на рассмотрении');
-                if (data.name == name) {
+                if (data.name == this.state.name) {
                     window.location.href =
                         '/profile/' + localStorage.getItem('user');
                 }
@@ -96,7 +115,7 @@ export default class Create extends Component {
 
     onChange(e) {
         const category = this.state.category;
-        console.log(e.target.name);
+
         let index;
         if (e.target.checked) {
             category.push(Number(e.target.name));
@@ -325,6 +344,27 @@ export default class Create extends Component {
                                     <Form.Text className="text-danger">
                                         {' '}
                                         {this.state.errorMessage.image}{' '}
+                                    </Form.Text>
+                                )}
+                            </Form.Group>
+                            <Form.Group className="mb-2">
+                                <Form.Label>Фотографии на шапку:</Form.Label>
+                                <Form.Control
+                                    multiple
+                                    accept="image/jpeg,image/png,image/gif"
+                                    name="image2"
+                                    type="file"
+                                    onChange={this.handleFileChange}
+                                />
+                                <div style={{ display: 'block' }}>
+                                    <Form.Text className="text-muted">
+                                        *вы можете выбрать несколько файлов
+                                    </Form.Text>
+                                </div>
+                                {this.state.errorMessage && (
+                                    <Form.Text className="text-danger">
+                                        {' '}
+                                        {this.state.errorMessage.add_image}{' '}
                                     </Form.Text>
                                 )}
                             </Form.Group>
