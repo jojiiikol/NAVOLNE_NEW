@@ -1,7 +1,7 @@
 import React from 'react';
 
 const ProgressBar = (props) => {
-    const { completed, completed_money, need_money } = props;
+    const { completed, completed_money, need_money, code } = props;
 
     const containerStyles = {
         height: 20,

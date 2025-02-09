@@ -81,6 +81,7 @@ const MyCard = (props) => {
                                 )}
                                 completed_money={collected_money}
                                 need_money={need_money}
+                                code={code}
                             />
                             <div className="d-flex justify-content-between align-items-center">
                                 <p className="aboutProject fs-4 mt-2">

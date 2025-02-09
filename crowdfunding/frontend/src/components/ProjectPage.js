@@ -19,6 +19,8 @@ import InfoProjectCard from './cards/InfoProjectCard';
 import ConfirmModalProject from './requests/ConfirmModalProject';
 import url from '../globalURL';
 import ModalClosureMoney from './requests/ModalClosureMoney';
+import MoneyAdd from './payment/MoneyAdd';
+import TransferMoney from './payment/TransferMoney';
 const ProjectPage = () => {
     const [showModalConfirm, setShowModalConfirm] = useState(false); // Состояние для отображения модального окна
     const openModalConfirm = () => setShowModalConfirm(true); // Функция для открытия модального окна
@@ -35,6 +37,11 @@ const ProjectPage = () => {
     const [showModalPayment, setShowModalPayment] = useState(false); // Состояние для отображения модального окна
     const openModalPayment = () => setShowModalPayment(true); // Функция для открытия модального окна
     const closeModalPayment = () => setShowModalPayment(false); // Функция для закрытия модального окна
+
+    const [showTransferMoney, setShowTransferMoney] = useState(false); // Состояние для отображения модального окна
+    const openTransferMoney = () => setShowTransferMoney(true); // Функция для открытия модального окна
+    const closeTransferMoney = () => setShowTransferMoney(false); // Функция для закрытия модального окна
+
     const { slug } = useParams();
     const [data, setData] = useState(null);
     useEffect(() => {
@@ -88,11 +95,11 @@ const ProjectPage = () => {
                                 <Carousel.Caption>
                                     <h1
                                         className="mb-0 mt-0 fw-bold text-uppercase"
-                                        style={{ fontSize: '4vw' }}
+                                        style={{ fontSize: '3.5vw' }}
                                     >
                                         {data.name}
                                     </h1>
-                                    <p style={{ fontSize: '2vw' }}>
+                                    <p style={{ fontSize: '1.5vw' }}>
                                         {data.small_description}
                                     </p>
                                     <Button
@@ -166,24 +173,46 @@ const ProjectPage = () => {
                                         )}
                                     </div>
                                 )}
-                                {data.is_owner && data.transfer_allowed && (
-                                    <div className="mt-1 me-1" style={{}}>
-                                        <Button
-                                            size="lg"
-                                            variant="primary"
-                                            onClick={openModalClosure}
-                                        >
-                                            Закрыть сбор
-                                        </Button>
-                                        {showModalClosure && (
-                                            <ModalClosureMoney
-                                                show={true}
-                                                onHide={closeModalClosure}
-                                                slug={slug}
-                                            />
-                                        )}
-                                    </div>
-                                )}
+                                {data.is_owner &&
+                                    data.transfer_allowed &&
+                                    data.status_code.code != 3 && (
+                                        <div className="mt-1 me-1" style={{}}>
+                                            <Button
+                                                size="lg"
+                                                variant="primary"
+                                                onClick={openModalClosure}
+                                            >
+                                                Закрыть сбор
+                                            </Button>
+                                            {showModalClosure && (
+                                                <ModalClosureMoney
+                                                    show={true}
+                                                    onHide={closeModalClosure}
+                                                    slug={slug}
+                                                />
+                                            )}
+                                        </div>
+                                    )}
+                                {data.is_owner &&
+                                    data.transfer_allowed &&
+                                    data.status_code.code == 3 && (
+                                        <div className="mt-1 me-1" style={{}}>
+                                            <Button
+                                                size="lg"
+                                                variant="primary"
+                                                onClick={openTransferMoney}
+                                            >
+                                                Вывести деньги
+                                            </Button>
+                                            {showTransferMoney && (
+                                                <TransferMoney
+                                                    show={true}
+                                                    onHide={closeTransferMoney}
+                                                    slug={slug}
+                                                />
+                                            )}
+                                        </div>
+                                    )}
                                 {data.is_admin && !data.confirmed && (
                                     <div className="mt-1" style={{}}>
                                         <Button

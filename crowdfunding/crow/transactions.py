@@ -26,6 +26,7 @@ def cash_out_project(project):
     project.transfer_allowed = False
     project.save()
 
+
 @transaction.atomic
 def make_payout_object(validated_data):
     validated_data['created_date'] = timezone.now()
@@ -34,6 +35,7 @@ def make_payout_object(validated_data):
     user.money -= validated_data['amount']
     user.save()
     return payout
+
 
 @transaction.atomic
 def payment_to_project(validated_data):
@@ -44,4 +46,3 @@ def payment_to_project(validated_data):
     project = validated_data['project']
     project.collected_money += validated_data['money']
     project.save()
-
