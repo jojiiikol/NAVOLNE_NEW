@@ -72,7 +72,7 @@ def create_payment(value, user):
         },
         "confirmation": {
             "type": "redirect",
-            "return_url": SERVER_URL
+            "return_url": SERVER_URL + '/profile/' + user.username
         },
         "capture": True,
         "description": f"Пополнение баланса для пользователя: {user.username}"
