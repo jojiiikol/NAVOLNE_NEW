@@ -108,6 +108,8 @@ class ProjectViewSet(mixins.ListModelMixin,
         self.serializer_class = ChangeProjectRequestSerializer
         serializer_data = self.serializer_class(data=request.data,
                                                 context={'request': request, 'project': self.get_object()})
+        print(request.data)
+
         if serializer_data.is_valid():
             serializer_data.save(project=self.get_object())
             return Response(serializer_data.data, status=status.HTTP_200_OK)
