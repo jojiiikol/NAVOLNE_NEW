@@ -332,7 +332,7 @@ class ChangeProjectRequestSerializer(serializers.ModelSerializer):
         return attrs
 
     def validate_end_date(self, attrs):
-        if self.context['project'].start_date >= attrs['end_date']:
+        if self.context['project'].start_date >= attrs:
             raise serializers.ValidationError({"end_date": "Дата окончания не может быть раннее даты старта проекта"})
         return attrs
 
