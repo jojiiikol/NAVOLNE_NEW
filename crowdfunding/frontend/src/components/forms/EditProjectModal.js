@@ -46,7 +46,12 @@ const EditProjectModal = ({ show, onHide, slug }) => {
             const imageObjects = createImageObjects(files);
             setImages(imageObjects);
             console.log(imageObjects);
-            formDataObject.append('add_image', imageObjects);
+            imageObjects.forEach((image, index) => {
+                formDataObject.append(
+                    `add_image[${index}]`,
+                    event.target.image2.files[index]
+                );
+            });
             // console.log(result);
         }
         Object.keys(formData).forEach((key) => {
@@ -185,7 +190,7 @@ const EditProjectModal = ({ show, onHide, slug }) => {
                     </Form.Group>
 
                     <Form.Group className="mb-2">
-                        <Form.Label>Фотография на шапку:</Form.Label>
+                        <Form.Label>Фотографии на шапку:</Form.Label>
                         <Form.Control
                             multiple
                             accept="image/jpeg,image/png,image/gif"
@@ -193,6 +198,11 @@ const EditProjectModal = ({ show, onHide, slug }) => {
                             type="file"
                             onChange={handleFileChange}
                         />
+                        <div style={{ display: 'block' }}>
+                            <Form.Text className="text-muted">
+                                *вы можете выбрать несколько файлов
+                            </Form.Text>
+                        </div>
                     </Form.Group>
 
                     <Modal.Footer className="">
