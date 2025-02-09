@@ -292,7 +292,9 @@ class AnswerChangeProjectRequestSerializer(serializers.ModelSerializer):
 class NewImageToProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewImageToProject
-        fields = ['pk', 'image']
+        fields = ['image']
+
+    image = serializers.ImageField()
 
 
 class ChangeProjectRequestSerializer(serializers.ModelSerializer):
@@ -317,10 +319,7 @@ class ChangeProjectRequestSerializer(serializers.ModelSerializer):
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), many=True, required=False,
                                                   help_text="Категории проекта")
     image = serializers.ImageField(required=False, default="")
-    # add_image = NewImageToProjectSerializer(required=False, many=True)
-    add_image = serializers.ListSerializer(
-        child=serializers.ImageField(), required=False
-    )
+    add_image = NewImageToProjectSerializer(required=False, many=True)
     description_for_change = serializers.CharField(required=False, max_length=2048,
                                                    help_text="Ответ от админа на заявку")
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
@@ -359,7 +358,7 @@ class ChangeProjectRequestSerializer(serializers.ModelSerializer):
         change_request = super().create(validated_data)
         if new_images:
             for image in new_images:
-                NewImageToProject.objects.create(project_change_request=change_request, image=image)
+                NewImageToProject.objects.create(project_change_request=change_request, image=image['image'])
         return change_request
 
 
