@@ -12,10 +12,10 @@ const Verify = () => {
         })
             .then((response) => response.json())
             .then((data) => {
-                if (data.success) {
+                if (data.code == 'success') {
                     alert('Email подтвержден!');
                     window.location.href = '/home'; // Перенаправляем на главную
-                } else {
+                } else if (data.code == 'failure') {
                     alert('Ошибка подтверждения');
                 }
             })
