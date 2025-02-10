@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['navolnetest.ru', '158.255.6.248', 'localhost', '127.0.0.1']
 
@@ -260,8 +260,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.yandex.ru'  # SMTP server host
 EMAIL_PORT = 465  # SMTP server port (587 for TLS, 465 for SSL)
 EMAIL_USE_SSL = True  # True for TLS, False for SSL
-EMAIL_HOST_USER = 'TheVext0r@yandex.ru'  # SMTP server username
-EMAIL_HOST_PASSWORD = 'lzwsbqurujektknc'  # SMTP server password
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Default sender email address
 SERVER_EMAIL = EMAIL_HOST_USER
