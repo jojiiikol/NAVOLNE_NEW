@@ -272,7 +272,7 @@ class AnswerChangeProjectRequestSerializer(serializers.ModelSerializer):
         project.description = change_request.description or project.description
         project.need_money = change_request.need_money or project.need_money
         project.end_date = change_request.end_date or project.end_date
-        if change_request.category:
+        if change_request.category.all():
             project.category.clear()
             project.category.set([category for category in (change_request.category.all())])
         project.image = change_request.image or project.image
