@@ -3,9 +3,19 @@ video {
     height: auto;
     width: 100%;
 }
-
+.all-projects-href-p {
+    text-decoration: none;
+    font-size: calc(20px + 20 * (100vw - 320px) / 880);
+    text-align: center;
+    align-self: center;
+}
+.all-projects-h1 {
+    font-size: calc(40px + 30 * (100vw - 320px) / 880);
+}
 .video-h1-center {
-    font-size: 9vw;
+    width: 100%;
+    font-size: calc(65px + 70 * (100vw - 320px) / 880);
+    text-align: center;
     font-weight: 900;
     position: absolute;
     left: 50%;
@@ -13,24 +23,56 @@ video {
     transform: translate(-50%, -50%);
     color: white;
 }
-
-.video-h2-center {
-    font-size: 3vw;
-    font-weight: 500;
-    position: absolute;
-    left: 50%;
-    top: 41%;
-    transform: translate(-50%, -50%);
-    color: white;
+@media (min-width: 320px) {
+    .video-h2-center {
+        width: 100%;
+        font-size: calc(30px + 25 * (100vw - 320px) / 880);
+        text-align: center;
+        font-weight: 500;
+        position: absolute;
+        left: 50%;
+        top: 36%;
+        transform: translate(-50%, -50%);
+        color: white;
+    }
+    .video-h3-center {
+        width: 100%;
+        font-size: calc(20px + 15 * (100vw - 320px) / 880);
+        text-align: center;
+        font-weight: 300;
+        position: absolute;
+        left: 50%;
+        top: 45%;
+        transform: translate(-50%, -50%);
+        color: white;
+    }
 }
-.video-h3-center {
-    width: 900px;
-    text-align: center;
-    font-size: 1.5vw;
-    font-weight: 300;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
+
+@media (min-width: 960px) {
+    .container-fluid {
+        padding-left: 100px;
+        padding-right: 100px;
+    }
+    .video-h2-center {
+        width: 100%;
+        font-size: calc(30px + 25 * (100vw - 320px) / 880);
+        text-align: center;
+        font-weight: 500;
+        position: absolute;
+        left: 50%;
+        top: 41%;
+        transform: translate(-50%, -50%);
+        color: white;
+    }
+    .video-h3-center {
+        width: 1100px;
+        font-size: calc(20px + 10 * (100vw - 320px) / 880);
+        text-align: center;
+        font-weight: 300;
+        position: absolute;
+        left: 50%;
+        top: 52%;
+        transform: translate(-50%, -50%);
+        color: white;
+    }
 }
