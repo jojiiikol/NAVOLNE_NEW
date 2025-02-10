@@ -118,11 +118,6 @@ class ProjectSerializerCreate(serializers.ModelSerializer):
             'user', 'name', 'image', 'small_description', 'description', 'need_money', 'collected_money', 'category',
             'project_images', 'start_date', 'end_date', 'closure_type')
 
-    def validate_start_date(self, value):
-        if value < timezone.now().date():
-            raise serializers.ValidationError("Неверно введенная дата")
-        return value
-
     def validate_need_money(self, value):
         if value < 1:
             raise serializers.ValidationError("Неверно введенные данные")
@@ -144,6 +139,7 @@ class ProjectSerializerCreate(serializers.ModelSerializer):
         images = validated_data.pop('project_images', [])
         validated_data['name'] = validated_data['name'].lower().capitalize()
         validated_data['status_code'] = ProjectStatusCode.objects.get(code=0)
+        validated_data['start_date'] = timezone.now()
         project = super().create(validated_data)
         for image in images:
             ProjectImages.objects.create(project=project, image=image['image'])
