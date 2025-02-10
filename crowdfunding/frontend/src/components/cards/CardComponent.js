@@ -55,16 +55,31 @@ const MyCard = (props) => {
                     )}
                     <Card.Body className="d-flex flex-column">
                         <Card.Title className="fs-1">{name}</Card.Title>
-                        <div className="d-flex">
-                            {category.map((category, index) => (
+                        <div className="d-flex" style={{ height: '40px' }}>
+                            {category[0] && (
                                 <div
                                     className="badge bg-primary text-wrap ms-1 mb-1"
                                     style={{ width: '6rem' }}
-                                    key={index}
                                 >
-                                    {category}
+                                    {category[0]}
                                 </div>
-                            ))}
+                            )}
+                            {category[1] && (
+                                <div
+                                    className="badge bg-primary text-wrap ms-1 mb-1"
+                                    style={{ width: '6rem' }}
+                                >
+                                    {category[1]}
+                                </div>
+                            )}
+                            {category[2] && (
+                                <div
+                                    className="badge bg-primary text-wrap ms-1 mb-1"
+                                    style={{ width: '6rem' }}
+                                >
+                                    {category[2]}
+                                </div>
+                            )}
                         </div>
                         <Card.Text className="fs-5" style={{ height: '3em' }}>
                             {small_description}

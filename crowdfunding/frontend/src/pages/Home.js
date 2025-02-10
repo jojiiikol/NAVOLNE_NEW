@@ -67,16 +67,11 @@ class Home extends Component {
                     fluid
                     style={{
                         marginTop: '50px',
-                        paddingLeft: '100px',
-                        paddingRight: '100px',
                     }}
                 >
                     <div className="d-flex justify-content-between mt-4 mb-4">
-                        <h1 style={{ fontSize: '75px' }}>Проекты</h1>
-                        <a
-                            className="text-decoration-none fs-2 align-self-center"
-                            href="/projects"
-                        >
+                        <h1 className="all-projects-h1">Проекты</h1>
+                        <a href="/projects" className="all-projects-href-p">
                             Все проекты
                         </a>
                     </div>
