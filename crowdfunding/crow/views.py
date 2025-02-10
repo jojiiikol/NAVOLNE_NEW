@@ -1,8 +1,10 @@
+from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 
 from django_filters.rest_framework import DjangoFilterBackend
+
 from drf_spectacular.utils import extend_schema
 from rest_framework import status, viewsets, filters, mixins
 from rest_framework.decorators import action
@@ -27,7 +29,6 @@ from .yookassa_crow.payout import create_payout
 
 
 # TODO: Отрефачить логику попытки удаления заявки на изменения при ответе админа, перенести в пермишины
-# TODO: Пересоздать миграции
 
 # TODO: ----------КЭШ----------
 # TODO: Ускорение путем удаления при добавлении/изменении
@@ -55,7 +56,7 @@ class ProjectViewSet(mixins.ListModelMixin,
     def get_permissions(self):
         return get_project_view_permissions(self)
 
-    # @method_decorator(cache_page(60 * 2, key_prefix='project_page'))
+    @method_decorator(cache_page(60 * 2, key_prefix='project_page'))
     def retrieve(self, request, *args, **kwargs):
         project = self.get_object()
         save_ip_view(request, project)
@@ -66,9 +67,15 @@ class ProjectViewSet(mixins.ListModelMixin,
         summary="Вывод всех подтвержденных проектов",
         description="Метод имеет фильтры с помощью которого проекты можно находить по категориям/названиям. Доступно всем"
     )
-    # @method_decorator(cache_page(60 * 2, key_prefix='all_projects_page'))
+    @method_decorator(cache_page(60 * 2, key_prefix='all_projects_page'))
     def list(self, request, *args, **kwargs):
-        self.queryset = Project.objects.exclude(status_code=ProjectStatusCode.objects.get(code=0))
+        cache_queryset = cache.get("main_page")
+        if cache_queryset:
+            self.queryset = cache_queryset
+        else:
+            self.queryset = Project.objects.exclude(status_code=ProjectStatusCode.objects.get(code=0))
+            cache.set("main_page", self.queryset, 60 * 5)
+
         return super().list(request, *args, **kwargs)
 
     # Создание проекта
