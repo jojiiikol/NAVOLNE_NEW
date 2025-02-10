@@ -35,6 +35,12 @@ class IsOwner(permissions.BasePermission):
             return obj.project.user == request.user
         return False
 
+class IsProjectConfirmed(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if isinstance(obj, Project):
+            if obj.confirmed is True:
+                return True
+            return False
 
 class IsProjectInWorkOrInNotConfirmed(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
@@ -49,7 +55,6 @@ class IsProjectInWork(permissions.BasePermission):
         return False
 
 class IsTransferAllowed(permissions.BasePermission):
-
     def has_object_permission(self, request, view, obj):
         if obj.transfer_allowed is True:
             return True
@@ -97,7 +102,7 @@ def get_project_view_permissions(view):
     if view.action == 'list':
         permission_classes = [AllowAny]
     if view.action == 'retrieve':
-        permission_classes = [AllowAny]
+        permission_classes = [IsAdminUser | IsOwner | IsProjectConfirmed]
     if view.action == 'create':
         permission_classes = [IsAuthenticatedAndConfirmed]
     if view.action == 'change_request':
