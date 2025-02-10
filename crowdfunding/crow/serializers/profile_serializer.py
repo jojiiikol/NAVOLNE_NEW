@@ -89,19 +89,6 @@ class ConfirmUserSerializer(serializers.ModelSerializer):
         profile.confirmed = self.validated_data['confirmed']
         profile.save()
 
-# class ProjectConfirmAnswerSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = ProjectConfirmAnswer
-#         fields = ['user', 'answer', 'confirmed', 'answer_time']
-#
-#     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-#     answer = serializers.CharField(required=False, max_length=1000)
-#     confirmed = serializers.BooleanField(required=True)
-#     answer_time = serializers.DateTimeField(default=timezone.now())
-#
-#     def update_project(self, project):
-#         project.confirmed = self.validated_data['confirmed']
-#         project.save()
 
 class AnswerChangeProfileSerializer(serializers.ModelSerializer):
     class Meta:

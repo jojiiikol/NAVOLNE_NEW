@@ -199,7 +199,7 @@ class ProjectChangeRequestViewSet(mixins.ListModelMixin,
                                   mixins.DestroyModelMixin,
                                   mixins.UpdateModelMixin,
                                   viewsets.GenericViewSet):
-    queryset = ProjectChangeRequest.objects.all()
+    queryset = ProjectChangeRequest.objects.all().order_by("-pk")
     serializer_class = ChangeProjectRequestSerializer
 
     # filter_backends = [DjangoFilterBackend]
@@ -459,7 +459,7 @@ class ProfileChangeRequestViewSet(mixins.ListModelMixin,
                                   mixins.RetrieveModelMixin,
                                   mixins.DestroyModelMixin,
                                   viewsets.GenericViewSet):
-    queryset = ProfileChangeRequest.objects.all().order_by("-create_date")
+    queryset = ProfileChangeRequest.objects.all().order_by("-pk")
     serializer_class = ChangeProfileRequestSerializer
 
     def get_permissions(self):
@@ -530,7 +530,7 @@ class ProjectClosureRequestViewSet(mixins.ListModelMixin,
                                    mixins.RetrieveModelMixin,
                                    mixins.DestroyModelMixin,
                                    viewsets.GenericViewSet):
-    queryset = ProjectClosureRequest.objects.all()
+    queryset = ProjectClosureRequest.objects.all().order_by("-pk")
     serializer_class = AnswerProjectClosureRequestSerializer
 
     def get_permissions(self):
