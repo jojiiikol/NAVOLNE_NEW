@@ -99,7 +99,7 @@ class ProjectSerializerCreate(serializers.ModelSerializer):
     collected_money = serializers.FloatField(required=True, help_text="Собранная сумма")
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), many=True,
                                                   help_text="Категории проекта")
-    start_date = serializers.DateField(default=timezone.now(),
+    start_date = serializers.DateField(default=timezone.now().date(),
                                        help_text="Дата начала проекта. По умолчанию - сегодняшняя дата")
     end_date = serializers.DateField(help_text="Дата окончания сборов на проект")
     project_images = ProjectImagesSerializer(many=True, required=False)
@@ -139,7 +139,7 @@ class ProjectSerializerCreate(serializers.ModelSerializer):
         images = validated_data.pop('project_images', [])
         validated_data['name'] = validated_data['name'].lower().capitalize()
         validated_data['status_code'] = ProjectStatusCode.objects.get(code=0)
-        validated_data['start_date'] = timezone.now()
+        validated_data['start_date'] = timezone.now().date()
         project = super().create(validated_data)
         for image in images:
             ProjectImages.objects.create(project=project, image=image['image'])
