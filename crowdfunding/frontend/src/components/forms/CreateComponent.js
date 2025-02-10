@@ -13,7 +13,7 @@ export default class Create extends Component {
             description: '',
             need_money: '',
             collected_money: '',
-            start_date: '',
+            start_date: new Date().toISOString().slice(0, 10),
             end_date: '',
             category: [],
             image: '',
@@ -104,6 +104,7 @@ export default class Create extends Component {
                 console.log(data);
                 alert('Ваш проект находится на рассмотрении');
                 if (data.name == this.state.name) {
+                    console.log('sdafasd');
                     window.location.href =
                         '/profile/' + localStorage.getItem('user');
                 }
@@ -272,6 +273,7 @@ export default class Create extends Component {
                                     onChange={this.handleChange}
                                     type="date"
                                     placeholder="Дата начала реализации проекта"
+                                    readOnly
                                 />
                                 {this.state.errorMessage && (
                                     <Form.Text className="text-danger">
