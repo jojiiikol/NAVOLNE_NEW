@@ -57,6 +57,7 @@ const EditProfileModal = ({ show, onHide, username }) => {
 
                 body: formDataObject,
             });
+            alert('Модератор рассмотрит вашу заявку');
             onHide();
             // Закрываем модальное окно после успешного сохранения
         } catch (error) {
@@ -64,9 +65,8 @@ const EditProfileModal = ({ show, onHide, username }) => {
         } finally {
             setIsLoading(false);
         }
-        username = localStorage.getItem('user');
+
         // window.location.href = `/profile/` + username;
-        console.log(formDataObject.first_name);
     };
 
     const handleChangeSkills = (e) => {

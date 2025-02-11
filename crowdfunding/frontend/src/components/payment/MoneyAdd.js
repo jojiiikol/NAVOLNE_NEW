@@ -39,6 +39,7 @@ const MoneyAdd = ({ show, onHide, totalmoney }) => {
                             data.data.confirmation.confirmation_url;
                 });
             onHide();
+            window.location.reload();
         } catch (error) {
             console.error('Ошибка при отправке запроса на сервер:', error);
         } finally {

@@ -53,6 +53,7 @@ const MoneyWithdrawal = ({ show, onHide, totalmoney }) => {
             });
             alert('Деньги скоро поступят на вашу карту.');
             onHide();
+            window.location.reload();
             // Закрываем модальное окно после успешного сохранения
         } catch (error) {
             console.error('Ошибка при отправке запроса на сервер:', error);

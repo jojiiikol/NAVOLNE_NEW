@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import url from '../../globalURL';
 
@@ -6,6 +6,9 @@ const ModalShowClosure = ({ show, onHide, slug, id }) => {
     const [formData, setFormData] = useState({}); // Состояние данных формы
     const [isLoading, setIsLoading] = useState(false); // Состояние загрузки
     const [data, setData] = useState();
+    useEffect(() => {
+        setFormData({ ...formData, allowed: false });
+    }, []);
     const handleChange = (event) => {
         setFormData({ ...formData, [event.target.name]: event.target.value });
     };

@@ -94,12 +94,15 @@ const ProjectPage = () => {
                                 />
                                 <Carousel.Caption>
                                     <h1
-                                        className="mb-0 mt-0 fw-bold text-uppercase"
-                                        style={{ fontSize: '3.5vw' }}
+                                        className="mb-0 mt-0 fw-bold text-uppercase display-3"
+                                        //style={{ fontSize: '3.5rem' }}
                                     >
                                         {data.name}
                                     </h1>
-                                    <p style={{ fontSize: '1.5vw' }}>
+                                    <p
+                                        className="fs-3"
+                                        //style={{ fontSize: '1.5vw' }}
+                                    >
                                         {data.small_description}
                                     </p>
                                     {data.status_code.code == 1 && (
@@ -109,7 +112,7 @@ const ProjectPage = () => {
                                                 className="mt-0"
                                                 variant="outline-primarylight"
                                                 onClick={openModalPayment}
-                                                style={{ width: '25rem' }}
+                                                style={{ width: '15rem' }}
                                             >
                                                 Поддержать проект
                                             </Button>
@@ -142,7 +145,7 @@ const ProjectPage = () => {
                             )}{' '}
                         </Col>
 
-                        <Col style={{ paddingLeft: '10px' }} className="mt-4">
+                        <Col style={{}} className="mt-4 ms-2">
                             <div
                                 className="d-flex flex-row-reverse"
                                 style={{

@@ -110,26 +110,26 @@ export default class header extends Component {
                                 />
                                 <Button
                                     variant="outline-primary"
-                                    className="me-sm-5"
+                                    className="me-sm-5 ms-1 ms-lg-0"
                                     onClick={this.handleSubmit}
                                 >
                                     Найти
                                 </Button>
                             </Form>
 
-                            <Nav className="d-flex ms-sm-5">
+                            <Nav className="d-flex ms-sm-5 mt-2 mt-lg-0">
                                 {!localStorage.getItem('accessToken') && (
-                                    <div className="d-flex">
+                                    <div className="d-flex ">
                                         <Button
                                             variant="outline-primary"
-                                            className="me-sm-2"
+                                            className="me-2 me-lg-2 "
                                             href="/auth"
                                         >
                                             Войти
                                         </Button>
                                         <Button
                                             variant="primary"
-                                            className="me-sm-2"
+                                            className="me-sm-2 "
                                             href="/auth"
                                         >
                                             Зарегистрироваться
