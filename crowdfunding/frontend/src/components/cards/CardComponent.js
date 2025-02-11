@@ -57,25 +57,25 @@ const MyCard = (props) => {
                         <Card.Title className="fs-1">{name}</Card.Title>
                         <div className="d-flex" style={{ height: '40px' }}>
                             {category[0] && (
-                                <div
-                                    className="badge bg-primary text-wrap ms-1 mb-1"
-                                    style={{ width: '6rem' }}
+                                <span
+                                    className="badge bg-primary  ms-1 mb-1 d-inline-flex justify-content-center align-items-center"
+                                    style={{}}
                                 >
                                     {category[0]}
-                                </div>
+                                </span>
                             )}
                             {category[1] && (
                                 <div
-                                    className="badge bg-primary text-wrap ms-1 mb-1"
-                                    style={{ width: '6rem' }}
+                                    className="badge bg-primary  ms-1 mb-1 d-inline-flex justify-content-center align-items-center"
+                                    style={{}}
                                 >
                                     {category[1]}
                                 </div>
                             )}
                             {category[2] && (
                                 <div
-                                    className="badge bg-primary text-wrap ms-1 mb-1"
-                                    style={{ width: '6rem' }}
+                                    className="badge bg-primary  ms-1 mb-1 d-inline-flex justify-content-center align-items-center"
+                                    style={{}}
                                 >
                                     {category[2]}
                                 </div>
