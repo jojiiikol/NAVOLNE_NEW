@@ -18,7 +18,7 @@ import MyCard from './cards/MiniProjectCard';
 import url from '../globalURL';
 import MoneyWithdrawal from './payment/MoneyWithdrawal';
 import MoneyAdd from './payment/MoneyAdd';
-
+import AboutProfileCard from './cards/AboutProfileCard';
 const ProfileComponent = () => {
     const { profilename } = useParams();
     const [data, setData] = useState(null);
@@ -94,316 +94,239 @@ const ProfileComponent = () => {
             {data && projects && data.code != 'token_not_valid' && (
                 <div>
                     {/* <MoneyWidget /> */}
-                    <Row>
-                        <Col sm={3}>
-                            <Image
-                                style={{ width: '300px', height: '300px' }}
-                                className="me-5 object-fit-cover"
-                                src={data.image}
-                                rounded
-                                roundedCircle
-                            />
+                    <Row md={3} sm={1}>
+                        <Col md={3} className="mt-2">
+                            <Card
+                                className="border-0 rounded-5 shadow "
+                                style={{ backgroundColor: '#FFFFFF' }}
+                            >
+                                <Card.Img
+                                    style={{ height: '300px' }}
+                                    src={data.image}
+                                    className="me-5 object-fit-cover rounded-5"
+                                ></Card.Img>
+                                <Card.Body>
+                                    <ListGroup className="list-group-flush">
+                                        <ListGroup.Item>
+                                            <Card.Text className=" fs-3 text-center fw-bold">
+                                                {data.last_name}{' '}
+                                                {data.first_name}
+                                            </Card.Text>
+                                        </ListGroup.Item>
+                                        <ListGroup.Item></ListGroup.Item>
+                                    </ListGroup>
 
-                            <div className="d-flex justify-content-between me-5">
-                                <p
-                                    className="fs-5 fw-normal text-secondary mt-1"
-                                    style={{ width: '300px' }}
-                                >
-                                    Поддержал проекты на:{' '}
-                                </p>
-                                <p className="fs-5 fw-normal text-normal mt-1">
-                                    {' '}
-                                    {data.total_money_sent}
-                                </p>
-                            </div>
-                            {/* {data.is_owner && (
-                                <div className="d-flex justify-content-between me-5">
-                                    <p
-                                        className="fs-5 fw-normal text-secondary "
-                                        style={{ width: '300px' }}
-                                    >
-                                        Баланс:{' '}
-                                    </p>
-                                    <p className="fs-5 fw-normal text-normal ">
-                                        {' '}
-                                        {data.money}
-                                    </p>
-                                </div>
-                            )} */}
-
-                            {data.is_owner && (
-                                <div>
-                                    {' '}
-                                    <div
-                                        className="d-flex justify-content-between me-5"
-                                        style={{}}
-                                    >
-                                        <Button
-                                            variant="danger"
-                                            onClick={clearLocalStorage}
-                                        >
-                                            Выйти
-                                        </Button>
-                                        <Button
-                                            variant="secondary"
-                                            onClick={openModal}
-                                        >
-                                            Редактировать
-                                        </Button>
-                                        {showModal && (
-                                            <EditProfileModal
-                                                show={true}
-                                                onHide={closeModal}
-                                                username={profilename}
-                                                skills_base={data.skill}
-                                            />
-                                        )}
-                                        {data.confirmed && (
-                                            <Button
-                                                variant="primary"
-                                                href="/create"
+                                    {data.is_owner && (
+                                        <div>
+                                            {' '}
+                                            <div
+                                                className="d-flex justify-content-between"
+                                                style={{}}
                                             >
-                                                Создать
-                                            </Button>
-                                        )}
-                                    </div>
-                                    {data.confirmed && (
-                                        <div className="d-flex justify-content-center mt-2">
-                                            <Button
-                                                variant="primary"
-                                                onClick={openModalWithdrawal}
-                                            >
-                                                Вывод средств
-                                            </Button>
-                                            {showModalWithdrawal && (
-                                                <MoneyWithdrawal
-                                                    show={true}
-                                                    onHide={
-                                                        closeModalWithdrawal
-                                                    }
-                                                    totalmoney={data.money}
-                                                />
-                                            )}
-                                            <Button
-                                                variant="primary"
-                                                onClick={openModalMoneyAdd}
-                                            >
-                                                Пополнить баланс
-                                            </Button>
-                                            {showModalMoneyAdd && (
-                                                <MoneyAdd
-                                                    show={true}
-                                                    onHide={closeModalMoneyAdd}
-                                                    totalmoney={data.money}
-                                                />
+                                                <Button
+                                                    variant="danger"
+                                                    onClick={clearLocalStorage}
+                                                >
+                                                    Выйти
+                                                </Button>
+                                                <Button
+                                                    variant="secondary"
+                                                    onClick={openModal}
+                                                >
+                                                    Редактировать
+                                                </Button>
+                                                {showModal && (
+                                                    <EditProfileModal
+                                                        show={true}
+                                                        onHide={closeModal}
+                                                        username={profilename}
+                                                        skills_base={data.skill}
+                                                    />
+                                                )}
+                                            </div>
+                                            {data.confirmed && (
+                                                <div className="d-grid gap-2">
+                                                    {' '}
+                                                    <Button
+                                                        variant="primary"
+                                                        href="/create"
+                                                        className="mt-2"
+                                                    >
+                                                        Создать проект
+                                                    </Button>
+                                                    {data.is_admin && (
+                                                        <Button
+                                                            variant="outline-primary"
+                                                            href={
+                                                                '/admin/' +
+                                                                profilename
+                                                            }
+                                                        >
+                                                            Админ панель
+                                                        </Button>
+                                                    )}
+                                                </div>
                                             )}
                                         </div>
                                     )}
-                                </div>
-                            )}
-                            {data.is_admin && (
-                                <div
-                                    className="d-flex justify-content-center mt-2"
-                                    style={{}}
-                                >
-                                    <Button
-                                        variant="primary"
-                                        href={'/admin/' + profilename}
-                                    >
-                                        Админ панель
-                                    </Button>
-                                </div>
-                            )}
+                                </Card.Body>
+                            </Card>
                         </Col>
-
-                        <Col sm={9}>
+                        <Col md={5} className="mt-2">
+                            <AboutProfileCard
+                                first_name={data.first_name}
+                                last_name={data.last_name}
+                                money={data.money}
+                                company={data.company}
+                                date_joined={data.date_joined}
+                                total_money_sent={data.total_money_sent}
+                                about={data.about}
+                            />
+                        </Col>
+                        <Col>
                             <Row className="g-5">
-                                <Col>
-                                    <Badge className=" bg-secondary h-100 d-inline-flex align-items-center">
-                                        <p className="fs-3 fw-bold text-black  mt-1 ms-2 me-2">
-                                            {data.first_name} {data.last_name}
-                                        </p>
-                                    </Badge>
-                                </Col>
-                                <Col>
-                                    <Badge className=" bg-secondary h-100 d-inline-flex align-items-center">
-                                        <p className="fs-3 fw-bold text-black mt-1 ms-2 me-2 ">
-                                            {data.birthday}
-                                        </p>
-                                    </Badge>
-                                </Col>
-                                <Col>
-                                    <Badge className="bg-secondary h-100 d-inline-flex align-items-center">
-                                        <p className="fs-3 fw-bold text-black mt-1 ms-2 me-2">
-                                            {data.company}
-                                        </p>
-                                    </Badge>
-                                </Col>
-                                <Col>
-                                    <Badge className=" bg-secondary ">
-                                        <p className="fs-5 fw-bold text-primary mt-2 mb-0 ms-2 me-2">
-                                            Мой баланс:
-                                        </p>
-                                        <p className="fs-4 fw-bold text-primary  mb-2 ms-2 me-2">
-                                            {data.money}
-                                        </p>
-                                    </Badge>
-                                </Col>
+                                <Col></Col>
                             </Row>
-                            <div className="d-flex  justify-content-between mt-4 "></div>
+                            <div className="d-flex  justify-content-between  "></div>
                             <Row>
-                                <Col sm={7}>
-                                    <Card className="mt-2">
-                                        <CardHeader className="bg-black text-white fs-3 text-center fw-bold">
-                                            О себе
-                                        </CardHeader>
-                                        <CardBody
-                                            className="bg-secondary"
-                                            style={{ height: '200px' }}
-                                        >
-                                            {data.about}
-                                        </CardBody>
-                                    </Card>
-                                </Col>
-                                <Col sm={5}>
-                                    <Card className="mt-2" rounded>
-                                        <CardHeader className="bg-black text-white fs-3 text-center fw-bold">
-                                            Поддержаные проекты
-                                        </CardHeader>
-                                        <CardBody
-                                            className="bg-secondary"
-                                            style={{ height: '200px' }}
-                                        >
-                                            <Row>
-                                                <ListGroup>
-                                                    {projects &&
-                                                        projects.length ===
-                                                            0 && (
-                                                            <div>
-                                                                <div
-                                                                    style={{
-                                                                        display:
-                                                                            'flex',
-                                                                        justifyContent:
-                                                                            'center',
-                                                                    }}
-                                                                >
-                                                                    <div className="ms-5">
-                                                                        <p className="fs-3 fw-normal  ">
-                                                                            Пользователь
-                                                                            еще
-                                                                            не
-                                                                            поддержал
-                                                                            проекты
-                                                                        </p>
-                                                                        <div
-                                                                            style={{
-                                                                                display:
-                                                                                    'flex',
-                                                                                justifyContent:
-                                                                                    'center',
-                                                                            }}
-                                                                            className="mt-3"
-                                                                        ></div>
+                                <Col className="mt-2">
+                                    <Card
+                                        className="border-0 rounded-5 shadow "
+                                        style={{ backgroundColor: '#FFFFFF' }}
+                                    >
+                                        <Card.Body>
+                                            <ListGroup className="list-group-flush">
+                                                <ListGroup.Item>
+                                                    <Card.Text className=" fs-3 text-center fw-bold">
+                                                        Поддержаные проекты
+                                                    </Card.Text>
+                                                </ListGroup.Item>
+                                                <ListGroup.Item>
+                                                    <ListGroup className="list-group-flush">
+                                                        {projects &&
+                                                            projects.length ===
+                                                                0 && (
+                                                                <div>
+                                                                    <div
+                                                                        style={{
+                                                                            display:
+                                                                                'flex',
+                                                                            justifyContent:
+                                                                                'center',
+                                                                        }}
+                                                                    >
+                                                                        <div className="ms-5">
+                                                                            <p className="fs-3 fw-normal  ">
+                                                                                Пользователь
+                                                                                еще
+                                                                                не
+                                                                                поддержал
+                                                                                проекты
+                                                                            </p>
+                                                                            <div
+                                                                                style={{
+                                                                                    display:
+                                                                                        'flex',
+                                                                                    justifyContent:
+                                                                                        'center',
+                                                                                }}
+                                                                                className="mt-3"
+                                                                            ></div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
+                                                            )}
+                                                        <div
+                                                            style={{
+                                                                display:
+                                                                    'block',
+                                                            }}
+                                                        >
+                                                            {' '}
+                                                            {projects.length !==
+                                                                0 &&
+                                                                projects.map(
+                                                                    (
+                                                                        project
+                                                                    ) => (
+                                                                        <ListGroup.Item
+                                                                            href={`/projects/${project.slug}`}
+                                                                            key={
+                                                                                project.url
+                                                                            }
+                                                                            action
+                                                                        >
+                                                                            {
+                                                                                project.name
+                                                                            }
+                                                                        </ListGroup.Item>
+                                                                    )
+                                                                )}
+                                                        </div>
+                                                    </ListGroup>
+                                                </ListGroup.Item>
+                                                {data.is_owner && (
+                                                    <ListGroup.Item>
+                                                        {data.confirmed && (
+                                                            <div className="d-grid gap-2">
+                                                                <Button
+                                                                    variant="outline-primary"
+                                                                    onClick={
+                                                                        openModalWithdrawal
+                                                                    }
+                                                                >
+                                                                    Вывод
+                                                                    средств
+                                                                </Button>
+                                                                {showModalWithdrawal && (
+                                                                    <MoneyWithdrawal
+                                                                        show={
+                                                                            true
+                                                                        }
+                                                                        onHide={
+                                                                            closeModalWithdrawal
+                                                                        }
+                                                                        totalmoney={
+                                                                            data.money
+                                                                        }
+                                                                    />
+                                                                )}
+                                                                <Button
+                                                                    variant="primary"
+                                                                    onClick={
+                                                                        openModalMoneyAdd
+                                                                    }
+                                                                >
+                                                                    Пополнить
+                                                                    баланс
+                                                                </Button>
+                                                                {showModalMoneyAdd && (
+                                                                    <MoneyAdd
+                                                                        show={
+                                                                            true
+                                                                        }
+                                                                        onHide={
+                                                                            closeModalMoneyAdd
+                                                                        }
+                                                                        totalmoney={
+                                                                            data.money
+                                                                        }
+                                                                    />
+                                                                )}
                                                             </div>
                                                         )}
-                                                    <div
-                                                        style={{
-                                                            display: 'block',
-                                                        }}
-                                                    >
-                                                        {' '}
-                                                        {projects.length !==
-                                                            0 &&
-                                                            projects.map(
-                                                                (project) => (
-                                                                    <ListGroupItem
-                                                                        href={`/projects/${project.slug}`}
-                                                                        key={
-                                                                            project.url
-                                                                        }
-                                                                        action
-                                                                    >
-                                                                        {
-                                                                            project.name
-                                                                        }
-                                                                    </ListGroupItem>
-                                                                )
-                                                            )}
-                                                    </div>
-                                                </ListGroup>
-                                            </Row>
-                                        </CardBody>
+                                                    </ListGroup.Item>
+                                                )}
+                                            </ListGroup>
+                                        </Card.Body>
                                     </Card>
                                 </Col>
                             </Row>
-
-                            {/* {data.groups.length !== 0 && (
-                                <div className="d-flex">
-                                    <p className="fs-5 fw-normal text-secondary">
-                                        Группы:{' '}
-                                    </p>
-
-                                    <div
-                                        className="badge bg-secondary text-wrap ms-1 mb-3"
-                                        style={{ width: '8rem' }}
-                                    >
-                                        {data.groups.name}
-                                    </div>
-
-                                    
-                                </div>
-                            )} */}
-
-                            {/* {data.is_owner && (
-                                <div className="d-flex">
-                                    <p className="fs-5 fw-normal text-secondary">
-                                        День рождения:{' '}
-                                    </p>
-                                    <p className="fs-5 fw-normal ms-1">
-                                        {data.birthday}
-                                    </p>
-                                </div>
-                            )}
-
-                            {data.is_owner && (
-                                <div className="d-flex">
-                                    <p className="fs-5 fw-normal text-secondary">
-                                        Компания:{' '}
-                                    </p>
-                                    <p className="fs-5 fw-normal ms-1">
-                                        {data.company}
-                                    </p>
-                                </div>
-                            )}
-
-                            {data.is_owner && (
-                                <div className="d-flex">
-                                    <p className="fs-5 fw-normal text-secondary">
-                                        ЕГРЮЛ:{' '}
-                                    </p>
-                                    <p className="fs-5 fw-normal ms-1">
-                                        {data.document}
-                                    </p>
-                                </div>
-                            )}
-                            {data.is_owner && (
-                                <div className="d-flex">
-                                    <p className="fs-5 fw-normal text-secondary">
-                                        Паспорт:{' '}
-                                    </p>
-                                    <p className="fs-5 fw-normal ms-1">
-                                        {data.passport}
-                                    </p>
-                                </div>
-                            )} */}
                         </Col>
                     </Row>
 
                     <Row>
-                        <p className="fs-1 fw-bold mb-0 text-center">
+                        <p className="fs-1 fw-bold mb-0 text-center mt-2">
                             Проекты пользователя:
                         </p>
 
