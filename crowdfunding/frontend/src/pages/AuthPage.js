@@ -26,17 +26,16 @@ const AuthPage = () => {
 
     return (
         <div style={{ marginTop: '60px' }}>
-            <Row>
+            <Row md={2} xs={1}>
                 <Col
                     style={{
-                        height: '90vh',
+                        height: '50rem',
                         background: '#E0F1EE',
                         borderRadius: '24px',
                         border: '1px solid rgba(0, 0, 0, 0.02)',
                     }}
                     md={4}
-                    sm={8}
-                    className="ms-4 mt-2 d-flex justify-content-center align-items-center"
+                    className="ms-4 me-4 mt-2 d-flex justify-content-center align-items-center"
                 >
                     <Container
                         center
@@ -72,17 +71,21 @@ const AuthPage = () => {
                         {authComponent}
                     </Container>
                 </Col>
-                <Col style={{ padding: '0px' }} className="ms-3 me-4">
+                <Col
+                    style={{ padding: '0px' }}
+                    className="d-none d-sm-block"
+                    md={7}
+                >
                     <section>
                         <video
                             style={{
                                 objectFit: 'cover',
                                 borderRadius: '24px',
                                 border: '1px solid rgba(0, 0, 0, 0.02)',
-
-                                height: '90vh',
+                                width: '135vh',
+                                height: '50rem',
                             }}
-                            className="w-100 mt-2"
+                            className=" mt-2 d-md-block"
                             autoPlay
                             loop
                             muted
