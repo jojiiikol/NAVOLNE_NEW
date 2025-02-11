@@ -26,6 +26,21 @@ const ProgressBar = (props) => {
         textAlign: 'right',
     };
 
+    const fillerStylesCode = {
+        height: '100%',
+        width: `${completed}%`,
+        backgroundColor: '#363737',
+        borderRadius: 'inherit',
+        textAlign: 'right',
+    };
+    const fillerStyles100Code = {
+        height: '100%',
+        width: '100%',
+        backgroundColor: '#363737',
+        borderRadius: 'inherit',
+        textAlign: 'right',
+    };
+
     const labelStyles = {
         paddingRight: 10,
         color: 'white',
@@ -43,33 +58,82 @@ const ProgressBar = (props) => {
 
     return (
         <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={labelStyles2}>{`${completed_money} ₽`}</span>
-                <span style={labelStyles2}>{`${need_money} ₽`}</span>
-            </div>
-
-            <div style={containerStyles}>
-                {completed_money / need_money < 1 && (
-                    <div style={fillerStyles}>
-                        {completed_money / need_money > 0.1 && (
-                            <span
-                                style={labelStyles}
-                                className="align-self-center"
-                            >{`${completed}%`}</span>
+            {code > 1 && (
+                <div>
+                    {' '}
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                        }}
+                    >
+                        <span
+                            style={labelStyles2}
+                        >{`${completed_money} ₽`}</span>
+                        <span style={labelStyles2}>{`${need_money} ₽`}</span>
+                    </div>
+                    <div style={containerStyles}>
+                        {completed_money / need_money < 1 && (
+                            <div style={fillerStylesCode}>
+                                {completed_money / need_money > 0.1 && (
+                                    <span
+                                        style={labelStyles}
+                                        className="align-self-center"
+                                    >{`${completed}%`}</span>
+                                )}
+                            </div>
+                        )}
+                        {completed_money / need_money >= 1 && (
+                            <div style={fillerStyles100Code}>
+                                {completed_money / need_money > 0.1 && (
+                                    <span
+                                        style={labelStyles}
+                                        className="align-self-center"
+                                    >{`${completed}%`}</span>
+                                )}
+                            </div>
                         )}
                     </div>
-                )}
-                {completed_money / need_money >= 1 && (
-                    <div style={fillerStyles100}>
-                        {completed_money / need_money > 0.1 && (
-                            <span
-                                style={labelStyles}
-                                className="align-self-center"
-                            >{`${completed}%`}</span>
+                </div>
+            )}
+            {code <= 1 && (
+                <div>
+                    {' '}
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                        }}
+                    >
+                        <span
+                            style={labelStyles2}
+                        >{`${completed_money} ₽`}</span>
+                        <span style={labelStyles2}>{`${need_money} ₽`}</span>
+                    </div>
+                    <div style={containerStyles}>
+                        {completed_money / need_money < 1 && (
+                            <div style={fillerStyles}>
+                                {completed_money / need_money > 0.1 && (
+                                    <span
+                                        style={labelStyles}
+                                        className="align-self-center"
+                                    >{`${completed}%`}</span>
+                                )}
+                            </div>
+                        )}
+                        {completed_money / need_money >= 1 && (
+                            <div style={fillerStyles100}>
+                                {completed_money / need_money > 0.1 && (
+                                    <span
+                                        style={labelStyles}
+                                        className="align-self-center"
+                                    >{`${completed}%`}</span>
+                                )}
+                            </div>
                         )}
                     </div>
-                )}
-            </div>
+                </div>
+            )}
         </div>
     );
 };

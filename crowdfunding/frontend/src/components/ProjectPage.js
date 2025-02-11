@@ -136,6 +136,7 @@ const ProjectPage = () => {
                                     collected_money={data.collected_money}
                                     need_money={data.need_money}
                                     category={data.category}
+                                    status_code={data.status_code.code}
                                     className="mt-0"
                                 />
                             )}{' '}
