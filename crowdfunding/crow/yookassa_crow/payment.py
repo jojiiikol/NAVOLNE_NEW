@@ -24,7 +24,8 @@ def account_replenishment(payment_id):
     task = PeriodicTask.objects.get(name=payment_name)
     if payment_info_status is not None:
         account_replenishment_atomic(payment_id, payment_info_status, task)
-    delete_payment_task_on_time(task)
+    else:
+        delete_payment_task_on_time(task)
 
 
 @transaction.atomic

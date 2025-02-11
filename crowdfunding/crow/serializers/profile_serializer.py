@@ -196,6 +196,8 @@ class AccountReplenishmentSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         if attrs['amount'] <= 0:
             raise serializers.ValidationError("Неверно введенное значение")
+        if attrs['amount'] > 350000:
+            raise serializers.ValidationError("Внутреннее ограничение - не более 350 тыс. р.")
         return attrs
 
     def create(self, validated_data):
