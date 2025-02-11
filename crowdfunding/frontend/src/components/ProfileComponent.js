@@ -430,7 +430,7 @@ const ProfileComponent = () => {
                                                 У {data.first_name} еще нет
                                                 проектов... Не будь как{' '}
                                                 {data.first_name}, скорее
-                                                нажимай на кнопку{' '}
+                                                создавай проект
                                             </p>
                                             <div
                                                 style={{
@@ -438,14 +438,7 @@ const ProfileComponent = () => {
                                                     justifyContent: 'center',
                                                 }}
                                                 className="mt-3"
-                                            >
-                                                <Button
-                                                    size="lg"
-                                                    href="/create"
-                                                >
-                                                    Cоздать проект
-                                                </Button>
-                                            </div>
+                                            ></div>
                                         </div>
                                     </div>
                                 </div>

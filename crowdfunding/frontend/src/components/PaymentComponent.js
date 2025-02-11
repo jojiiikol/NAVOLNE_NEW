@@ -8,18 +8,12 @@ const PaymentComponent = ({ show, onHide, slug }) => {
     const [data, setData] = useState(null);
     const [skills2, setSkills] = useState([]);
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const response = await fetch('http://localhost:8000/additional/', {
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //         });
-    //         const data = await response.json();
-    //         setData(data.skills);
-    //     };
-    //     fetchData();
-    // }, []);
+    useEffect(() => {
+        const accessToken = localStorage.getItem('accessToken');
+        if (!accessToken) {
+            window.location.href = `/auth/`;
+        }
+    }, []);
 
     const handleChange = (event) => {
         setFormData({ ...formData, [event.target.name]: event.target.value });

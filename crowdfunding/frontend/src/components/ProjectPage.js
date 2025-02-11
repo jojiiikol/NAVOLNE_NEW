@@ -102,22 +102,26 @@ const ProjectPage = () => {
                                     <p style={{ fontSize: '1.5vw' }}>
                                         {data.small_description}
                                     </p>
-                                    <Button
-                                        size="lg"
-                                        className="mt-0"
-                                        variant="outline-primarylight"
-                                        onClick={openModalPayment}
-                                        style={{ width: '25rem' }}
-                                    >
-                                        Поддержать проект
-                                    </Button>
+                                    {data.status_code.code == 1 && (
+                                        <div>
+                                            <Button
+                                                size="lg"
+                                                className="mt-0"
+                                                variant="outline-primarylight"
+                                                onClick={openModalPayment}
+                                                style={{ width: '25rem' }}
+                                            >
+                                                Поддержать проект
+                                            </Button>
 
-                                    {showModalPayment && (
-                                        <PaymentComponent
-                                            show={true}
-                                            onHide={closeModalPayment}
-                                            slug={slug}
-                                        />
+                                            {showModalPayment && (
+                                                <PaymentComponent
+                                                    show={true}
+                                                    onHide={closeModalPayment}
+                                                    slug={slug}
+                                                />
+                                            )}
+                                        </div>
                                     )}
                                 </Carousel.Caption>
                             </Carousel.Item>
@@ -156,7 +160,8 @@ const ProjectPage = () => {
 
                             <div className="d-flex flex-row-reverse">
                                 {data.is_owner &&
-                                    data.status_code.code == 1 && (
+                                    data.status_code.code != 2 &&
+                                    data.status_code.code != 3 && (
                                         <div className="mt-1" style={{}}>
                                             <Button
                                                 size="lg"
@@ -176,7 +181,8 @@ const ProjectPage = () => {
                                     )}
                                 {data.is_owner &&
                                     data.transfer_allowed &&
-                                    data.status_code.code != 3 && (
+                                    data.status_code.code != 3 &&
+                                    data.status_code.code != 2 && (
                                         <div className="mt-1 me-1" style={{}}>
                                             <Button
                                                 size="lg"

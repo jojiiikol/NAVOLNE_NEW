@@ -102,9 +102,9 @@ export default class Create extends Component {
             .then((data) => {
                 this.setState({ errorMessage: data });
                 console.log(data);
-                alert('Ваш проект находится на рассмотрении');
+
                 if (data.name == this.state.name) {
-                    console.log('sdafasd');
+                    alert('Ваш проект находится на рассмотрении');
                     window.location.href =
                         '/profile/' + localStorage.getItem('user');
                 }
