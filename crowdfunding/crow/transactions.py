@@ -45,6 +45,7 @@ def make_payout_object(validated_data):
 def payment_to_project(validated_data):
     user = validated_data['user']
     user.money -= validated_data['money']
+    user.total_money_sent += validated_data['money']
     user.save()
 
     project = validated_data['project']
