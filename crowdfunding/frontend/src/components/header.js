@@ -33,7 +33,25 @@ import ConfirmedProjects from './requests/ConfirmedProjects';
 import ShowClosureAllProjects from './requests/ShowClosureAllProjects';
 import Verify from './VerifyEmail';
 import ConfirmUsers from './requests/ConfirmUsers';
+import url from '../globalURL';
 export default class header extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            search: '',
+        };
+    }
+    handleChange = (event) => {
+        const { name, value } = event.target;
+        this.setState({ [name]: value });
+        console.log(this.state.search);
+    };
+
+    handleSubmit = (event) => {
+        event.preventDefault();
+        window.location.href = '/search/' + this.state.search;
+        this.state.search = '';
+    };
     render() {
         return (
             <>
@@ -78,16 +96,22 @@ export default class header extends Component {
                                     FAQ{' '}
                                 </Nav.Link>
                             </Nav>
-                            <Form className="d-flex">
+                            <Form
+                                className="d-flex"
+                                onSubmit={this.handleSubmit}
+                            >
                                 <FormControl
                                     type="text"
                                     placeholder="Найти проект"
                                     className="me-sm-2"
+                                    name="search"
+                                    value={this.state.search}
+                                    onChange={this.handleChange}
                                 />
                                 <Button
                                     variant="outline-primary"
                                     className="me-sm-5"
-                                    href="/search"
+                                    onClick={this.handleSubmit}
                                 >
                                     Найти
                                 </Button>
@@ -143,7 +167,10 @@ export default class header extends Component {
                         />
                         <Route path="/verify/:token" component={Verify} />
                         <Route path="/projects/:slug" component={ProjectPage} />
-                        <Route path="/search/" component={SearchComponent} />
+                        <Route
+                            path="/search/:slug"
+                            component={SearchComponent}
+                        />
                         <Route path="/category/" component={Category} />
                         <Route
                             path="/admin/:profilename"

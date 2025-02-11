@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Card, Col, Row } from 'react-bootstrap';
+import { Container, Card, Col, Row, Button } from 'react-bootstrap';
 import ProgressBar from '../components/progress-bar.component.js';
 import {
     MDBPagination,
@@ -54,17 +54,13 @@ const PaginationComponent = () => {
                 style={{ display: 'flex', justifyContent: 'space-between' }}
             >
                 <MDBPaginationItem>
-                    <MDBPaginationLink
-                        href="#"
-                        tabIndex={-1}
-                        onClick={handlePrevPage}
-                    >
+                    <Button href="#" tabIndex={-1} onClick={handlePrevPage}>
                         Предыдущая
-                    </MDBPaginationLink>
+                    </Button>
                 </MDBPaginationItem>
 
                 <MDBPaginationItem onClick={handleNextPage}>
-                    <MDBPaginationLink href="#">Следующая</MDBPaginationLink>
+                    <Button href="#">Следующая</Button>
                 </MDBPaginationItem>
             </MDBPagination>
 
@@ -93,17 +89,13 @@ const PaginationComponent = () => {
                 style={{ display: 'flex', justifyContent: 'space-between' }}
             >
                 <MDBPaginationItem>
-                    <MDBPaginationLink
-                        href="#"
-                        tabIndex={-1}
-                        onClick={handlePrevPage}
-                    >
+                    <Button href="#" tabIndex={-1} onClick={handlePrevPage}>
                         Предыдущая
-                    </MDBPaginationLink>
+                    </Button>
                 </MDBPaginationItem>
 
                 <MDBPaginationItem onClick={handleNextPage}>
-                    <MDBPaginationLink href="#">Следующая</MDBPaginationLink>
+                    <Button href="#">Следующая</Button>
                 </MDBPaginationItem>
             </MDBPagination>
         </Container>

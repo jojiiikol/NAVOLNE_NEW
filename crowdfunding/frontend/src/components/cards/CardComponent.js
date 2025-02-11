@@ -23,7 +23,7 @@ const MyCard = (props) => {
                 >
                     {code == 1 && (
                         <Card.Img
-                            className="rounded-5 "
+                            className="rounded-5 shadow"
                             style={{ height: 200, objectFit: 'cover' }}
                             variant="top"
                             src={image}
