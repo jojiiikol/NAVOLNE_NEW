@@ -3,8 +3,15 @@ import { Link } from 'react-router-dom';
 import { Card, Image, ListGroup } from 'react-bootstrap';
 import ProgressBar from '../progress-bar.component';
 const InfoProjectCard = (props) => {
-    const { description, collected_money, need_money, category, status_code } =
-        props;
+    const {
+        description,
+        collected_money,
+        need_money,
+        category,
+        status_code,
+        start_date,
+        end_date,
+    } = props;
     return (
         <div>
             <Card className="shadow border-0 rounded-4">
@@ -19,17 +26,36 @@ const InfoProjectCard = (props) => {
                                 <span className="text-secondary fs-5 text-uppercase">
                                     Описание
                                 </span>
-                                <div className="d-flex mt-0 mb-2">
-                                    {category.map((category, index) => (
-                                        <div
-                                            className="badge bg-primary text-wrap ms-1 mb-1"
-                                            style={{ width: '6rem' }}
-                                            key={index}
-                                        >
-                                            {category}
-                                        </div>
-                                    ))}
-                                </div>
+                                {status_code != 2 && status_code != 3 && (
+                                    <div
+                                        className="d-flex"
+                                        style={{ height: '40px' }}
+                                    >
+                                        {category[0] && (
+                                            <span
+                                                className="badge bg-primary  ms-1 mb-1 d-inline-flex justify-content-center align-items-center"
+                                                style={{}}
+                                            >
+                                                {category[0]}
+                                            </span>
+                                        )}
+                                    </div>
+                                )}
+                                {status_code != 1 && status_code != 0 && (
+                                    <div
+                                        className="d-flex"
+                                        style={{ height: '40px' }}
+                                    >
+                                        {category[0] && (
+                                            <span
+                                                className="badge bg-warning  ms-1 mb-1 d-inline-flex justify-content-center align-items-center"
+                                                style={{}}
+                                            >
+                                                {category[0]}
+                                            </span>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                             <p>{description}</p>
                         </ListGroup.Item>
@@ -44,6 +70,15 @@ const InfoProjectCard = (props) => {
                                 need_money={need_money}
                                 code={status_code}
                             />
+                            <div className="d-flex justify-content-between">
+                                {' '}
+                                <span className="fw-bold text-secondary">
+                                    {start_date}
+                                </span>
+                                <span className="fw-bold text-secondary">
+                                    {end_date}
+                                </span>
+                            </div>
                             {status_code == 2 && (
                                 <div className="d-flex justify-content-center">
                                     <p className="fs-5 fw-bolder">

@@ -141,6 +141,8 @@ const ProjectPage = () => {
                                     category={data.category}
                                     status_code={data.status_code.code}
                                     className="mt-0"
+                                    start_date={data.start_date}
+                                    end_date={data.end_date}
                                 />
                             )}{' '}
                         </Col>

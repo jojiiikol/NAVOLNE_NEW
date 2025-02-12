@@ -146,7 +146,7 @@ const EditProfileModal = ({ show, onHide, username }) => {
                         />
                     </Form.Group>
 
-                    <Form.Group className="mb-2">
+                    {/* <Form.Group className="mb-2">
                         <Form.Label>ЕГРЮЛ</Form.Label>
                         <Form.Control
                             type="text"
@@ -164,7 +164,7 @@ const EditProfileModal = ({ show, onHide, username }) => {
                             value={formData.passport || ''}
                             onChange={handleChange}
                         />
-                    </Form.Group>
+                    </Form.Group> */}
 
                     <Form.Group className="mb-3">
                         <Form.Label>Выберите навыки</Form.Label>

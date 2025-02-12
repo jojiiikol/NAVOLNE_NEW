@@ -27,7 +27,9 @@ const PaginationComponent = () => {
                 setData(response.data.results);
                 setNextPage(response.data.next);
                 setPrevPage(response.data.previous);
+                console.log(response);
             })
+
             .catch((error) => {
                 console.error('Error fetching data:', error);
             });
@@ -53,15 +55,20 @@ const PaginationComponent = () => {
                 className="m-4"
                 style={{ display: 'flex', justifyContent: 'space-between' }}
             >
-                <MDBPaginationItem>
-                    <Button href="#" tabIndex={-1} onClick={handlePrevPage}>
-                        Предыдущая
-                    </Button>
-                </MDBPaginationItem>
-
-                <MDBPaginationItem onClick={handleNextPage}>
-                    <Button href="#">Следующая</Button>
-                </MDBPaginationItem>
+                {!prevPage && <div></div>}
+                {prevPage && (
+                    <MDBPaginationItem>
+                        <Button href="#" tabIndex={-1} onClick={handlePrevPage}>
+                            Предыдущая
+                        </Button>
+                    </MDBPaginationItem>
+                )}
+                {!nextPage && <div></div>}
+                {nextPage && (
+                    <MDBPaginationItem onClick={handleNextPage}>
+                        <Button href="#">Следующая</Button>
+                    </MDBPaginationItem>
+                )}
             </MDBPagination>
 
             <Row xs={1} md={2} className="g-4">
@@ -88,15 +95,20 @@ const PaginationComponent = () => {
                 className="m-4"
                 style={{ display: 'flex', justifyContent: 'space-between' }}
             >
-                <MDBPaginationItem>
-                    <Button href="#" tabIndex={-1} onClick={handlePrevPage}>
-                        Предыдущая
-                    </Button>
-                </MDBPaginationItem>
-
-                <MDBPaginationItem onClick={handleNextPage}>
-                    <Button href="#">Следующая</Button>
-                </MDBPaginationItem>
+                {!prevPage && <div></div>}
+                {prevPage && (
+                    <MDBPaginationItem>
+                        <Button href="#" tabIndex={-1} onClick={handlePrevPage}>
+                            Предыдущая
+                        </Button>
+                    </MDBPaginationItem>
+                )}
+                {!nextPage && <div></div>}
+                {nextPage && (
+                    <MDBPaginationItem onClick={handleNextPage}>
+                        <Button href="#">Следующая</Button>
+                    </MDBPaginationItem>
+                )}
             </MDBPagination>
         </Container>
     );

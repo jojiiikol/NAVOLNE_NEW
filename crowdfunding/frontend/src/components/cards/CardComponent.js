@@ -13,6 +13,8 @@ const MyCard = (props) => {
         views,
         image,
         code,
+        start_date,
+        end_date,
     } = props;
     return (
         <div>
@@ -53,34 +55,50 @@ const MyCard = (props) => {
                             src={image}
                         />
                     )}
+
                     <Card.Body className="d-flex flex-column">
                         <Card.Title className="fs-1">{name}</Card.Title>
-                        <div className="d-flex" style={{ height: '40px' }}>
-                            {category[0] && (
-                                <span
-                                    className="badge bg-primary  ms-1 mb-1 d-inline-flex justify-content-center align-items-center"
-                                    style={{}}
-                                >
-                                    {category[0]}
-                                </span>
-                            )}
-                            {category[1] && (
-                                <div
-                                    className="badge bg-primary  ms-1 mb-1 d-inline-flex justify-content-center align-items-center"
-                                    style={{}}
-                                >
-                                    {category[1]}
-                                </div>
-                            )}
-                            {category[2] && (
-                                <div
-                                    className="badge bg-primary  ms-1 mb-1 d-inline-flex justify-content-center align-items-center"
-                                    style={{}}
-                                >
-                                    {category[2]}
-                                </div>
-                            )}
-                        </div>
+                        {code != 2 && code != 3 && (
+                            <div className="d-flex" style={{ height: '40px' }}>
+                                {category[0] && (
+                                    <span
+                                        className="badge bg-primary  ms-1 mb-1 d-inline-flex justify-content-center align-items-center"
+                                        style={{}}
+                                    >
+                                        {category[0]}
+                                    </span>
+                                )}
+                                {category[1] && (
+                                    <div
+                                        className="badge bg-primary  ms-1 mb-1 d-inline-flex justify-content-center align-items-center"
+                                        style={{}}
+                                    >
+                                        {category[1]}
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                        {code != 0 && code != 1 && (
+                            <div className="d-flex" style={{ height: '40px' }}>
+                                {category[0] && (
+                                    <span
+                                        className="badge bg-warning  ms-1 mb-1 d-inline-flex justify-content-center align-items-center"
+                                        style={{}}
+                                    >
+                                        {category[0]}
+                                    </span>
+                                )}
+                                {category[1] && (
+                                    <div
+                                        className="badge bg-warning  ms-1 mb-1 d-inline-flex justify-content-center align-items-center"
+                                        style={{}}
+                                    >
+                                        {category[1]}
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
                         <Card.Text className="fs-5" style={{ height: '3em' }}>
                             {small_description}
                         </Card.Text>
@@ -98,17 +116,18 @@ const MyCard = (props) => {
                                 need_money={need_money}
                                 code={code}
                             />
+                            <div className="d-flex justify-content-between"></div>
                             <div className="d-flex justify-content-between align-items-center">
                                 <p className="aboutProject fs-4 mt-2">
                                     Подробнее о проекте
                                 </p>
                                 <div className="d-flex me-2 my-auto">
-                                    <span className="material-symbols-outlined my-auto">
+                                    <span className="material-symbols-outlined d-inline-flex justify-content-center align-items-center text-secondary ">
                                         visibility
                                     </span>
-                                    <p className="d-flex align-items-center ms-1 align-middle my-auto fs-5">
+                                    <span className="d-inline-flex justify-content-center align-items-center ms-1  fs-5 text-secondary">
                                         {views}
-                                    </p>
+                                    </span>
                                 </div>
                             </div>
                         </div>
