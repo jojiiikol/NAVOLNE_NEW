@@ -215,8 +215,8 @@ const ProfileComponent = () => {
                                                                                 'center',
                                                                         }}
                                                                     >
-                                                                        <div className="ms-5">
-                                                                            <p className="fs-3 fw-normal  ">
+                                                                        <div className="">
+                                                                            <p className="fs-3 fw-normal text-center text-secondary ">
                                                                                 Пользователь
                                                                                 еще
                                                                                 не

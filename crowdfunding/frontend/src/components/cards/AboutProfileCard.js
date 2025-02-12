@@ -27,26 +27,23 @@ const AboutProfileCard = (props) => {
                         </ListGroup.Item>
                         <ListGroup.Item>
                             <div className="d-flex justify-content-between">
-                                <Row xs={1} md={2}>
-                                    <Col md={10}>
-                                        <div className="d-flex align-content-center">
-                                            <span className="material-symbols-outlined my-auto text-secondary fs-4">
-                                                person
-                                            </span>
-                                            <p className="fs-4 fw-bolder  ms-2 mb-0 ">
-                                                {first_name} {last_name}
-                                            </p>
-                                        </div>
-                                    </Col>
-                                    <Col md={2}>
-                                        <div className="d-flex align-content-center">
-                                            {' '}
-                                            <p className="fs-5 fw-bolder text-primary align-content-center  mb-0 ">
-                                                ₽ {money}
-                                            </p>
-                                        </div>
-                                    </Col>
-                                </Row>
+                                <div className="d-flex align-content-center">
+                                    <span className="material-symbols-outlined my-auto text-secondary fs-4">
+                                        person
+                                    </span>
+                                    <p className="fs-4 fw-bolder  ms-2 mb-0 ">
+                                        {first_name} {last_name}
+                                    </p>
+                                </div>
+
+                                <div className="d-flex justify-content-end">
+                                    <p className="fs-5 fw-bolder text-primary align-content-center  mb-0 me-1">
+                                        ₽
+                                    </p>
+                                    <p className="fs-5 fw-bolder text-primary align-content-center  mb-0 ">
+                                        {money}
+                                    </p>
+                                </div>
                             </div>
 
                             <div className="d-flex align-content-center">
