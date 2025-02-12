@@ -41,11 +41,8 @@ const AboutProfileCard = (props) => {
                                     <Col md={2}>
                                         <div className="d-flex align-content-center">
                                             {' '}
-                                            <span class="material-symbols-outlined my-auto text-primary fw-bold">
-                                                attach_money
-                                            </span>
                                             <p className="fs-5 fw-bolder text-primary align-content-center  mb-0 ">
-                                                {money}
+                                                ₽ {money}
                                             </p>
                                         </div>
                                     </Col>

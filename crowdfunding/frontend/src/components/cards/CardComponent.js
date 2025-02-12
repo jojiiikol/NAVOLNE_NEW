@@ -13,6 +13,8 @@ const MyCard = (props) => {
         views,
         image,
         code,
+        start_date,
+        end_date,
     } = props;
     return (
         <div>
@@ -114,6 +116,7 @@ const MyCard = (props) => {
                                 need_money={need_money}
                                 code={code}
                             />
+                            <div className="d-flex justify-content-between"></div>
                             <div className="d-flex justify-content-between align-items-center">
                                 <p className="aboutProject fs-4 mt-2">
                                     Подробнее о проекте

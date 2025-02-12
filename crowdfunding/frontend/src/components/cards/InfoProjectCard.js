@@ -3,8 +3,15 @@ import { Link } from 'react-router-dom';
 import { Card, Image, ListGroup } from 'react-bootstrap';
 import ProgressBar from '../progress-bar.component';
 const InfoProjectCard = (props) => {
-    const { description, collected_money, need_money, category, status_code } =
-        props;
+    const {
+        description,
+        collected_money,
+        need_money,
+        category,
+        status_code,
+        start_date,
+        end_date,
+    } = props;
     return (
         <div>
             <Card className="shadow border-0 rounded-4">
@@ -63,6 +70,15 @@ const InfoProjectCard = (props) => {
                                 need_money={need_money}
                                 code={status_code}
                             />
+                            <div className="d-flex justify-content-between">
+                                {' '}
+                                <span className="fw-bold text-secondary">
+                                    {start_date}
+                                </span>
+                                <span className="fw-bold text-secondary">
+                                    {end_date}
+                                </span>
+                            </div>
                             {status_code == 2 && (
                                 <div className="d-flex justify-content-center">
                                     <p className="fs-5 fw-bolder">

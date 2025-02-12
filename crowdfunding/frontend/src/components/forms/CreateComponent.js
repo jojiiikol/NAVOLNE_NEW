@@ -223,7 +223,6 @@ export default class Create extends Component {
                                         value={this.state.need_money}
                                         onChange={this.handleChange}
                                         type="number"
-                                        placeholder="Надо денег"
                                     />
                                     <InputGroup.Text>₽</InputGroup.Text>
                                     {this.state.errorMessage && (
@@ -248,7 +247,6 @@ export default class Create extends Component {
                                         value={this.state.collected_money}
                                         onChange={this.handleChange}
                                         type="number"
-                                        placeholder="Не надо денег"
                                     />
                                     <InputGroup.Text>₽</InputGroup.Text>
                                     {this.state.errorMessage && (

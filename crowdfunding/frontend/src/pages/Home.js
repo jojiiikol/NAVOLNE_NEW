@@ -19,6 +19,7 @@ class Home extends Component {
             .then((response) => response.json())
             .then((data) => {
                 this.setState({ project: data.results });
+                console.log(this.state.project);
             })
             .catch((error) => console.error('Ошибка:', error));
     }
@@ -92,6 +93,8 @@ class Home extends Component {
                                     views={project.views}
                                     image={project.image}
                                     code={project.status_code.code}
+                                    start_date={project.start_date}
+                                    end_date={project.end_date}
                                 />
                             </Col>
                         ))}
