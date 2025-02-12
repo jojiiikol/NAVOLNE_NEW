@@ -25,6 +25,10 @@ from .utils import check_token_timelife, change_transfer_status, save_ip_view
 from .tasks import send_message_verification_email, create_check_payment_status_task, create_check_payout_status_task
 from .yookassa_crow.payout import create_payout
 
+# TODO: ----------НОВОСТИ НА ПРОЕКТ----------
+# TODO: Человек может постить новости о проекте
+# TODO: Поменять порядок по дате в моих проектах
+
 
 # TODO: Отрефачить логику попытки удаления заявки на изменения при ответе админа, перенести в пермишины
 # TODO: Пересоздать миграции

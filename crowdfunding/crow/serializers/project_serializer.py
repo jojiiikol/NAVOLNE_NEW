@@ -436,7 +436,7 @@ class AdditionalUserSerializerForOther(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        projects = Project.objects.filter(user=instance, confirmed=True)
+        projects = Project.objects.filter(user=instance, confirmed=True).order_by("-start_date")
         print(projects)
         representation['projects'] = ProjectSerializer(projects, many=True,
                                                        context={'request': self.context.get('request')}).data
