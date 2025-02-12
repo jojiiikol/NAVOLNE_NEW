@@ -4,7 +4,7 @@ const ProgressBar = (props) => {
     const { completed, completed_money, need_money, code } = props;
 
     const containerStyles = {
-        height: 20,
+        height: 25,
         width: '100%',
         backgroundColor: '#e0e0de',
         borderRadius: 50,
@@ -47,13 +47,11 @@ const ProgressBar = (props) => {
         fontWeight: 'bold',
         left: '1%',
         top: '0%',
-        textAlign: 'center',
     };
     const labelStyles2 = {
         padding: 10,
         color: 'black',
         fontWeight: 'bold',
-        textAlign: 'center',
     };
 
     return (
@@ -78,7 +76,7 @@ const ProgressBar = (props) => {
                                 {completed_money / need_money > 0.1 && (
                                     <span
                                         style={labelStyles}
-                                        className="align-self-center"
+                                        className="d-inline-flex justify-content-center align-items-center"
                                     >{`${completed}%`}</span>
                                 )}
                             </div>
@@ -88,7 +86,7 @@ const ProgressBar = (props) => {
                                 {completed_money / need_money > 0.1 && (
                                     <span
                                         style={labelStyles}
-                                        className="align-self-center"
+                                        className="d-inline-flex justify-content-center align-items-center"
                                     >{`${completed}%`}</span>
                                 )}
                             </div>
@@ -114,10 +112,10 @@ const ProgressBar = (props) => {
                         {completed_money / need_money < 1 && (
                             <div style={fillerStyles}>
                                 {completed_money / need_money > 0.1 && (
-                                    <span
+                                    <p
                                         style={labelStyles}
-                                        className="align-self-center"
-                                    >{`${completed}%`}</span>
+                                        className="d-inline-flex justify-content-center align-content-center me-1"
+                                    >{`${completed}%`}</p>
                                 )}
                             </div>
                         )}
@@ -126,7 +124,7 @@ const ProgressBar = (props) => {
                                 {completed_money / need_money > 0.1 && (
                                     <span
                                         style={labelStyles}
-                                        className="align-self-center"
+                                        className="d-inline-flex justify-content-center align-items-center "
                                     >{`${completed}%`}</span>
                                 )}
                             </div>

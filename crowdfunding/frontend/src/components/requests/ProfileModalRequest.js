@@ -7,6 +7,7 @@ const ProfileModalRequest = ({ show, onHide, id }) => {
     const [formData, setFormData] = useState({}); // Состояние данных формы
     const [isLoading, setIsLoading] = useState(false); // Состояние загрузки
     const [data, setData] = useState();
+ 
     const handleChange = (event) => {
         setFormData({ ...formData, [event.target.name]: event.target.value });
         //console.log(event.target.name, ':', event.target.value);
@@ -20,7 +21,8 @@ const ProfileModalRequest = ({ show, onHide, id }) => {
     };
     const { current: myArray } = useRef(['one', 'two', 'three']);
     useEffect(() => {
-        if (!id) return; // Проверяем, существует ли id, прежде чем делать запрос
+			if (!id) return; // Проверяем, существует ли id, прежде чем делать запрос
+			 setFormData({ ...formData, confirmed: false });
         const fetchData = async () => {
             try {
                 setIsLoading(true); // Включаем индикатор загрузки

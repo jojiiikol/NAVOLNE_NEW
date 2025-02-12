@@ -7,7 +7,7 @@ const ContactCard = (props) => {
     return (
         <div>
             <Card
-                style={{ width: '400px' }}
+                style={{ width: '23rem' }}
                 className="shadow border-0 rounded-4"
             >
                 <Card.Body>
