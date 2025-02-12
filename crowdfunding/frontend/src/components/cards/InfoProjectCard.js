@@ -19,17 +19,36 @@ const InfoProjectCard = (props) => {
                                 <span className="text-secondary fs-5 text-uppercase">
                                     Описание
                                 </span>
-                                <div className="d-flex mt-0 mb-2">
-                                    {category.map((category, index) => (
-                                        <div
-                                            className="badge bg-primary text-wrap ms-1 mb-1"
-                                            style={{ width: '6rem' }}
-                                            key={index}
-                                        >
-                                            {category}
-                                        </div>
-                                    ))}
-                                </div>
+                                {status_code != 2 && status_code != 3 && (
+                                    <div
+                                        className="d-flex"
+                                        style={{ height: '40px' }}
+                                    >
+                                        {category[0] && (
+                                            <span
+                                                className="badge bg-primary  ms-1 mb-1 d-inline-flex justify-content-center align-items-center"
+                                                style={{}}
+                                            >
+                                                {category[0]}
+                                            </span>
+                                        )}
+                                    </div>
+                                )}
+                                {status_code != 1 && status_code != 0 && (
+                                    <div
+                                        className="d-flex"
+                                        style={{ height: '40px' }}
+                                    >
+                                        {category[0] && (
+                                            <span
+                                                className="badge bg-warning  ms-1 mb-1 d-inline-flex justify-content-center align-items-center"
+                                                style={{}}
+                                            >
+                                                {category[0]}
+                                            </span>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                             <p>{description}</p>
                         </ListGroup.Item>
