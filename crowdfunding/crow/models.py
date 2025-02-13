@@ -12,6 +12,7 @@ class IP(models.Model):
     def __str__(self):
         return self.ip
 
+
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
@@ -32,12 +33,14 @@ class User(AbstractUser):
     skill = models.ManyToManyField(Skill, help_text="Уменя пользователя")
     sex = models.CharField(blank=True, null=True, max_length=1, help_text="Пол пользователя. М/Ж")
     city = models.CharField(blank=True, null=True, max_length=170, help_text="Город проживания")
-    company = models.CharField(blank=True, null=True, max_length=255, help_text="Компания в которой работает пользователь")
+    company = models.CharField(blank=True, null=True, max_length=255,
+                               help_text="Компания в которой работает пользователь")
     passport = models.CharField(blank=True, null=True, max_length=10, help_text="Паспортные данные пользователя")
     document = models.CharField(blank=True, null=True, max_length=50, help_text="Документ пользователя")
     image = models.ImageField(upload_to="users/", blank=True, default='users/user.png')
     money = models.FloatField(blank=True, null=False, default=0, help_text="Актнуальный счет пользователя")
-    total_money_sent = models.FloatField(blank=True, null=False, default=0, help_text="Сколько всего задонатил пользователь")
+    total_money_sent = models.FloatField(blank=True, null=False, default=0,
+                                         help_text="Сколько всего задонатил пользователь")
     category = models.ManyToManyField(Category, help_text="Интересные категории проектов для пользователя")
     confirmed = models.BooleanField(default=False, null=False, help_text="Подтвержден дли пользователь в системе")
     email_verified = models.BooleanField(default=False, null=False, help_text="Подтверждена ли почта пользователя")
@@ -71,9 +74,12 @@ class Project(models.Model):
     slug = models.SlugField(max_length=255, unique=True, db_index=True)
     views = models.IntegerField(default=0)
     confirmed = models.BooleanField(default=False, null=False)
-    closure_type = models.CharField(blank=False, null=False, max_length=10, default="BY_AMOUNT", help_text="Тип закрытия проекта. BY_AMOUNT - закрытие сбора по определенной сумме, BY_TIME - закрытие сбора по истечении времени")
-    status_code = models.ForeignKey(ProjectStatusCode, on_delete=models.CASCADE, null=True,  help_text="Статус код проекта. 0 - не поступил в работу, 1 - в работе, 2 - сбор приостановлен, 3 - в архиве")
-    transfer_allowed = models.BooleanField(default=False, null=False, help_text="Поле для разрешения снятии средств с проекта")
+    closure_type = models.CharField(blank=False, null=False, max_length=10, default="BY_AMOUNT",
+                                    help_text="Тип закрытия проекта. BY_AMOUNT - закрытие сбора по определенной сумме, BY_TIME - закрытие сбора по истечении времени")
+    status_code = models.ForeignKey(ProjectStatusCode, on_delete=models.CASCADE, null=True,
+                                    help_text="Статус код проекта. 0 - не поступил в работу, 1 - в работе, 2 - сбор приостановлен, 3 - в архиве")
+    transfer_allowed = models.BooleanField(default=False, null=False,
+                                           help_text="Поле для разрешения снятии средств с проекта")
     views = models.ManyToManyField(IP, related_name='project_views')
 
     class Meta:
@@ -97,8 +103,6 @@ class Project(models.Model):
     def set_allowed_transfer_status(self):
         self.transfer_allowed = True
         self.save()
-
-
 
     def get_absolute_url(self):
         return reverse('project_view', kwargs={'slug': self.slug})
@@ -124,14 +128,13 @@ class ProjectConfirmAnswer(models.Model):
     def __str__(self):
         return f"{self.project}"
 
+
 class CashingOutProject(models.Model):
     project = models.ForeignKey(Project, on_delete=models.PROTECT, related_name='cashing_out_project')
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='cashing_out_user')
     money = models.FloatField(null=False, default=0)
     actual_amount = models.FloatField(null=False, default=0)
     create_date = models.DateTimeField(null=True, blank=True)
-
-
 
 
 class ProjectChangeRequest(models.Model):
@@ -246,10 +249,12 @@ class ResetPasswordToken(models.Model):
     def __str__(self):
         return self.user.username
 
+
 class CommissionRules(models.Model):
     min_percentage = models.FloatField(null=True, blank=True)
     max_percentage = models.FloatField(null=True, blank=True)
     commission_rate = models.FloatField(null=True, blank=True)
+
 
 class AccountReplenishment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -263,6 +268,7 @@ class AccountReplenishment(models.Model):
     def __str__(self):
         return f"{self.user} + {self.amount}, id={self.payment_id}"
 
+
 class Payout(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     amount = models.FloatField(null=True, blank=True)
@@ -274,3 +280,17 @@ class Payout(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.amount}р, id={self.payout_token}"
+
+
+class Post(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.PROTECT, related_name='posts')
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    name = models.CharField(max_length=255)
+    image = models.ImageField(upload_to="posts/", blank=True, default="posts/no_image.jpg")
+    description = models.CharField()
+    date = models.DateField()
+
+
+class ImageToPost(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.PROTECT, related_name='post_images')
+    image = models.ImageField(upload_to="posts/", blank=True)

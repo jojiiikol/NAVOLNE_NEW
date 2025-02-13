@@ -12,7 +12,7 @@ from rest_framework.validators import UniqueValidator
 
 from crow.models import Project, Category, Transaction, ProjectChangeRequest, User, AnswerProjectChangeRequest, \
     ProjectConfirmAnswer, ProjectImages, \
-    NewImageToProject, ProjectStatusCode, ProjectClosureRequest, CashingOutProject, Payout
+    NewImageToProject, ProjectStatusCode, ProjectClosureRequest, CashingOutProject, Payout, Post, ImageToPost
 from crow.serializers.listings_serializer import CategoryListing, SkillListing, GroupSerializerForAdditionalView, \
     ProjectStatusCodeSerializer
 from crow.serializers.profile_serializer import UserSerializer
@@ -161,10 +161,7 @@ class ProjectConfirmSerializer(serializers.ModelSerializer):
         if project.confirmed:
             project.set_inwork_status()
         project.save()
-    # def to_representation(self, instance):
-    #     representation = super().to_representation(instance)
-    #     representation['project'] = ProjectSerializer((instance.project), context={"request": self.context.get('request')}).data
-    #     return representation
+
 
 
 class ConfirmProjectSerializer(serializers.ModelSerializer):
@@ -356,6 +353,46 @@ class ChangeProjectRequestSerializer(serializers.ModelSerializer):
             for image in new_images:
                 NewImageToProject.objects.create(project_change_request=change_request, image=image['image'])
         return change_request
+
+
+class ImagePostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ImageToPost
+        fields = ('pk', 'image')
+
+
+class PostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = (
+            'pk', 'user', 'name', 'description', 'image', 'date', 'post_images', 'url'
+        )
+
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    name = serializers.CharField(required=True)
+    description = serializers.CharField(required=True)
+    image = serializers.ImageField(required=False)
+    date = serializers.DateField(required=False)
+    post_images = ImagePostSerializer(many=True, required=False)
+    url = serializers.SerializerMethodField()
+
+    def get_url(self, obj):
+        return reverse('post-detail', kwargs={'pk': obj.pk}, request=self.context.get('request'))
+
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['user'] = UserSerializer(instance.user, context={"request": self.context.get('request')}).data
+        return representation
+
+    def create(self, validated_data):
+        images = validated_data.pop('post_images', [])
+        validated_data['date'] = timezone.now().date()
+        post = super().create(validated_data)
+        for image in images:
+            ImageToPost.objects.create(image=image['image'], post=post)
+        return post
+
 
 
 class AdditionalUserSerializerForOwner(serializers.ModelSerializer):

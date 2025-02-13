@@ -11,8 +11,8 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import VerificationToken
-from .paginators import AllProjectsPaginator
+from .models import VerificationToken, Post
+from .paginators import AllProjectsPaginator, AllPostsPaginator
 from crow.serializers.project_serializer import *
 from crow.serializers.profile_serializer import *
 from crow.serializers.listings_serializer import *
@@ -24,6 +24,10 @@ from .transactions import cash_out_project
 from .utils import check_token_timelife, change_transfer_status, save_ip_view
 from .tasks import send_message_verification_email, create_check_payment_status_task, create_check_payout_status_task
 from .yookassa_crow.payout import create_payout
+
+# TODO: Кинуть id на заявки подтверждения проектов
+# TODO: Ограничение 1 мб на фото
+# TODO: Корпоративная почта
 
 # TODO: ----------НОВОСТИ НА ПРОЕКТ----------
 # TODO: Человек может постить новости о проекте
@@ -195,6 +199,30 @@ class ProjectViewSet(mixins.ListModelMixin,
         except Exception as e:
             return Response({'data': 'Операция невозможна'}, status=status.HTTP_400_BAD_REQUEST)
 
+    @extend_schema(summary="Добавление поста к проекту",
+                   description="Может делать тольок создатель проекта",
+                   request=PostSerializer
+                   )
+    @action(methods=['POST'], detail=True)
+    def add_post(self, request, *args, **kwargs):
+        project = self.get_object()
+        data = request.data
+        serializer_data = PostSerializer(data=data, context={'request': request})
+        if serializer_data.is_valid():
+            serializer_data.save(project=project)
+            return Response(serializer_data.data, status=status.HTTP_200_OK)
+        return Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @extend_schema(summary="Получение списка постов проекта",
+                   )
+    @action(methods=['GET'], detail=True)
+    def get_post(self, request, *args, **kwargs):
+        project = self.get_object()
+        posts = Post.objects.filter(project=project).order_by('-date')
+        serializer = PostSerializer(posts, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 
 
 
@@ -206,8 +234,6 @@ class ProjectChangeRequestViewSet(mixins.ListModelMixin,
     queryset = ProjectChangeRequest.objects.all().order_by("-pk")
     serializer_class = ChangeProjectRequestSerializer
 
-    # filter_backends = [DjangoFilterBackend]
-    # filterset_fields = ['confirmed', ]
 
     def get_permissions(self):
         return get_project_change_request_view_permissions(self)
@@ -261,6 +287,24 @@ class ProjectChangeRequestViewSet(mixins.ListModelMixin,
         answer = AnswerProjectChangeRequest.objects.filter(change_request=change_request).order_by('-answer_date')
         serializer = AnswerChangeProjectRequestSerializer(answer, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class PostViewSet(mixins.ListModelMixin,
+                  mixins.RetrieveModelMixin,
+                  viewsets.GenericViewSet):
+
+    queryset = Post.objects.all().order_by('-pk')
+    serializer_class = PostSerializer
+    pagination_class = AllPostsPaginator
+
+    @extend_schema(summary="Список всех постов проектов",
+                   )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    @extend_schema(summary="Получение поста проекта",
+                   )
+    def retrieve(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
 
 
 class ProfileViewSet(mixins.ListModelMixin,

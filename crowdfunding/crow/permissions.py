@@ -121,6 +121,10 @@ def get_project_view_permissions(view):
         permission_classes = [IsAdminUser]
     if view.action == 'cash_out':
         permission_classes = [IsOwner & IsCashOutAllowed]
+    if view.action == 'add_post':
+        permission_classes = [IsOwner & IsProjectConfirmed]
+    if view.action == 'get_post':
+        permission_classes = [IsProjectConfirmed]
     return [permission() for permission in permission_classes]
 
 

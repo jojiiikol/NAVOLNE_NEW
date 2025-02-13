@@ -1,6 +1,6 @@
 from rest_framework import routers
 from .views import ProjectViewSet, ProjectChangeRequestViewSet, ProfileViewSet, ProfileChangeRequestViewSet, \
-    ProjectClosureRequestViewSet
+    ProjectClosureRequestViewSet, PostViewSet
 
 projects_router = routers.SimpleRouter()
 projects_router.register(r'projects', ProjectViewSet)
@@ -16,3 +16,6 @@ profile_change_requests_router.register(r'profile_change_requests', ProfileChang
 
 project_closure_request_router = routers.SimpleRouter()
 project_closure_request_router.register(r'project_closure_requests', ProjectClosureRequestViewSet)
+
+post_router = routers.SimpleRouter()
+post_router.register(r'posts', PostViewSet)
