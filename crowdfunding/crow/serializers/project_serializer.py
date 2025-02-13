@@ -12,7 +12,7 @@ from rest_framework.validators import UniqueValidator
 
 from crow.models import Project, Category, Transaction, ProjectChangeRequest, User, AnswerProjectChangeRequest, \
     ProjectConfirmAnswer, ProjectImages, \
-    NewImageToProject, ProjectStatusCode, ProjectClosureRequest, CashingOutProject, Payout, Post, ImageToPost
+    NewImageToProject, ProjectStatusCode, ProjectClosureRequest, Post, ImageToPost
 from crow.serializers.listings_serializer import CategoryListing, SkillListing, GroupSerializerForAdditionalView, \
     ProjectStatusCodeSerializer
 from crow.serializers.profile_serializer import UserSerializer
@@ -188,7 +188,7 @@ class ProjectClosureRequestSerializer(serializers.ModelSerializer):
 class AnswerProjectClosureRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectClosureRequest
-        fields = ['admin', 'description', 'allowed', 'answer_date', 'url']
+        fields = ['pk', 'admin', 'description', 'allowed', 'answer_date', 'url']
 
     admin = serializers.HiddenField(default=serializers.CurrentUserDefault())
     description = serializers.CharField(required=False, max_length=1000)
@@ -474,7 +474,6 @@ class AdditionalUserSerializerForOther(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         projects = Project.objects.filter(user=instance, confirmed=True).order_by("-start_date")
-        print(projects)
         representation['projects'] = ProjectSerializer(projects, many=True,
                                                        context={'request': self.context.get('request')}).data
         return representation

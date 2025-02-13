@@ -25,12 +25,9 @@ from .utils import check_token_timelife, change_transfer_status, save_ip_view
 from .tasks import send_message_verification_email, create_check_payment_status_task, create_check_payout_status_task
 from .yookassa_crow.payout import create_payout
 
-# TODO: Кинуть id на заявки подтверждения проектов
 # TODO: Ограничение 1 мб на фото
 # TODO: Корпоративная почта
 
-# TODO: ----------НОВОСТИ НА ПРОЕКТ----------
-# TODO: Человек может постить новости о проекте
 # TODO: Поменять порядок по дате в моих проектах
 
 
@@ -333,7 +330,6 @@ class ProfileViewSet(mixins.ListModelMixin,
             if self.get_object().confirmed is False and self.request.user.is_staff is False:
                 return Response(status=status.HTTP_404_NOT_FOUND)
             self.serializer_class = AdditionalUserSerializerForOther
-            print(self.serializer_class)
         return super().retrieve(request, *args, **kwargs)
 
     @extend_schema(summary="Регистрация",
