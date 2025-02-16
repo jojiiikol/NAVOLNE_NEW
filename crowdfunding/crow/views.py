@@ -26,22 +26,19 @@ from .tasks import send_message_verification_email, create_check_payment_status_
 from .yookassa_crow.payout import create_payout
 
 # TODO: Ограничение 1 мб на фото
+# TODO: Переделать авторизацию по email
 # TODO: Корпоративная почта
 
-# TODO: Поменять порядок по дате в моих проектах
-
-
-# TODO: Отрефачить логику попытки удаления заявки на изменения при ответе админа, перенести в пермишины
-# TODO: Пересоздать миграции
+# TODO: Поменять порядок по дате в моих проектах ---> Это нужно менать порядок в модели
 
 # TODO: ----------КЭШ----------
-# TODO: Ускорение путем удаления при добавлении/изменении
+# TODO: Накинуть на посты
 
 
 # TODO: ----------ДЕПЛОЙ----------
 # TODO: Настроить SOCKET_TIMEOUT
 # TODO: Настроить логгирование SENTRY
-# TODO: Разобраться с SSL сертификатом ---> certbot?
+
 
 
 class ProjectViewSet(mixins.ListModelMixin,
