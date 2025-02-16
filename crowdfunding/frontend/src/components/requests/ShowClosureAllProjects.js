@@ -65,7 +65,7 @@ const ShowClosureAllProjects = () => {
                                 <td>
                                     <Button
                                         onClick={handleClick}
-                                        value={request.project.pk}
+                                        value={request.pk}
                                         name={request.project.slug}
                                     >
                                         Просмотреть заявку
