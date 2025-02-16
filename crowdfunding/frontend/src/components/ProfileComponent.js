@@ -19,6 +19,7 @@ import url from '../globalURL';
 import MoneyWithdrawal from './payment/MoneyWithdrawal';
 import MoneyAdd from './payment/MoneyAdd';
 import AboutProfileCard from './cards/AboutProfileCard';
+import getEmailMessage from './requests/getEmailMessage';
 const ProfileComponent = () => {
     const { profilename } = useParams();
     const [data, setData] = useState(null);
@@ -112,6 +113,12 @@ const ProfileComponent = () => {
                                                 {data.last_name}{' '}
                                                 {data.first_name}
                                             </Card.Text>
+                                            {!data.confirmed && (
+                                                <Card.Text className="text-secondary">
+                                                    {' '}
+                                                    *пользователь не подтвержден
+                                                </Card.Text>
+                                            )}
                                         </ListGroup.Item>
                                         <ListGroup.Item></ListGroup.Item>
                                     </ListGroup>
@@ -144,6 +151,19 @@ const ProfileComponent = () => {
                                                     />
                                                 )}
                                             </div>
+                                            {!data.email_verified && (
+                                                <div className="mt-2 d-flex justify-content-center">
+                                                    {' '}
+                                                    <Button
+                                                        variant="secondary"
+                                                        onClick={
+                                                            getEmailMessage
+                                                        }
+                                                    >
+                                                        Подтвердить почту
+                                                    </Button>
+                                                </div>
+                                            )}
                                             {data.confirmed && (
                                                 <div className="d-grid gap-2">
                                                     {' '}

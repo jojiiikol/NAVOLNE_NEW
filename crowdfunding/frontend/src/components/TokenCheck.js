@@ -1,18 +1,3 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import {
-    Container,
-    Image,
-    Button,
-    ListGroup,
-    ListGroupItem,
-    Badge,
-    CardHeader,
-    Card,
-    CardBody,
-    Row,
-    Col,
-} from 'react-bootstrap';
 import url from '../globalURL';
 const TokenCheck = () => {
     if (localStorage.getItem('accessToken')) {
