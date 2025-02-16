@@ -55,6 +55,9 @@ const MoneyAdd = ({ show, onHide, totalmoney }) => {
         if (event.target.value < 10) {
             setIsLoading(true);
         }
+        if (event.target.value > 350000) {
+            setIsLoading(true);
+        }
     };
     return (
         <div>
@@ -77,7 +80,7 @@ const MoneyAdd = ({ show, onHide, totalmoney }) => {
                                 value={money || ''}
                                 onChange={handleChange}
                                 type="number"
-                                placeholder="Введите сумму"
+                                placeholder="Введите сумму не более 350000 руб."
                             />
                         </Form.Group>
                     </Form>
