@@ -181,6 +181,7 @@ const ProfileComponent = () => {
                                 date_joined={data.date_joined}
                                 total_money_sent={data.total_money_sent}
                                 about={data.about}
+                                skills={data.skill}
                             />
                         </Col>
                         <Col>

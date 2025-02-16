@@ -11,6 +11,7 @@ const AboutProfileCard = (props) => {
         date_joined,
         total_money_sent,
         about,
+        skills,
     } = props;
     return (
         <div>
@@ -72,6 +73,32 @@ const AboutProfileCard = (props) => {
                                 <p className="fs-5 fw-bolder text-secondary align-content-center  ms-2 mb-0 ">
                                     {total_money_sent}
                                 </p>
+                            </div>
+                            <div className="d-flex" style={{ height: '40px' }}>
+                                {skills[0] && (
+                                    <span
+                                        className="badge bg-primary mt-2  d-inline-flex justify-content-center align-items-center"
+                                        style={{}}
+                                    >
+                                        {skills[0]}
+                                    </span>
+                                )}
+                                {skills[1] && (
+                                    <div
+                                        className="badge bg-primary  mt-2 ms-1  d-inline-flex justify-content-center align-items-center"
+                                        style={{}}
+                                    >
+                                        {skills[1]}
+                                    </div>
+                                )}
+                                {skills[2] && (
+                                    <div
+                                        className="badge bg-primary  mt-2 ms-1  d-inline-flex justify-content-center align-items-center"
+                                        style={{}}
+                                    >
+                                        {skills[2]}
+                                    </div>
+                                )}
                             </div>
                         </ListGroup.Item>
                         <ListGroup.Item>

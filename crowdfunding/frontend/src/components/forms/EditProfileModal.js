@@ -35,37 +35,51 @@ const EditProfileModal = ({ show, onHide, username }) => {
             if (key == 'image') {
                 formDataObject.append(key, event.target.image.files[0]);
             } else if (key == 'skills') {
-                if (skills2.length !== 0) {
-                    skills2.forEach((cat) =>
-                        formDataObject.append('skill', cat)
-                    );
-                }
             } else {
                 formDataObject.append(key, formData[key]);
                 console.log(key, ':', formData[key]);
             }
         });
-        //formDataObject.append('username', 'govno');
         const accessToken = localStorage.getItem('accessToken');
-        try {
-            await fetch(url + `/profiles/${username}/change/`, {
-                method: 'POST',
-                headers: {
-                    //'Content-Type': 'multipart/form-data',
-                    Authorization: 'Bearer ' + accessToken,
-                },
+        if (formDataObject.entries().next().value) {
+            try {
+                await fetch(url + `/profiles/${username}/change/`, {
+                    method: 'POST',
+                    headers: {
+                        //'Content-Type': 'multipart/form-data',
+                        Authorization: 'Bearer ' + accessToken,
+                    },
 
-                body: formDataObject,
-            });
-            alert('Модератор рассмотрит вашу заявку');
-            onHide();
-            // Закрываем модальное окно после успешного сохранения
-        } catch (error) {
-            console.error('Ошибка при отправке запроса на сервер:', error);
-        } finally {
-            setIsLoading(false);
+                    body: formDataObject,
+                });
+
+                // Закрываем модальное окно после успешного сохранения
+            } catch (error) {
+                console.error('Ошибка при отправке запроса на сервер:', error);
+            } finally {
+                setIsLoading(false);
+            }
         }
+        if (skills2.length !== 0) {
+            const formDataSkills = new FormData();
+            skills2.forEach((cat) => formDataSkills.append('skill', cat));
+            try {
+                await fetch(url + `/profiles/${username}/`, {
+                    method: 'PATCH',
+                    headers: {
+                        //'Content-Type': 'multipart/form-data',
+                        Authorization: 'Bearer ' + accessToken,
+                    },
 
+                    body: formDataSkills,
+                });
+            } catch (error) {
+                console.error('Ошибка при отправке запроса на сервер:', error);
+            }
+        }
+        //formDataObject.append('username', 'govno');
+        alert('Модератор рассмотрит вашу заявку');
+        onHide();
         // window.location.href = `/profile/` + username;
     };
 
@@ -79,9 +93,7 @@ const EditProfileModal = ({ show, onHide, username }) => {
             skills.splice(index, 1);
         }
         setSkills(skills);
-        if (skills2.length !== 0) {
-            setFormData({ ...formData, skills: skills2 });
-        }
+        console.log(skills);
     };
 
     return (
