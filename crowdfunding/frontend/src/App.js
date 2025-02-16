@@ -14,7 +14,7 @@ function App() {
         <div>
             <SimpleBar style={{ maxHeight: 1000 }}>
                 <Header></Header>
-                <Footer></Footer>
+                <Footer />
             </SimpleBar>
         </div>
     );

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Container, Card, Col, Row } from 'react-bootstrap';
-import ProgressBar from '../components/progress-bar.component';
+import { Container, Col, Row } from 'react-bootstrap';
+
 import MyCard from '../components/cards/CardComponent';
 import '../css/home.css';
 import footage from '../images/surgut.mp4';
-import { Link } from 'react-router-dom';
+
 import url from '../globalURL';
+
 class Home extends Component {
     constructor(props) {
         super(props);

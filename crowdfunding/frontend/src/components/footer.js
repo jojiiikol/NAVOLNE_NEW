@@ -1,20 +1,33 @@
-import React, { Component } from 'react'
-import { MDBFooter } from 'mdb-react-ui-kit';
+import { Navbar } from 'react-bootstrap';
+import logo from '../logo512.png';
 
-export default class footer extends Component {
-	
-	render() {
-		return (
-			<>
-		    <MDBFooter bgColor='light' className='text-center text-lg-left mt-2'>
-      <div className='text-center p-3 mt-auto' style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)'}}>
-        &copy; {new Date().getFullYear()} Права защищены:{' '}
-        <a className='text-dark' href='/Home'>
-          NA VOLNE
-        </a>
-      </div>
-    </MDBFooter>
-			</>
-		)
-	}
-}
+const Footer = () => {
+    console.log('sad');
+    return (
+        <Navbar
+            sticky="bottom"
+            bg="white"
+            variant="light"
+            className="d-flex justify-content-center"
+            style={{
+                boxShadow: '0px 0px 10px #a8a8a8',
+            }}
+        >
+            <Navbar.Brand className="text-secondary">
+                &copy; Права защищены:
+            </Navbar.Brand>
+            <Navbar.Brand href="/home" className="fw-bold">
+                <img
+                    src={logo}
+                    height="30"
+                    width="30"
+                    className="d-inline-block align-top"
+                    alt="Logo"
+                />{' '}
+                NA VOLNE
+            </Navbar.Brand>
+        </Navbar>
+    );
+};
+
+export default Footer;

@@ -151,19 +151,6 @@ const ProfileComponent = () => {
                                                     />
                                                 )}
                                             </div>
-                                            {!data.email_verified && (
-                                                <div className="mt-2 d-flex justify-content-center">
-                                                    {' '}
-                                                    <Button
-                                                        variant="secondary"
-                                                        onClick={
-                                                            getEmailMessage
-                                                        }
-                                                    >
-                                                        Подтвердить почту
-                                                    </Button>
-                                                </div>
-                                            )}
                                             {data.confirmed && (
                                                 <div className="d-grid gap-2">
                                                     {' '}
@@ -185,6 +172,19 @@ const ProfileComponent = () => {
                                                             Админ панель
                                                         </Button>
                                                     )}
+                                                </div>
+                                            )}
+                                            {!data.email_verified && (
+                                                <div className="mt-2 d-grid gap-2">
+                                                    {' '}
+                                                    <Button
+                                                        variant="secondary"
+                                                        onClick={
+                                                            getEmailMessage
+                                                        }
+                                                    >
+                                                        Подтвердить почту
+                                                    </Button>
                                                 </div>
                                             )}
                                         </div>

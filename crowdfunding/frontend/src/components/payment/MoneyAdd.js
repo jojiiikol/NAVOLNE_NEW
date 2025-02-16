@@ -82,6 +82,9 @@ const MoneyAdd = ({ show, onHide, totalmoney }) => {
                                 type="number"
                                 placeholder="Введите сумму не более 350000 руб."
                             />
+                            <Form.Text className="text-secondary">
+                                *деньги поступят на ваш счёт через пару минут
+                            </Form.Text>
                         </Form.Group>
                     </Form>
 
