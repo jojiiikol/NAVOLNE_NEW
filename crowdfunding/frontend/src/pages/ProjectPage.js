@@ -14,7 +14,7 @@ import Carousel from 'react-bootstrap/Carousel';
 import ProgressBar from '../components/cards/progress-bar.component';
 import EditProjectModal from '../components/forms/EditProjectModal';
 import ContactCard from '../components/cards/CardContactsComponent';
-import PaymentComponent from '../components/PaymentComponent';
+import PaymentComponent from '../components/payment/PaymentComponent';
 import InfoProjectCard from '../components/cards/InfoProjectCard';
 import ConfirmModalProject from '../components/requests/ConfirmModalProject';
 import url from '../components/functions/globalURL';

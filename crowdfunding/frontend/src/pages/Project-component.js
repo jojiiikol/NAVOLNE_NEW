@@ -10,7 +10,7 @@ import {
 import { Link } from 'react-router-dom';
 import '../css/home.css';
 import MyCard from '../components/cards/CardComponent.js';
-import PaymentComponent from '../components/PaymentComponent.js';
+import PaymentComponent from '../components/payment/PaymentComponent.js';
 import url from '../components/functions/globalURL.js';
 const PaginationComponent = () => {
     const [data, setData] = useState([]);

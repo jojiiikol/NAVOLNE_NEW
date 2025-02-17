@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useEffect } from 'react';
-import url from './functions/globalURL';
+import url from '../functions/globalURL';
 const PaymentComponent = ({ show, onHide, slug }) => {
     const [formData, setFormData] = useState({}); // Состояние данных формы
     const [isLoading, setIsLoading] = useState(false); // Состояние загрузки
