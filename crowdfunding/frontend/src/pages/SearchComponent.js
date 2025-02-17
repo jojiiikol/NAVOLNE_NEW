@@ -10,9 +10,9 @@ import {
     ListGroup,
     Form,
 } from 'react-bootstrap';
-import ProgressBar from './progress-bar.component';
-import url from '../globalURL';
-import MyCard from './cards/MiniProjectCard';
+import ProgressBar from '../components/cards/progress-bar.component';
+import url from '../components/functions/globalURL';
+import MyCard from '../components/cards/MiniProjectCard';
 const SearchComponent = () => {
     const { slug } = useParams();
     const [data, setData] = useState(null);

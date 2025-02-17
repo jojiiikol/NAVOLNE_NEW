@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container, Card, Col, Row, Button } from 'react-bootstrap';
-import ProgressBar from '../components/progress-bar.component.js';
+import ProgressBar from '../components/cards/progress-bar.component.js';
 import {
     MDBPagination,
     MDBPaginationItem,
@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 import '../css/home.css';
 import MyCard from '../components/cards/CardComponent.js';
 import PaymentComponent from '../components/PaymentComponent.js';
-import url from '../globalURL';
+import url from '../components/functions/globalURL.js';
 const PaginationComponent = () => {
     const [data, setData] = useState([]);
     const [nextPage, setNextPage] = useState(null);

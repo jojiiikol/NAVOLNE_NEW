@@ -13,13 +13,13 @@ import {
     Row,
     Col,
 } from 'react-bootstrap';
-import EditProfileModal from './forms/EditProfileModal';
-import MyCard from './cards/MiniProjectCard';
-import url from '../globalURL';
-import MoneyWithdrawal from './payment/MoneyWithdrawal';
-import MoneyAdd from './payment/MoneyAdd';
-import AboutProfileCard from './cards/AboutProfileCard';
-import getEmailMessage from './requests/getEmailMessage';
+import EditProfileModal from '../components/forms/EditProfileModal';
+import MyCard from '../components/cards/MiniProjectCard';
+import url from '../components/functions/globalURL';
+import MoneyWithdrawal from '../components/payment/MoneyWithdrawal';
+import MoneyAdd from '../components/payment/MoneyAdd';
+import AboutProfileCard from '../components/cards/AboutProfileCard';
+import getEmailMessage from '../components/requests/getEmailMessage';
 const ProfileComponent = () => {
     const { profilename } = useParams();
     const [data, setData] = useState(null);
@@ -202,6 +202,7 @@ const ProfileComponent = () => {
                                 total_money_sent={data.total_money_sent}
                                 about={data.about}
                                 skills={data.skill}
+                                is_owner={data.is_owner}
                             />
                         </Col>
                         <Col>

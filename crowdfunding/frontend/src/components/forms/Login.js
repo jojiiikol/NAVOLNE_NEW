@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import url from '../../globalURL';
+import url from '../functions/globalURL';
 export default class Login extends Component {
     constructor(props) {
         super(props);

@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Button, Form, Modal, ListGroup } from 'react-bootstrap';
 
-import url from '../../globalURL';
+import url from '../functions/globalURL';
 
 const TransferMoney = ({ show, onHide, slug }) => {
     const [isLoading, setIsLoading] = useState(false); // Состояние загрузки

@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Button, Form, Modal, ListGroup } from 'react-bootstrap';
 import { useEffect } from 'react';
-import url from '../../globalURL';
+import url from '../functions/globalURL';
 import EditedBlock from './EditedBlockProfile';
 const ModalClosureMoney = ({ show, onHide, slug }) => {
     const [isLoading, setIsLoading] = useState(false); // Состояние загрузки

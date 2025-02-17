@@ -11,16 +11,16 @@ import {
 } from 'react-bootstrap';
 import Carousel from 'react-bootstrap/Carousel';
 
-import ProgressBar from './progress-bar.component';
+import ProgressBar from '../components/cards/progress-bar.component';
 import EditProjectModal from '../components/forms/EditProjectModal';
 import ContactCard from '../components/cards/CardContactsComponent';
-import PaymentComponent from './PaymentComponent';
-import InfoProjectCard from './cards/InfoProjectCard';
-import ConfirmModalProject from './requests/ConfirmModalProject';
-import url from '../globalURL';
-import ModalClosureMoney from './requests/ModalClosureMoney';
-import MoneyAdd from './payment/MoneyAdd';
-import TransferMoney from './payment/TransferMoney';
+import PaymentComponent from '../components/PaymentComponent';
+import InfoProjectCard from '../components/cards/InfoProjectCard';
+import ConfirmModalProject from '../components/requests/ConfirmModalProject';
+import url from '../components/functions/globalURL';
+import ModalClosureMoney from '../components/requests/ModalClosureMoney';
+import MoneyAdd from '../components/payment/MoneyAdd';
+import TransferMoney from '../components/payment/TransferMoney';
 const ProjectPage = () => {
     const [showModalConfirm, setShowModalConfirm] = useState(false); // Состояние для отображения модального окна
     const openModalConfirm = () => setShowModalConfirm(true); // Функция для открытия модального окна

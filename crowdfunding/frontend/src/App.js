@@ -6,7 +6,7 @@ import Header from './components/header';
 import Footer from './components/footer';
 import SimpleBar from 'simplebar-react';
 import 'simplebar-react/dist/simplebar.min.css';
-import TokenCheck from './components/TokenCheck';
+import TokenCheck from './components/functions/TokenCheck';
 
 function App() {
     TokenCheck();
@@ -14,8 +14,8 @@ function App() {
         <div>
             <SimpleBar style={{ maxHeight: 1000 }}>
                 <Header></Header>
-                <Footer />
             </SimpleBar>
+            <Footer />
         </div>
     );
 }

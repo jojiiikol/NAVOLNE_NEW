@@ -1,11 +1,7 @@
-import React, { Component } from 'react'
-import PaginationComponent from '../components/Project-component.js';
+import React, { Component } from 'react';
+import PaginationComponent from './Project-component.js';
 export default class Projects extends Component {
-
-
-	render() {
-		return (
-			<PaginationComponent />
-		)
-	}
+    render() {
+        return <PaginationComponent />;
+    }
 }

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import url from '../globalURL';
+import url from './globalURL';
 const Verify = () => {
     const { token } = useParams(); // Получаем токен из URL
 

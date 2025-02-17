@@ -1,4 +1,4 @@
-import url from '../globalURL';
+import url from './globalURL';
 const TokenCheck = () => {
     if (localStorage.getItem('accessToken')) {
         const formDataVerify = new FormData();
