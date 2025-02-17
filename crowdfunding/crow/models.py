@@ -290,6 +290,9 @@ class Post(models.Model):
     description = models.CharField()
     date = models.DateField()
 
+    def __str__(self):
+        return f"{self.name}"
+
 
 class ImageToPost(models.Model):
     post = models.ForeignKey(Post, on_delete=models.PROTECT, related_name='post_images')

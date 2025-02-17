@@ -105,8 +105,12 @@ class AccountReplenishmentAdmin(admin.ModelAdmin):
 class PayoutAdmin(admin.ModelAdmin):
     pass
 
+class PostImagesAdmin(admin.TabularInline):
+    model = ImageToPost
+
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    inlines = [ImageToPost]
+    list_display = ('name', 'project', 'user')
+    inlines = [PostImagesAdmin]
 
 
