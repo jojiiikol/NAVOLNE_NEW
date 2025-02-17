@@ -16,6 +16,7 @@ const MoneyAdd = ({ show, onHide, totalmoney }) => {
     }, []);
 
     const handleSubmit = async (event) => {
+        //console.log('fdsf');
         //formData.username = localStorage.getItem('user');
         event.preventDefault();
         setIsLoading(true);
@@ -95,7 +96,7 @@ const MoneyAdd = ({ show, onHide, totalmoney }) => {
                             variant="primary"
                             type="submit"
                             disabled={isLoading}
-                            onTouchStart={handleSubmit}
+                            onClick={handleSubmit}
                         >
                             Далее
                         </Button>
