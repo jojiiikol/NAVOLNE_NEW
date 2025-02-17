@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Container, Table, Modal } from 'react-bootstrap';
 import ProfileModalRequest from './ProfileModalRequest';
-import url from '../../globalURL';
+import url from '../functions/globalURL';
 const ProfileChangeRequests = () => {
     const [showModal, setShowModal] = useState(false); // Состояние для отображения модального окна
 

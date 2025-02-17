@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Container, Table, Modal } from 'react-bootstrap';
 import ConfirmModalUser from './ConfirmModalUsers';
-import url from '../../globalURL';
+import url from '../functions/globalURL';
 const ConfirmUsers = () => {
     const [showModal, setShowModal] = useState(false); // Состояние для отображения модального окна
 

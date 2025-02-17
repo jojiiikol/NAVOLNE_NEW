@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Image, ListGroup } from 'react-bootstrap';
-import ProgressBar from '../progress-bar.component';
+import ProgressBar from './progress-bar.component';
 const InfoProjectCard = (props) => {
     const {
         description,

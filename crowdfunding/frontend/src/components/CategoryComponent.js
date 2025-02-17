@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, InputGroup } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import url from '../globalURL';
+import url from './functions/globalURL';
 
 const Category = () => {
     const [name, setName] = useState('');

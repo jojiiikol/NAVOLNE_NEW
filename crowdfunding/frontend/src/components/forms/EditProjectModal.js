@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useEffect } from 'react';
-import url from '../../globalURL';
+import url from '../functions/globalURL';
 
 const EditProjectModal = ({ show, onHide, slug }) => {
     const [formData, setFormData] = useState({}); // Состояние данных формы

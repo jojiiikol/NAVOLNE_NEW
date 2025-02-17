@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import url from '../../globalURL';
+import url from '../functions/globalURL';
 
 const ConfirmModalUser = ({ show, onHide, slug }) => {
     const [formData, setFormData] = useState({}); // Состояние данных формы

@@ -13,9 +13,9 @@ import {
     Row,
     Col,
 } from 'react-bootstrap';
-import EditProfileModal from './forms/EditProfileModal';
-import MyCard from './cards/MiniProjectCard';
-import url from '../globalURL';
+import EditProfileModal from '../components/forms/EditProfileModal';
+import MyCard from '../components/cards/MiniProjectCard';
+import url from '../components/functions/globalURL';
 
 const AdminComponent = () => {
     // useEffect(() => {

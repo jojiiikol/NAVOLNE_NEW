@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Container, Row, Col, InputGroup } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import url from '../../globalURL';
+import url from '../functions/globalURL';
 
 export default class Create extends Component {
     constructor(props) {

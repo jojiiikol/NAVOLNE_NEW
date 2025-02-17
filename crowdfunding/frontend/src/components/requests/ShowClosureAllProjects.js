@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Container, Table, Modal } from 'react-bootstrap';
 import ConfirmModalProject from './ConfirmModalProject';
 
-import url from '../../globalURL';
+import url from '../functions/globalURL';
 import ModalShowClosure from './ModalShowClosure';
 const ShowClosureAllProjects = () => {
     const [showModal, setShowModal] = useState(false); // Состояние для отображения модального окна

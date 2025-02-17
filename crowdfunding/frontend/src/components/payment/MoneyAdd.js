@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Button, Form, Modal, ListGroup } from 'react-bootstrap';
 import { useEffect } from 'react';
-import url from '../../globalURL';
+import url from '../functions/globalURL';
 import { WindowSidebar } from 'react-bootstrap-icons';
 
 const MoneyAdd = ({ show, onHide, totalmoney }) => {
@@ -10,6 +10,7 @@ const MoneyAdd = ({ show, onHide, totalmoney }) => {
     const [money, setMoney] = useState();
     const [flag, setFlag] = useState();
     const [formShow, setFormShow] = useState(false);
+
     useEffect(() => {
         setIsLoading(true);
     }, []);
@@ -33,13 +34,14 @@ const MoneyAdd = ({ show, onHide, totalmoney }) => {
             })
                 .then((response) => response.json())
                 .then((data) => {
+                    setIsLoading(true);
                     console.log(data.data.confirmation.confirmation_url);
                     if (data.data.confirmation.confirmation_url)
                         window.location.href =
                             data.data.confirmation.confirmation_url;
                 });
             onHide();
-            window.location.reload();
+            //window.location.reload();
         } catch (error) {
             console.error('Ошибка при отправке запроса на сервер:', error);
         } finally {
@@ -93,7 +95,7 @@ const MoneyAdd = ({ show, onHide, totalmoney }) => {
                             variant="primary"
                             type="submit"
                             disabled={isLoading}
-                            onClick={handleSubmit}
+                            onTouchStart={handleSubmit}
                         >
                             Далее
                         </Button>

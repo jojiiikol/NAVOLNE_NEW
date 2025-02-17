@@ -13,27 +13,25 @@ import { PersonFill } from 'react-bootstrap-icons';
 
 import About from '../pages/About';
 import Courses from '../pages/Courses';
-import Login from '../components/forms/Login';
 import News from '../pages/News';
 import Projects from '../pages/Projects';
-import Registration from '../components/forms/Registration';
 import Home from '../pages/Home';
-import ProfileComponent from './ProfileComponent';
-import ProjectPage from './ProjectPage';
+import ProfileComponent from '../pages/ProfileComponent';
+import ProjectPage from '../pages/ProjectPage';
 import Create from '../components/forms/CreateComponent';
-import SearchComponent from './SearchComponent';
+import SearchComponent from '../pages/SearchComponent';
 import Category from './CategoryComponent';
-import NotFoundComponent from './NotFoundComponent';
+import NotFoundComponent from './functions/NotFoundComponent';
 import AuthPage from '../pages/AuthPage';
 import ProfileChangeRequests from './requests/ProfilesChangeRequests.';
-import AdminComponent from './AdminComponent';
+import AdminComponent from '../pages/AdminComponent';
 import ProjectChangeRequests from './requests/ProjectChangeRequest';
 import ShowProfileRequests from './requests/ShowProfileRequests';
 import ConfirmedProjects from './requests/ConfirmedProjects';
 import ShowClosureAllProjects from './requests/ShowClosureAllProjects';
-import Verify from './VerifyEmail';
+import Verify from './functions/VerifyEmail';
 import ConfirmUsers from './requests/ConfirmUsers';
-import url from '../globalURL';
+
 export default class header extends Component {
     constructor(props) {
         super(props);

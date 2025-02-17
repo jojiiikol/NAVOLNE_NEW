@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import url from '../../globalURL';
+import url from '../functions/globalURL';
 const getEmailMessage = () => {
     fetch(url + '/profiles/get_email_verification_message/', {
         headers: {

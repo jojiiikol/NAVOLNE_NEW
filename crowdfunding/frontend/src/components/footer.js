@@ -5,12 +5,12 @@ const Footer = () => {
     console.log('sad');
     return (
         <Navbar
-            sticky="bottom"
             bg="white"
             variant="light"
             className="d-flex justify-content-center"
             style={{
                 boxShadow: '0px 0px 10px #a8a8a8',
+                height: '50px',
             }}
         >
             <Navbar.Brand className="text-secondary">
