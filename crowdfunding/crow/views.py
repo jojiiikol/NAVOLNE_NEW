@@ -10,6 +10,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .models import VerificationToken, Post
 from .paginators import AllProjectsPaginator, AllPostsPaginator
@@ -20,13 +21,13 @@ from crow.yookassa_crow.payment import create_payment
 from .permissions import get_project_view_permissions, \
     get_project_change_request_view_permissions, get_profile_view_permissions, \
     get_profile_change_request_view_permissions, get_closure_request_view_permissions
+
 from .transactions import cash_out_project
 from .utils import check_token_timelife, change_transfer_status, save_ip_view
 from .tasks import send_message_verification_email, create_check_payment_status_task, create_check_payout_status_task
 from .yookassa_crow.payout import create_payout
 
 # TODO: Ограничение 1 мб на фото
-# TODO: Переделать авторизацию по email
 # TODO: Корпоративная почта
 
 # TODO: Поменять порядок по дате в моих проектах ---> Это нужно менать порядок в модели

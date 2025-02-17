@@ -489,8 +489,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         RegexValidator(),
         SpecialCharactersValidator()
     ], help_text="Юзернейм пользователя")
-    email = serializers.EmailField(required=True, validators=[
-        UniqueValidator(queryset=User.objects.all(), message="Пользователь с таким email уже зарегистрирован")],
+    email = serializers.EmailField(required=True,
                                    help_text="Электронная почта пользователя")
     password_1 = serializers.CharField(write_only=True, required=True, validators=[validate_password],
                                        help_text="Пароль")
@@ -508,6 +507,11 @@ class RegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Выберите группу')
         return values
 
+    def validate_email(self, values):
+        if User.objects.filter(email__iexact=values).exists():
+            raise serializers.ValidationError('пользователь с таким email уже зарегистрирован')
+        return values
+
     def validate(self, attrs):
         if attrs['password_1'] != attrs['password_2']:
             raise serializers.ValidationError({'password': 'Пароли не совпадают'})
@@ -517,7 +521,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
         user = User.objects.create(
             username=validated_data['username'],
-            email=validated_data['email'],
+            email=validated_data['email'].lower(),
             last_name=validated_data['last_name'].lower().capitalize(),
             first_name=validated_data['first_name'].lower().capitalize(),
         )

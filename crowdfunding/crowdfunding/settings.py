@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
@@ -66,6 +66,11 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'crowdfunding.urls'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'crow.authbackend.EmailBackend',
+]
 
 TEMPLATES = [
     {
