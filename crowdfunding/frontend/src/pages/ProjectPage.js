@@ -1,17 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import {
-    Container,
-    Image,
-    Row,
-    Col,
-    Button,
-    Card,
-    CardBody,
-} from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import Carousel from 'react-bootstrap/Carousel';
 
-import ProgressBar from '../components/cards/progress-bar.component';
 import EditProjectModal from '../components/forms/EditProjectModal';
 import ContactCard from '../components/cards/CardContactsComponent';
 import PaymentComponent from '../components/payment/PaymentComponent';
@@ -21,6 +12,8 @@ import url from '../components/functions/globalURL';
 import ModalClosureMoney from '../components/requests/ModalClosureMoney';
 import MoneyAdd from '../components/payment/MoneyAdd';
 import TransferMoney from '../components/payment/TransferMoney';
+import CreatePost from '../components/forms/CreatePost';
+import PostCard from '../components/cards/PostCard';
 const ProjectPage = () => {
     const [showModalConfirm, setShowModalConfirm] = useState(false); // Состояние для отображения модального окна
     const openModalConfirm = () => setShowModalConfirm(true); // Функция для открытия модального окна
@@ -44,6 +37,7 @@ const ProjectPage = () => {
 
     const { slug } = useParams();
     const [data, setData] = useState(null);
+    const [posts, setPosts] = useState(null);
     useEffect(() => {
         const fetchData = async () => {
             const accessToken = localStorage.getItem('accessToken');
@@ -69,7 +63,18 @@ const ProjectPage = () => {
                 console.log(data);
             }
         };
+        const fetchPosts = async () => {
+            const response = await fetch(url + `/projects/${slug}/get_post/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            const data = await response.json();
+            setPosts(data);
+            console.log(data);
+        };
 
+        fetchPosts();
         fetchData();
     }, [slug]);
 
@@ -131,7 +136,7 @@ const ProjectPage = () => {
                         ))}
                     </Carousel>
 
-                    <Row className="g-4 mt-1">
+                    <Row className="g-4 mt-1 mb-5">
                         <Col md={8}>
                             {data && (
                                 <InfoProjectCard
@@ -178,6 +183,25 @@ const ProjectPage = () => {
                                             </Button>
                                             {showModal && (
                                                 <EditProjectModal
+                                                    show={true}
+                                                    onHide={closeModal}
+                                                    slug={slug}
+                                                />
+                                            )}
+                                        </div>
+                                    )}
+                                {data.is_owner &&
+                                    data.status_code.code != 0 && (
+                                        <div className="mt-1 me-1" style={{}}>
+                                            <Button
+                                                size="lg"
+                                                variant="secondary"
+                                                onClick={openModal}
+                                            >
+                                                Добавить новость
+                                            </Button>
+                                            {showModal && (
+                                                <CreatePost
                                                     show={true}
                                                     onHide={closeModal}
                                                     slug={slug}
@@ -247,7 +271,21 @@ const ProjectPage = () => {
                             </div>
                         </Col>
                     </Row>
-
+                    <span className="fw-bolder fs-1 ms-2">Новости проекта</span>
+                    <Row xs={1} md={3} className="g-4 mt-1">
+                        {posts.map((post) => (
+                            <Col>
+                                <PostCard
+                                    slug={post.pk}
+                                    name={post.name}
+                                    description={post.description}
+                                    image={post.image}
+                                    date={post.date}
+                                    user={post.user}
+                                />
+                            </Col>
+                        ))}
+                    </Row>
                     {/* <span className="fs-5 "></span> */}
                 </div>
             )}

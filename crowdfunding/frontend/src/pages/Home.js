@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { Container, Col, Row } from 'react-bootstrap';
-
 import MyCard from '../components/cards/CardComponent';
 import '../css/home.css';
 import footage from '../images/surgut.mp4';
-
 import url from '../components/functions/globalURL';
 
 class Home extends Component {

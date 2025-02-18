@@ -31,6 +31,7 @@ import ConfirmedProjects from './requests/ConfirmedProjects';
 import ShowClosureAllProjects from './requests/ShowClosureAllProjects';
 import Verify from './functions/VerifyEmail';
 import ConfirmUsers from './requests/ConfirmUsers';
+import PostPage from '../pages/PostPage';
 
 export default class header extends Component {
     constructor(props) {
@@ -64,7 +65,7 @@ export default class header extends Component {
                     }}
                 >
                     <Container>
-                        <Navbar.Brand href="/home" className="fw-bold">
+                        <Navbar.Brand href="/" className="fw-bold">
                             <img
                                 src={logo}
                                 height="30"
@@ -157,7 +158,7 @@ export default class header extends Component {
 
                         <Route exact path="/Auth" component={AuthPage} />
 
-                        <Route exact path="/Home" component={Home} />
+                        <Route exact path="/" component={Home} />
                         <Route exact path="/Create" component={Create} />
                         <Route
                             path="/profile/:profilename"
@@ -165,6 +166,7 @@ export default class header extends Component {
                         />
                         <Route path="/verify/:token" component={Verify} />
                         <Route path="/projects/:slug" component={ProjectPage} />
+                        <Route path="/posts/:slug" component={PostPage} />
                         <Route
                             path="/search/:slug"
                             component={SearchComponent}

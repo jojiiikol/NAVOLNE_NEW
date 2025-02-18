@@ -14,7 +14,7 @@ const Verify = () => {
             .then((data) => {
                 if (data.code == 'success') {
                     alert('Email подтвержден!');
-                    window.location.href = '/home'; // Перенаправляем на главную
+                    window.location.href = '/'; // Перенаправляем на главную
                 } else if (data.code == 'failure') {
                     alert('Ошибка подтверждения');
                 }

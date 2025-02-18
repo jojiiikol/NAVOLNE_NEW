@@ -31,7 +31,7 @@ const AdminComponent = () => {
         if (!isCleared) {
             localStorage.clear();
             setIsCleared(true);
-            window.location.href = `/home`;
+            window.location.href = `/`;
         }
     };
     const [showModal, setShowModal] = useState(false); // Состояние для отображения модального окна
