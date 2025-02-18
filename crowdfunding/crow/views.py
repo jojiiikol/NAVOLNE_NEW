@@ -465,6 +465,18 @@ class ProfileViewSet(mixins.ListModelMixin,
         serializer = ProjectSerializer(projects, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @extend_schema(summary="Найти юзернейм по email",
+                   )
+    @action(methods=['POST'], detail=False)
+    def get_username(self, request, *args, **kwargs):
+        try:
+            user = User.objects.get(email=request.data['email'].lower())
+            data = user.username
+            return Response(data={"username": data}, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response(data={"data": "Юзер не найден"}, status=status.HTTP_404_NOT_FOUND)
+
+
 
 class EmailVerification(APIView):
     @extend_schema(summary="Эндпоинт подтверждения почты",
