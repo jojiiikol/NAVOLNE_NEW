@@ -39,7 +39,7 @@ class News extends Component {
                     <p className="fs-2 fw-bold mb-0 ">Новости по проектам:</p>
 
                     {this.state.posts && (
-                        <Row xs={1} md={3} className="g-4 mt-2 mb-3">
+                        <Row xs={1} md={4} className="g-4 mt-2 mb-3">
                             {this.state.posts.map((post) => (
                                 <Col>
                                     <PostCard

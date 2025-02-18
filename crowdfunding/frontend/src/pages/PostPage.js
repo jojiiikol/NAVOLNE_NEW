@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col, Button, Card, ListGroup } from 'react-bootstrap';
 import Carousel from 'react-bootstrap/Carousel';
 import url from '../components/functions/globalURL';
-
+import ContactCard from '../components/cards/CardContactsComponent';
 const PostPage = () => {
     const { slug } = useParams();
     const [data, setData] = useState(null);
@@ -47,7 +47,28 @@ const PostPage = () => {
                     </Carousel>
 
                     <Row className="g-4 mt-1 mb-5">
-                        <Col md={8}></Col>
+                        <Col md={8}>
+                            {' '}
+                            <Card className="shadow border-0 rounded-4">
+                                <Card.Body>
+                                    <Card.Title className="fs-4 mt-2 ms-3 ">
+                                        {data.name}
+                                    </Card.Title>
+                                    <ListGroup className="list-group-flush">
+                                        <ListGroup.Item></ListGroup.Item>
+                                        <ListGroup.Item className="">
+                                            <div className="d-flex justify-content-between">
+                                                <span className="text-secondary fs-5 text-uppercase">
+                                                    Описание
+                                                </span>
+                                                <span>{data.date}</span>
+                                            </div>
+                                            <p>{data.description}</p>
+                                        </ListGroup.Item>
+                                    </ListGroup>
+                                </Card.Body>
+                            </Card>
+                        </Col>
 
                         <Col style={{}} className="mt-4 ms-2">
                             <div
@@ -56,14 +77,14 @@ const PostPage = () => {
                                     position: 'sticky',
                                 }}
                             >
-                                {/* <ContactCard
+                                <ContactCard
                                     email={data.user.email}
                                     first_name={data.user.first_name}
                                     last_name={data.user.last_name}
                                     username={data.user.username}
                                     image={data.user.image}
                                     slug={slug}
-                                ></ContactCard> */}
+                                ></ContactCard>
                             </div>
                         </Col>
                     </Row>
