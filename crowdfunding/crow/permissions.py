@@ -124,7 +124,7 @@ def get_project_view_permissions(view):
     if view.action == 'add_post':
         permission_classes = [IsOwner & IsProjectConfirmed]
     if view.action == 'get_post':
-        permission_classes = [IsProjectConfirmed]
+        permission_classes = [AllowAny]
     return [permission() for permission in permission_classes]
 
 

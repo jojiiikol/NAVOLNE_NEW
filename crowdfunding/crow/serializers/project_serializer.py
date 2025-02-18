@@ -365,7 +365,7 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = (
-            'pk', 'user', 'name', 'description', 'image', 'date', 'post_images', 'url'
+            'pk', 'user', 'name', 'description', 'image', 'date', 'post_images', 'url', 'project_url'
         )
 
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
@@ -375,9 +375,14 @@ class PostSerializer(serializers.ModelSerializer):
     date = serializers.DateField(required=False)
     post_images = ImagePostSerializer(many=True, required=False)
     url = serializers.SerializerMethodField()
+    project_url = serializers.SerializerMethodField()
 
     def get_url(self, obj):
         return reverse('post-detail', kwargs={'pk': obj.pk}, request=self.context.get('request'))
+
+    def get_project_url(self, obj):
+        project = obj.project
+        return reverse('project-detail', kwargs={'slug': project.slug}, request=self.context.get('request'))
 
 
     def to_representation(self, instance):
