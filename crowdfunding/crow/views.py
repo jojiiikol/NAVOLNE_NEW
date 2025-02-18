@@ -209,6 +209,7 @@ class ProjectViewSet(mixins.ListModelMixin,
         return Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @extend_schema(summary="Получение списка постов проекта",
+                   responses=PostSerializer
                    )
     @action(methods=['GET'], detail=True)
     def get_post(self, request, *args, **kwargs):
