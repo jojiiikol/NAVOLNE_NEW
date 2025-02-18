@@ -92,6 +92,10 @@ def get_project_change_request_view_permissions(view):
         permission_classes = [IsOwner]
     if view.action == 'show_request':
         permission_classes = [IsAuthenticatedAndConfirmed]
+    if view.action == 'requests_with_answer':
+        permission_classes = [IsAdminUser]
+    if view.action == 'requests_without_answer':
+        permission_classes = [IsAdminUser]
     return [permission() for permission in permission_classes]
 
 
@@ -171,6 +175,10 @@ def get_profile_change_request_view_permissions(view):
         permission_classes = [IsAdminUser]
     if view.action == 'see_admin_response':
         permission_classes = [IsOwner]
+    if view.action == 'requests_with_answer':
+        permission_classes = [IsAdminUser]
+    if view.action == 'requests_without_answer':
+        permission_classes = [IsAdminUser]
     return [permission() for permission in permission_classes]
 
 def get_closure_request_view_permissions(view):

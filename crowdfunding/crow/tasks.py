@@ -19,7 +19,7 @@ from crowdfunding.settings import SERVER_URL
 app.conf.beat_schedule = {
     'check_transfer_status': {
         'task': 'time_check_transfer_status',
-        'schedule': 60*60,
+        'schedule': 60*60*24,
     },
 }
 
