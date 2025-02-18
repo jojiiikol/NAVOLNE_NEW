@@ -218,7 +218,16 @@ class ProjectViewSet(mixins.ListModelMixin,
         serializer = PostSerializer(posts, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
+    @extend_schema(summary="Показать просроченные проекты",
+                   description="Проекты, которые не набрали минимальную сумму по времени. Доступ только у админов",
+                   )
+    @action(methods=['GET'], detail=False)
+    def get_expired_projects(self, request, *args, **kwargs):
+        projects = Project.objects.filter(closure_type="BY_TIME",
+                                          status_code = ProjectStatusCode.objects.get(code=2),
+                                          transfer_allowed=False)
+        serializer = ProjectSerializer(projects, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 

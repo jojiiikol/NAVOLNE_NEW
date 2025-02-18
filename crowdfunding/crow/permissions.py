@@ -129,6 +129,8 @@ def get_project_view_permissions(view):
         permission_classes = [IsOwner & IsProjectConfirmed]
     if view.action == 'get_post':
         permission_classes = [AllowAny]
+    if view.action == "get_expired_projects":
+        permission_classes = [IsAdminUser]
     return [permission() for permission in permission_classes]
 
 
