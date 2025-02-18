@@ -46,6 +46,7 @@ const PaymentComponent = ({ show, onHide, slug }) => {
                 });
             onHide();
             console.log();
+            window.location.reload();
             // Закрываем модальное окно после успешного сохранения
         } catch (error) {
             console.error('Ошибка при отправке запроса на сервер:', error);
