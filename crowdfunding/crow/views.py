@@ -231,14 +231,30 @@ class ProjectChangeRequestViewSet(mixins.ListModelMixin,
     serializer_class = ChangeProjectRequestSerializer
 
 
+
     def get_permissions(self):
         return get_project_change_request_view_permissions(self)
 
     @extend_schema(summary="Показать заявки на изменение проектов",
                    description="Доступ только у админов")
-    # Покащать список заявок на изменение проекта
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
+
+    @extend_schema(summary="Показать заявки с ответами",
+                   description="Доступ у админа")
+    @action(methods=['GET'], detail=False)
+    def requests_with_answer(self, request, *args, **kwargs):
+        requests = ProjectChangeRequest.objects.exclude(answer_change_requests_project__isnull=True).order_by("-pk")
+        serializer = ChangeProjectRequestSerializer(requests, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(summary="Показать заявки без ответа",
+                   description="Доступ у админа")
+    @action(methods=['GET'], detail=False)
+    def requests_without_answer(self, request, *args, **kwargs):
+        requests = ProjectChangeRequest.objects.exclude(answer_change_requests_project__isnull=False).order_by("-pk")
+        serializer = ChangeProjectRequestSerializer(requests, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @extend_schema(summary="Удаление заявки на изменение проекта",
                    description="Удаление возможно только в том случае, если он не содержит ответов от администратора. Доступ у создателя заявки")
@@ -529,6 +545,20 @@ class ProfileChangeRequestViewSet(mixins.ListModelMixin,
     @extend_schema(summary="Показать все заявки на изменение профиля. Доступ у админов")
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
+
+    @extend_schema(summary="Показать заявки с ответами")
+    @action(methods=['GET'], detail=False)
+    def requests_with_answer(self, request, *args, **kwargs):
+        requests = ProfileChangeRequest.objects.exclude(answer_request__isnull=True).order_by("-pk")
+        serializer = ChangeProfileRequestSerializer(requests, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(summary="Показать заявки без ответов")
+    @action(methods=['GET'], detail=False)
+    def requests_without_answer(self, request, *args, **kwargs):
+        requests = ProfileChangeRequest.objects.exclude(answer_request__isnull=False).order_by("-pk")
+        serializer = ChangeProfileRequestSerializer(requests, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @extend_schema(summary="Удаление заявки на изменение профиля",
                    description="Удаление возможно только в том случае, если он не содержит ответов от администратора. Доступ у создателя заявки")
