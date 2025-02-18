@@ -299,7 +299,7 @@ class PostViewSet(mixins.ListModelMixin,
     @extend_schema(summary="Получение поста проекта",
                    )
     def retrieve(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
+        return super().retrieve(request, *args, **kwargs)
 
 
 class ProfileViewSet(mixins.ListModelMixin,
