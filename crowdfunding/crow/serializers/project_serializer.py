@@ -19,7 +19,8 @@ from crow.serializers.profile_serializer import UserSerializer
 from crow.tasks import send_message_verification_email
 from crow.transactions import make_payout_object, payment_to_project
 from crow.utils import result_amount_with_commission
-from crow.validators import SpecialCharactersValidator, OnlyTextValidator, ProjectNameValidator
+from crow.validators import SpecialCharactersValidator, OnlyTextValidator, ProjectNameValidator, \
+    SQL_INJECTION_CHARACTERS
 
 
 class ProjectImagesSerializer(serializers.ModelSerializer):
@@ -163,7 +164,6 @@ class ProjectConfirmSerializer(serializers.ModelSerializer):
         project.save()
 
 
-
 class ConfirmProjectSerializer(serializers.ModelSerializer):
     confirmed = serializers.BooleanField(required=True)
 
@@ -216,7 +216,6 @@ class AnswerProjectClosureRequestSerializer(serializers.ModelSerializer):
             project.set_inwork_status()
         project.save()
         return instance
-
 
 
 class PaymentSerializer(serializers.ModelSerializer):
@@ -301,7 +300,10 @@ class ChangeProjectRequestSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=False,
                                  validators=[
                                      UniqueValidator(queryset=Project.objects.all(), message="Это имя уже занято"),
-                                     UniqueValidator(queryset=ProjectChangeRequest.objects.all())],
+                                     UniqueValidator(queryset=ProjectChangeRequest.objects.all()),
+                                     ProjectNameValidator()
+                                 ],
+
                                  max_length=27, help_text="Название проекта")
     small_description = serializers.CharField(required=False, max_length=40,
                                               help_text="Малое описание проекта. Максимум - 40 символов")
@@ -384,7 +386,6 @@ class PostSerializer(serializers.ModelSerializer):
         project = obj.project
         return reverse('project-detail', kwargs={'slug': project.slug}, request=self.context.get('request'))
 
-
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['user'] = UserSerializer(instance.user, context={"request": self.context.get('request')}).data
@@ -397,7 +398,6 @@ class PostSerializer(serializers.ModelSerializer):
         for image in images:
             ImageToPost.objects.create(image=image['image'], post=post)
         return post
-
 
 
 class AdditionalUserSerializerForOwner(serializers.ModelSerializer):
@@ -491,8 +491,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     username = serializers.CharField(required=True, max_length=255, validators=[
         UniqueValidator(queryset=User.objects.all(), message="Пользователь с таким username уже зарегистрирован"),
-        RegexValidator(),
-        SpecialCharactersValidator()
+        RegexValidator(regex=SQL_INJECTION_CHARACTERS, message="Username не валиден")
     ], help_text="Юзернейм пользователя")
     email = serializers.EmailField(required=True,
                                    help_text="Электронная почта пользователя")

@@ -13,6 +13,7 @@ from crow.models import User, ResetPasswordToken, ProfileChangeRequest, Skill, C
 import datetime
 
 from crow.transactions import make_payout_object
+from crow.validators import SQL_INJECTION_CHARACTERS
 from crowdfunding.settings import EMAIL_HOST_USER
 from crow.tasks import send_reset_password_message
 
@@ -140,7 +141,7 @@ class ChangeProfileRequestSerializer(serializers.ModelSerializer):
         UniqueValidator(queryset=ProfileChangeRequest.objects.all(),
                         message="Пользователь с таким username уже существует"),
         UniqueValidator(queryset=User.objects.all(), message="Пользователь с таким username уже существует"),
-        RegexValidator()
+        RegexValidator(regex=SQL_INJECTION_CHARACTERS, message="Username не валиден")
     ], help_text="Юзернейм пользователя")
     image = serializers.ImageField(required=False, help_text="Изображение пользователя")
     last_name = serializers.CharField(required=False, max_length=150, help_text="Фамилия пользователя")

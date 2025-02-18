@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
 
+SQL_INJECTION_CHARACTERS = r"^(?!.*(--|\b(OR|AND|UNION|SELECT|INSERT|UPDATE|DELETE|DROP|EXEC|XP_CMDSHELL|INTO|LOAD_FILE|OUTFILE)\b|'|\"|;|#|/\*)).*$"
+
 class SpecialCharactersValidator:
 
     def __call__(self, text):
