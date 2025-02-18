@@ -299,6 +299,7 @@ class PostViewSet(mixins.ListModelMixin,
 
     @extend_schema(summary="Получение поста проекта",
                    )
+    @method_decorator(cache_page(60*60*24*5, key_prefix='post'))
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
 
