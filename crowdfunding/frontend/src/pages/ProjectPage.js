@@ -35,6 +35,10 @@ const ProjectPage = () => {
     const openTransferMoney = () => setShowTransferMoney(true); // Функция для открытия модального окна
     const closeTransferMoney = () => setShowTransferMoney(false); // Функция для закрытия модального окна
 
+    const [showPostCreate, setshowPostCreate] = useState(false); // Состояние для отображения модального окна
+    const openPostCreate = () => setshowPostCreate(true); // Функция для открытия модального окна
+    const closePostCreat = () => setshowPostCreate(false); // Функция для закрытия модального окна
+
     const { slug } = useParams();
     const [data, setData] = useState(null);
     const [posts, setPosts] = useState(null);
@@ -196,14 +200,14 @@ const ProjectPage = () => {
                                             <Button
                                                 size="lg"
                                                 variant="secondary"
-                                                onClick={openModal}
+                                                onClick={openPostCreate}
                                             >
                                                 Добавить новость
                                             </Button>
-                                            {showModal && (
+                                            {showPostCreate && (
                                                 <CreatePost
                                                     show={true}
-                                                    onHide={closeModal}
+                                                    onHide={closePostCreat}
                                                     slug={slug}
                                                 />
                                             )}
@@ -273,18 +277,24 @@ const ProjectPage = () => {
                     </Row>
                     <span className="fw-bolder fs-1 ms-2">Новости проекта</span>
                     <Row xs={1} md={3} className="g-4 mt-1">
-                        {posts.map((post) => (
-                            <Col>
-                                <PostCard
-                                    slug={post.pk}
-                                    name={post.name}
-                                    description={post.description}
-                                    image={post.image}
-                                    date={post.date}
-                                    user={post.user}
-                                />
-                            </Col>
-                        ))}
+                        {posts &&
+                            posts.map((post) => (
+                                <Col>
+                                    <PostCard
+                                        slug={post.pk}
+                                        name={post.name}
+                                        description={post.description}
+                                        image={post.image}
+                                        date={post.date}
+                                        user={post.user}
+                                    />
+                                </Col>
+                            ))}
+                        {posts && posts.length == 0 && (
+                            <span className="ms-2 fs-5 text-secondary fw-bolder">
+                                *У проекта нет новостей
+                            </span>
+                        )}
                     </Row>
                     {/* <span className="fs-5 "></span> */}
                 </div>
