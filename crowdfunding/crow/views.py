@@ -27,14 +27,15 @@ from .utils import check_token_timelife, change_transfer_status, save_ip_view
 from .tasks import send_message_verification_email, create_check_payment_status_task, create_check_payout_status_task
 from .yookassa_crow.payout import create_payout
 
+# TODO: АВТОВОЗВРАТ
+# TODO: Админы смотрят на просроченные проекты
+# TODO: У админов есть кнопка возврата средств
+# TODO: Создаются объекты обратные объекты транзакции
+# TODO: Деньги летят инвесторам
+# TODO: проект закрывается на статус код 4
+
 # TODO: Ограничение 1 мб на фото
 # TODO: Корпоративная почта
-
-# TODO: Поменять порядок по дате в моих проектах ---> Это нужно менать порядок в модели
-
-# TODO: ----------КЭШ----------
-# TODO: Накинуть на посты
-
 
 # TODO: ----------ДЕПЛОЙ----------
 # TODO: Настроить SOCKET_TIMEOUT
@@ -51,7 +52,7 @@ class ProjectViewSet(mixins.ListModelMixin,
     filter_backends = [filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter]
     search_fields = ['name']
     filterset_fields = ['category', 'status_code']
-    ordering_fields = ['collected_money', 'views']
+    ordering_fields = ['collected_money', 'views', 'start_date']
     lookup_field = 'slug'
     pagination_class = AllProjectsPaginator
 
@@ -499,6 +500,8 @@ class ProfileViewSet(mixins.ListModelMixin,
             user = User.objects.get(email=request.data['email'].lower())
             data = user.username
             return Response(data={"username": data}, status=status.HTTP_200_OK)
+        except KeyError:
+            return Response(data={"data": "Неверно введенные данные"}, status=status.HTTP_400_BAD_REQUEST)
         except User.DoesNotExist:
             return Response(data={"data": "Юзер не найден"}, status=status.HTTP_404_NOT_FOUND)
 
