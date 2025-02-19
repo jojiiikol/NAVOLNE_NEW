@@ -1,3 +1,26 @@
+/* .element {
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+}
+
+.fade-enter {
+    opacity: 0;
+}
+
+.fade-enter-active {
+    opacity: 1;
+    transition: opacity 300ms;
+}
+
+.fade-exit {
+    opacity: 1;
+}
+
+.fade-exit-active {
+    opacity: 0;
+    transition: opacity 300ms;
+} */
+
 video {
     position: relative;
     height: auto;
@@ -5,12 +28,14 @@ video {
 }
 .all-projects-href-p {
     text-decoration: none;
-    font-size: calc(20px + 20 * (100vw - 320px) / 880);
+    font-size: calc(15px + 25 * (100vw - 320px) / 880);
     text-align: center;
     align-self: center;
 }
 .all-projects-h1 {
-    font-size: calc(40px + 30 * (100vw - 320px) / 880);
+    font-size: calc(20px + 40 * (100vw - 320px) / 880);
+    text-align: center;
+    align-self: center;
 }
 .video-h1-center {
     width: 100%;
