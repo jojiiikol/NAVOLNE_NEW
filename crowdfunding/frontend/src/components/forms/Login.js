@@ -3,6 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import url from '../functions/globalURL';
+
 export default class Login extends Component {
     constructor(props) {
         super(props);
@@ -43,13 +44,42 @@ export default class Login extends Component {
                 if (data.access != null) {
                     localStorage.setItem('accessToken', data.access);
                     localStorage.setItem('refreshToken', data.refresh);
-                    localStorage.setItem('user', username);
+                    console.log(data);
+                    let flag = false;
+                    if (
+                        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+                            this.state.username
+                        )
+                    ) {
+                        flag = true;
+                    }
+
+                    if (flag) {
+                        const email = this.state.username;
+
+                        fetch(url + '/profiles/get_username/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                email,
+                            }),
+                        })
+                            .then((response) => response.json())
+                            .then((data) => {
+                                console.log(data);
+                                localStorage.setItem('user', data.username);
+                                window.location.href = `/profile/${localStorage.getItem('user')}`;
+                            });
+                    }
+                    if (!flag) {
+                        localStorage.setItem('user', username);
+                        window.location.href = `/profile/${localStorage.getItem('user')}`;
+                    }
                 }
 
                 this.setState({ errorMessage: data });
-                if (localStorage.getItem('accessToken') !== null) {
-                    window.location.href = `/profile/${localStorage.getItem('user')}`;
-                }
             })
             .catch((error) => {
                 console.error(error);
@@ -66,7 +96,7 @@ export default class Login extends Component {
                             value={this.state.username}
                             onChange={this.handleChange}
                             type="text"
-                            placeholder="Введите имя пользователя"
+                            placeholder="Введите имя логин или email"
                         />
                         {this.state.errorMessage && (
                             <Form.Text className="text-danger">
