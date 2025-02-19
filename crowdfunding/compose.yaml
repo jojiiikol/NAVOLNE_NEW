@@ -99,6 +99,16 @@ services:
       - rabbitmq
       - celery_beat
 
+  refund_worker:
+    build:
+      context: ../crowdfunding
+    restart: always
+    container_name: refund_worker
+    command: celery -A crowdfunding.celery worker -l INFO -Q refund_queue
+    depends_on:
+      - web
+      - rabbitmq
+
   celery_beat:
     build:
       context: ../crowdfunding
