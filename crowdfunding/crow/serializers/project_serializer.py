@@ -237,6 +237,7 @@ class PaymentSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
+        validated_data['datetime'] = timezone.now()
         payment_to_project(validated_data)
         return Transaction.objects.create(**validated_data)
 

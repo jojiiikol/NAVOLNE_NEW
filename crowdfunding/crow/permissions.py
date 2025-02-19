@@ -77,6 +77,12 @@ class IsUserProfile(permissions.BasePermission):
             return True
         return obj.pk == request.user.pk
 
+class IsExpiredProject(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if obj.closure_type == "BY_TIME" and obj.status_code == ProjectStatusCode.objects.get(code=2) and obj.transfer_allowed == False:
+            return True
+        return False
+
 
 def get_project_change_request_view_permissions(view):
     permission_classes = [IsAdminUser]
@@ -131,6 +137,8 @@ def get_project_view_permissions(view):
         permission_classes = [AllowAny]
     if view.action == "get_expired_projects":
         permission_classes = [IsAdminUser]
+    if view.action == "refund_money":
+        permission_classes = [IsExpiredProject & IsAdminUser]
     return [permission() for permission in permission_classes]
 
 

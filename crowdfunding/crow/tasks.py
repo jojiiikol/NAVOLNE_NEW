@@ -4,11 +4,12 @@ import uuid
 from celery import shared_task
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
+from django.db import transaction
 from django.utils import timezone
 from django_celery_beat.models import IntervalSchedule, PeriodicTask
 from rest_framework.reverse import reverse
 
-from crow.models import VerificationToken, User, ResetPasswordToken, Project, ProjectStatusCode
+from crow.models import VerificationToken, User, ResetPasswordToken, Project, ProjectStatusCode, Transaction, Refund
 from crow.yookassa_crow.payment import account_replenishment
 from crow.utils import check_transfer_possibility
 from crow.yookassa_crow.payout import do_payout
@@ -19,7 +20,7 @@ from crowdfunding.settings import SERVER_URL
 app.conf.beat_schedule = {
     'check_transfer_status': {
         'task': 'time_check_transfer_status',
-        'schedule': 60*60*24,
+        'schedule': 60 * 60 * 24,
     },
 }
 
@@ -66,6 +67,7 @@ def send_reset_password_message(user_id):
     )
     ResetPasswordToken.objects.create(user=user, token=token)
 
+
 def create_check_payment_status_task(payment_id):
     schedule, created = IntervalSchedule.objects.get_or_create(
         every=1,
@@ -80,6 +82,7 @@ def create_check_payment_status_task(payment_id):
         args=json.dumps([payment_id]),
     )
 
+
 def create_check_payout_status_task(payout_id):
     schedule, created = IntervalSchedule.objects.get_or_create(
         every=1,
@@ -93,11 +96,47 @@ def create_check_payout_status_task(payout_id):
         start_time=timezone.now(),
         args=json.dumps([payout_id]),
     )
+
+
 @shared_task(queue='yookassa_queue')
 def check_payment_status_task(payment_id):
     account_replenishment(payment_id)
+
 
 @shared_task(queue='yookassa_queue')
 def check_payout_status_task(payout_id):
     do_payout(payout_id)
 
+
+@shared_task(queue='refund_queue')
+def refund_transaction_task(project_id, admin_id):
+    project = Project.objects.get(pk=project_id)
+    admin = User.objects.get(pk=admin_id)
+    payments = Transaction.objects.filter(project=project)
+
+    for payment in payments:
+        with transaction.atomic():
+            if not Refund.objects.filter(transaction=payment).exists():
+                Refund.objects.create(
+                    admin=admin,
+                    transaction=payment,
+                    datetime=timezone.now()
+                )
+                payment.user.money += payment.money
+                payment.user.save()
+    check_refund.delay_on_commit(project_id, admin_id)
+
+
+@shared_task(queue='refund_queue')
+def check_refund(project_id, admin_id):
+    project = Project.objects.get(pk=project_id)
+
+    not_refund_transaction = False
+    payments = Transaction.objects.filter(project=project)
+    for payment in payments:
+        if not Refund.objects.filter(transaction=payment).exists():
+            not_refund_transaction = True
+            break
+    if not not_refund_transaction:
+        project.set_finish_status()
+        project.save()

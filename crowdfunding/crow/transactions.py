@@ -51,3 +51,6 @@ def payment_to_project(validated_data):
     project = validated_data['project']
     project.collected_money += validated_data['money']
     project.save()
+
+
+

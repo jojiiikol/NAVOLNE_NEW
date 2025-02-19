@@ -24,15 +24,16 @@ from .permissions import get_project_view_permissions, \
 
 from .transactions import cash_out_project
 from .utils import check_token_timelife, change_transfer_status, save_ip_view
-from .tasks import send_message_verification_email, create_check_payment_status_task, create_check_payout_status_task
+from .tasks import send_message_verification_email, create_check_payment_status_task, create_check_payout_status_task, \
+    refund_transaction_task
 from .yookassa_crow.payout import create_payout
 
 # TODO: АВТОВОЗВРАТ
 # TODO: Админы смотрят на просроченные проекты
 # TODO: У админов есть кнопка возврата средств
-# TODO: Создаются объекты обратные объекты транзакции
+# TODO: Создаются объекты обратные объектам транзакции
 # TODO: Деньги летят инвесторам
-# TODO: проект закрывается на статус код 4
+# TODO: проект закрывается на статус код 3
 
 # TODO: Ограничение 1 мб на фото
 # TODO: Корпоративная почта
@@ -229,6 +230,16 @@ class ProjectViewSet(mixins.ListModelMixin,
                                           transfer_allowed=False)
         serializer = ProjectSerializer(projects, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(summary="Возврат средств с просроченного проекта",
+                   description="Просроченный проект: закрытие - по времени, вывод - не разрешен, статус код - 2. Доступ только у админов",
+                   )
+    @action(methods=["GET"], detail=True)
+    def refund_money(self, request, *args, **kwargs):
+        project = self.get_object().pk
+        user = self.request.user.pk
+        refund_transaction_task.delay(project, user)
+        return Response(data={"data": "ok"}, status=status.HTTP_200_OK)
 
 
 

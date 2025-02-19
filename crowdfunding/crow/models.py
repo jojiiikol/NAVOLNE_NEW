@@ -227,9 +227,17 @@ class Transaction(models.Model):
     project = models.ForeignKey(Project, on_delete=models.PROTECT)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     money = models.FloatField(null=False)
+    datetime = models.DateTimeField(null=True)
 
     def __str__(self):
         return f"{self.user}-->{self.project}={self.money}"
+
+class Refund(models.Model):
+    admin = models.ForeignKey(User, on_delete=models.PROTECT, related_name='refund_admin')
+    transaction = models.ForeignKey(Transaction, on_delete=models.PROTECT, related_name='refund_transaction')
+    datetime = models.DateTimeField(null=True)
+    def __str__(self):
+        return f"Refund {self.transaction.project}--->{self.transaction.user}={self.transaction.money}"
 
 
 class VerificationToken(models.Model):

@@ -113,4 +113,8 @@ class PostAdmin(admin.ModelAdmin):
     list_display = ('name', 'project', 'user')
     inlines = [PostImagesAdmin]
 
+@admin.register(Refund)
+class RefundAdmin(admin.ModelAdmin):
+    pass
+
 
