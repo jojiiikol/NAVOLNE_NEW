@@ -127,7 +127,7 @@ const CreatePost = ({ show, onHide, slug }) => {
                             name="name"
                             value={formData.name || ''}
                             onChange={handleChange}
-                            placeholder="Название вашего проекта"
+                            placeholder=""
                         />
                     </Form.Group>
 
@@ -139,7 +139,7 @@ const CreatePost = ({ show, onHide, slug }) => {
                             name="description"
                             value={formData.description || ''}
                             onChange={handleChange}
-                            placeholder="Полное описание проекта"
+                            placeholder=""
                         />
                     </Form.Group>
 
