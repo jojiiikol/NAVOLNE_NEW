@@ -4,7 +4,7 @@ import MyCard from '../components/cards/CardComponent';
 import '../css/home.css';
 import footage from '../images/surgut.mp4';
 import url from '../components/functions/globalURL';
-import { CSSTransition } from 'react-transition-group';
+//import { CSSTransition } from 'react-transition-group';
 
 class Home extends Component {
     constructor(props) {

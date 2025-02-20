@@ -128,16 +128,19 @@ const ProjectModalRequest = ({ show, onHide, id }) => {
                                     />
                                 </div>
                             )}
-                            {data.add_image && (
+                            {data.add_image && data.add_image.length != 0 && (
                                 <div>
                                     <div>add_image</div>
-                                    <img
-                                        src={data.add_image.image}
-                                        style={{
-                                            width: '150px',
-                                            height: '150px',
-                                        }}
-                                    />
+                                    {data.add_image.map((image) => (
+                                        <img
+                                            src={image.image}
+                                            className="ms-1"
+                                            style={{
+                                                width: '150px',
+                                                height: '150px',
+                                            }}
+                                        />
+                                    ))}
                                 </div>
                             )}
                         </Form>

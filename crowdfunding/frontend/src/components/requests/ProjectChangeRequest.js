@@ -20,7 +20,10 @@ const ProjectChangeRequests = () => {
     const [withData, setWithData] = useState(null);
     const [withoutData, setWithoutData] = useState(null);
     const handleToggle = (newMode) => {
+        console.log(withoutData);
+
         setShowMode(newMode); // Используем коллбэк для обновления состояния
+
         if (showMode === 'without') {
             setData(withData);
         } else if (showMode === 'with') {
@@ -43,6 +46,7 @@ const ProjectChangeRequests = () => {
             );
             const data = await response.json();
             setData(data);
+            setWithoutData(data);
             console.log(data);
         };
         fetchData();
