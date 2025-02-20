@@ -540,3 +540,12 @@ class RegistrationSerializer(serializers.ModelSerializer):
             pass
 
         return user
+
+class TopDonatorsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Transaction
+        fields = ('money', 'user', )
+
+    money = serializers.FloatField(read_only=True)
+    user = UserSerializer(read_only=True)
+

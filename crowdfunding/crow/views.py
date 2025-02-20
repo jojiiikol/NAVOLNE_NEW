@@ -241,6 +241,16 @@ class ProjectViewSet(mixins.ListModelMixin,
         refund_transaction_task.delay(project, user)
         return Response(data={"data": "ok"}, status=status.HTTP_200_OK)
 
+    @extend_schema(summary="Просмотр топ донатеров проекта",
+                   description="Показывает топ 3 донатера по проекту",
+                   responses=TopDonatorsSerializer)
+    @action(methods=['GET'], detail=True)
+    def top_donators(self, request, *args, **kwargs):
+        project = self.get_object()
+        transactions = Transaction.objects.filter(project=project).order_by("-money")[:3]
+        serializer = TopDonatorsSerializer(transactions, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 
 class ProjectChangeRequestViewSet(mixins.ListModelMixin,
