@@ -19,7 +19,9 @@ export default class Registration extends Component {
             info_cat: '',
             groups: [0],
             info_groups: [],
+            isChecked: false,
         };
+        this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
     }
     componentDidMount() {
         fetch(url + '/additional/') // замените на URL вашего DRF API и ID проекта
@@ -99,7 +101,11 @@ export default class Registration extends Component {
         this.state.groups.pop();
         this.state.groups.push(value);
     };
+    handleCheckboxChange(e) {
+        this.setState({ isChecked: e.target.checked });
+    }
     render() {
+        const { isChecked } = this.state;
         return (
             <Container style={{}}>
                 <Form onSubmit={this.handleSubmit}>
@@ -262,6 +268,7 @@ export default class Registration extends Component {
                         <Form.Check
                             type="checkbox"
                             style={{ marginRight: '1em' }}
+                            onChange={this.handleCheckboxChange}
                         />
                         <Form.Label>
                             Нажимая на кнопку «Зарегистрироваться», я соглашаюсь
@@ -272,7 +279,11 @@ export default class Registration extends Component {
                         </Form.Label>
                     </Form.Group>
 
-                    <Button variant="primary" type="submit">
+                    <Button
+                        variant="primary"
+                        type="submit"
+                        disabled={!isChecked}
+                    >
                         Зарегистрироваться
                     </Button>
                 </Form>
