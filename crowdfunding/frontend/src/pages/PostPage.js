@@ -4,6 +4,7 @@ import { Container, Row, Col, Button, Card, ListGroup } from 'react-bootstrap';
 import Carousel from 'react-bootstrap/Carousel';
 import url from '../components/functions/globalURL';
 import ContactCard from '../components/cards/CardContactsComponent';
+
 const PostPage = () => {
     const { slug } = useParams();
     const [data, setData] = useState(null);
