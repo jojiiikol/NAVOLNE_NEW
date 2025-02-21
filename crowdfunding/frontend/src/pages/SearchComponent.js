@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import {
     Container,
-    Image,
     Row,
     Col,
     Button,
@@ -10,7 +9,6 @@ import {
     ListGroup,
     Form,
 } from 'react-bootstrap';
-import ProgressBar from '../components/cards/progress-bar.component';
 import url from '../components/functions/globalURL';
 import MyCard from '../components/cards/MiniProjectCard';
 const SearchComponent = () => {

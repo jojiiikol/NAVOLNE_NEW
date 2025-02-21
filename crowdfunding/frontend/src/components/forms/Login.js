@@ -3,6 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import url from '../functions/globalURL';
+import ForgotPasswordModal from './ForgotPassword';
 
 export default class Login extends Component {
     constructor(props) {
@@ -11,7 +12,19 @@ export default class Login extends Component {
             username: '',
             password: '',
             accessToken: localStorage.getItem('accessToken'),
+            showModal: false,
         };
+        this.handleShowModal = this.handleShowModal.bind(this);
+        this.handleCloseModal = this.handleCloseModal.bind(this);
+    }
+
+    handleShowModal() {
+        this.setState({ showModal: true });
+    }
+
+    // Закрыть модальное окно
+    handleCloseModal() {
+        this.setState({ showModal: false });
     }
     componentDidMount() {
         if (
@@ -127,6 +140,7 @@ export default class Login extends Component {
                             {this.state.errorMessage.detail}{' '}
                         </Form.Text>
                     )}
+
                     <div className="d-grid ">
                         <Button
                             variant="primary"
@@ -136,6 +150,24 @@ export default class Login extends Component {
                         >
                             ПРОДОЛЖИТЬ
                         </Button>
+                    </div>
+
+                    <div className="d-flex justify-content-end">
+                        {' '}
+                        <Button
+                            onClick={this.handleShowModal}
+                            size="sm"
+                            variant="outline-primary"
+                            className="mt-2"
+                        >
+                            Забыли пароль?
+                        </Button>
+                        {this.state.showModal && (
+                            <ForgotPasswordModal
+                                show={true}
+                                onHide={this.handleCloseModal}
+                            />
+                        )}
                     </div>
                 </Form>
 
