@@ -32,6 +32,7 @@ import ShowClosureAllProjects from './requests/ShowClosureAllProjects';
 import Verify from './functions/VerifyEmail';
 import ConfirmUsers from './requests/ConfirmUsers';
 import PostPage from '../pages/PostPage';
+import ForgotPasswordPage from './functions/forgotPasswordPage';
 
 export default class header extends Component {
     constructor(props) {
@@ -170,6 +171,10 @@ export default class header extends Component {
                         <Route
                             path="/search/:slug"
                             component={SearchComponent}
+                        />
+                        <Route
+                            path="/reset_password/:token"
+                            component={ForgotPasswordPage}
                         />
                         <Route path="/category/" component={Category} />
                         <Route
