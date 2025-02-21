@@ -1,4 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Sum
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 
@@ -247,7 +248,18 @@ class ProjectViewSet(mixins.ListModelMixin,
     @action(methods=['GET'], detail=True)
     def top_donators(self, request, *args, **kwargs):
         project = self.get_object()
-        transactions = Transaction.objects.filter(project=project).order_by("-money")[:3]
+        transactions = (
+            Transaction.objects
+            .filter(project=project)
+            .values('user')
+            .annotate(money=Sum('money'))
+            .order_by('-money')[:3]
+        )
+
+        
+        for transaction in transactions:
+            transaction['user'] = User.objects.get(id=transaction['user'])
+
         serializer = TopDonatorsSerializer(transactions, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
