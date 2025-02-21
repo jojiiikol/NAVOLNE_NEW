@@ -13,6 +13,28 @@ const PaymentComponent = ({ show, onHide, slug }) => {
         if (!accessToken) {
             window.location.href = `/auth/`;
         }
+
+        const fetchData = async () => {
+            if (localStorage.getItem('accessToken')) {
+                const response = await fetch(
+                    url + '/profiles/' + localStorage.getItem('user') + '/',
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Bearer ' + localStorage.getItem('accessToken'),
+                        },
+                    }
+                );
+                const data = await response.json();
+                setData(data);
+                console.log(data);
+                if (!data.confirmed) {
+                    setIsLoading(true);
+                }
+            }
+        };
+        fetchData();
     }, []);
 
     const handleChange = (event) => {
@@ -73,6 +95,12 @@ const PaymentComponent = ({ show, onHide, slug }) => {
                             placeholder="Введите денюжку"
                         />
                     </Form.Group>
+                    {data && !data.confirmed && (
+                        <Form.Text className="text-secondary fw-bolder">
+                            *дождитесь, пока администраторы подтвердят ваш
+                            профиль, пока вы не можете донатить
+                        </Form.Text>
+                    )}
 
                     <Modal.Footer className="">
                         <Button
