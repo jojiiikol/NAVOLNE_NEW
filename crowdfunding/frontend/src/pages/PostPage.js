@@ -4,24 +4,37 @@ import { Container, Row, Col, Button, Card, ListGroup } from 'react-bootstrap';
 import Carousel from 'react-bootstrap/Carousel';
 import url from '../components/functions/globalURL';
 import ContactCard from '../components/cards/CardContactsComponent';
-
+import MyCard from '../components/cards/MiniProjectCard';
 const PostPage = () => {
     const { slug } = useParams();
     const [data, setData] = useState(null);
-
+    const [project, setProject] = useState(null);
+    const [projecturl, setProjectUrl] = useState(null);
     useEffect(() => {
         const fetchPosts = async () => {
-            const response = await fetch(url + `/posts/${slug}/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            const data = await response.json();
-            setData(data);
-            console.log(data);
+            try {
+                const response = await fetch(`${url}/posts/${slug}`);
+                if (!response.ok)
+                    throw new Error('Network response was not ok');
+                const data = await response.json();
+
+                setData(data);
+                setProjectUrl(data.project_url); // Установим projectUrl
+                console.log(data);
+
+                // Теперь делаем второй запрос, используя установленную projectUrl
+                const projectResponse = await fetch(data.project_url);
+                if (!projectResponse.ok)
+                    throw new Error('Network response for project was not ok');
+                const projectData = await projectResponse.json();
+
+                setProject(projectData);
+            } catch (error) {
+                console.error('Ошибка:', error);
+            }
         };
 
-        fetchPosts();
+        fetchPosts(); // Вызываем функцию для выполнения запросов
     }, [slug]);
 
     return (
@@ -89,6 +102,21 @@ const PostPage = () => {
                             </div>
                         </Col>
                     </Row>
+                    {project && (
+                        <MyCard
+                            className="mb-5"
+                            key={project.pk}
+                            slug={project.slug}
+                            collected_money={project.collected_money}
+                            need_money={project.need_money}
+                            name={project.name}
+                            category={project.category}
+                            small_description={project.small_description}
+                            views={project.views}
+                            image={project.image}
+                            confirmed="true"
+                        />
+                    )}
                 </div>
             )}
         </Container>

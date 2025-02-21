@@ -14,6 +14,7 @@ import MoneyAdd from '../components/payment/MoneyAdd';
 import TransferMoney from '../components/payment/TransferMoney';
 import CreatePost from '../components/forms/CreatePost';
 import PostCard from '../components/cards/PostCard';
+import TopDonaters from '../components/cards/TopDonaters';
 const ProjectPage = () => {
     const [showModalConfirm, setShowModalConfirm] = useState(false); // Состояние для отображения модального окна
     const openModalConfirm = () => setShowModalConfirm(true); // Функция для открытия модального окна
@@ -42,6 +43,7 @@ const ProjectPage = () => {
     const { slug } = useParams();
     const [data, setData] = useState(null);
     const [posts, setPosts] = useState(null);
+    const [donaters, setDonaters] = useState(null);
     useEffect(() => {
         const fetchData = async () => {
             const accessToken = localStorage.getItem('accessToken');
@@ -77,7 +79,20 @@ const ProjectPage = () => {
             setPosts(data);
             console.log(data);
         };
-
+        const fetchDonate = async () => {
+            const response = await fetch(
+                url + `/projects/${slug}/top_donators/`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+            const data = await response.json();
+            setDonaters(data);
+            console.log(data);
+        };
+        fetchDonate();
         fetchPosts();
         fetchData();
     }, [slug]);
@@ -141,22 +156,52 @@ const ProjectPage = () => {
                     </Carousel>
 
                     <Row className="g-4 mt-1 mb-5">
-                        <Col md={8}>
-                            {data && (
-                                <InfoProjectCard
-                                    description={data.description}
-                                    collected_money={data.collected_money}
-                                    need_money={data.need_money}
-                                    category={data.category}
-                                    status_code={data.status_code.code}
-                                    className="mt-0"
-                                    start_date={data.start_date}
-                                    end_date={data.end_date}
-                                />
-                            )}{' '}
+                        <Col md={8} className="order-md-1 order-2">
+                            <div className="mb-3">
+                                {' '}
+                                {data && (
+                                    <InfoProjectCard
+                                        description={data.description}
+                                        collected_money={data.collected_money}
+                                        need_money={data.need_money}
+                                        category={data.category}
+                                        status_code={data.status_code.code}
+                                        className="mt-0"
+                                        start_date={data.start_date}
+                                        end_date={data.end_date}
+                                    />
+                                )}{' '}
+                            </div>
+
+                            <span className="fw-bolder fs-1 ms-2">
+                                Новости проекта
+                            </span>
+                            <Row xs={1} md={2} className="g-4 ">
+                                {posts &&
+                                    posts.map((post) => (
+                                        <Col>
+                                            <PostCard
+                                                slug={post.pk}
+                                                name={post.name}
+                                                description={post.description}
+                                                image={post.image}
+                                                date={post.date}
+                                                user={post.user}
+                                            />
+                                        </Col>
+                                    ))}
+                                {posts && posts.length == 0 && (
+                                    <span className="ms-2 fs-5 text-secondary fw-bolder">
+                                        *У проекта нет новостей
+                                    </span>
+                                )}
+                            </Row>
                         </Col>
 
-                        <Col style={{}} className="mt-4 ms-2">
+                        <Col
+                            style={{}}
+                            className="mt-4 ms-2 order-md-2 order-1"
+                        >
                             <div
                                 className="d-flex flex-row-reverse"
                                 style={{
@@ -172,7 +217,9 @@ const ProjectPage = () => {
                                     slug={slug}
                                 ></ContactCard>
                             </div>
-
+                            <div className="d-flex flex-row-reverse">
+                                <TopDonaters data={donaters} />
+                            </div>
                             <div className="d-flex flex-row-reverse">
                                 {data.is_owner &&
                                     data.status_code.code != 2 &&
@@ -213,27 +260,7 @@ const ProjectPage = () => {
                                             )}
                                         </div>
                                     )}
-                                {data.is_owner &&
-                                    data.transfer_allowed &&
-                                    data.status_code.code != 3 &&
-                                    data.status_code.code != 2 && (
-                                        <div className="mt-1 me-1" style={{}}>
-                                            <Button
-                                                size="lg"
-                                                variant="primary"
-                                                onClick={openModalClosure}
-                                            >
-                                                Закрыть сбор
-                                            </Button>
-                                            {showModalClosure && (
-                                                <ModalClosureMoney
-                                                    show={true}
-                                                    onHide={closeModalClosure}
-                                                    slug={slug}
-                                                />
-                                            )}
-                                        </div>
-                                    )}
+
                                 {data.is_owner &&
                                     data.transfer_allowed &&
                                     data.status_code.code == 3 && (
@@ -273,29 +300,33 @@ const ProjectPage = () => {
                                     </div>
                                 )}
                             </div>
+                            <div className="d-flex flex-row-reverse">
+                                {' '}
+                                {data.is_owner &&
+                                    data.transfer_allowed &&
+                                    data.status_code.code != 3 &&
+                                    data.status_code.code != 2 && (
+                                        <div className="mt-1 me-1" style={{}}>
+                                            <Button
+                                                size="lg"
+                                                variant="primary"
+                                                onClick={openModalClosure}
+                                            >
+                                                Закрыть сбор
+                                            </Button>
+                                            {showModalClosure && (
+                                                <ModalClosureMoney
+                                                    show={true}
+                                                    onHide={closeModalClosure}
+                                                    slug={slug}
+                                                />
+                                            )}
+                                        </div>
+                                    )}
+                            </div>
                         </Col>
                     </Row>
-                    <span className="fw-bolder fs-1 ms-2">Новости проекта</span>
-                    <Row xs={1} md={3} className="g-4 mt-1">
-                        {posts &&
-                            posts.map((post) => (
-                                <Col>
-                                    <PostCard
-                                        slug={post.pk}
-                                        name={post.name}
-                                        description={post.description}
-                                        image={post.image}
-                                        date={post.date}
-                                        user={post.user}
-                                    />
-                                </Col>
-                            ))}
-                        {posts && posts.length == 0 && (
-                            <span className="ms-2 fs-5 text-secondary fw-bolder">
-                                *У проекта нет новостей
-                            </span>
-                        )}
-                    </Row>
+
                     {/* <span className="fs-5 "></span> */}
                 </div>
             )}

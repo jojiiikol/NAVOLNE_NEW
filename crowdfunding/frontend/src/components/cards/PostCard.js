@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
+
 const PostCard = (props) => {
     const { slug, name, description, image, date, user } = props;
     let adress = `/posts/${slug}`;
