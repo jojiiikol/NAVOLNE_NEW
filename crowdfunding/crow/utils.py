@@ -11,7 +11,7 @@ from crowdfunding.settings import EMAIL_HOST_USER, EMAIL_VERIFICATION_TOKEN_LIFE
 def check_token_timelife(token):
     if timezone.now() - token.created_at > EMAIL_VERIFICATION_TOKEN_LIFETIME:
         token.delete()
-        return Response(data={"Ссылка недействительна"}, status=status.HTTP_200_OK)
+        return Response(data={"data": "Ссылка недействительна"}, status=status.HTTP_200_OK)
 
 
 def change_transfer_status(project):

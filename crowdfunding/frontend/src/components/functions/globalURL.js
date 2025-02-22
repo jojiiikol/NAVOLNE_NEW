@@ -1,3 +1,3 @@
-const url = 'http://localhost:8000/api';
+const url = 'https://navolne/api';
 
 export default url;
