@@ -114,6 +114,12 @@ const AdminComponent = () => {
                                     >
                                         Показать неподтвержденных юзеров
                                     </Button>
+                                    <Button
+                                        variant="primary"
+                                        href="/expired_projects/"
+                                    >
+                                        Показать просроченные проекты
+                                    </Button>
                                 </div>
                             </div>
                         )}

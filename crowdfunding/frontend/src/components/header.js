@@ -33,6 +33,7 @@ import Verify from './functions/VerifyEmail';
 import ConfirmUsers from './requests/ConfirmUsers';
 import PostPage from '../pages/PostPage';
 import ForgotPasswordPage from './functions/forgotPasswordPage';
+import ExpiredProjects from './requests/ExpiredProjects';
 
 export default class header extends Component {
     constructor(props) {
@@ -196,6 +197,10 @@ export default class header extends Component {
                         <Route
                             path="/not_confirmed_projects/"
                             component={ConfirmedProjects}
+                        />
+                        <Route
+                            path="/expired_projects/"
+                            component={ExpiredProjects}
                         />
                         <Route
                             path="/not_confirmed_users/"
