@@ -1,3 +1,3 @@
-const url = 'https://navolne/api';
+const url = 'https://navolnetest/api';
 
 export default url;
