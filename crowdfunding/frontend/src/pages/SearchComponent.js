@@ -30,7 +30,7 @@ const SearchComponent = () => {
     useEffect(() => {
         const fetchData = async () => {
             console.log(slug);
-            const response = await fetch(url + `/projects/?search=${slug}`);
+            const response = await fetch(url + `/projects/?name=${slug}`);
             const data = await response.json();
             setData(data);
             console.log(data);
