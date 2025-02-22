@@ -13,6 +13,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from .filters import ProjectFilter
 from .models import VerificationToken, Post
 from .paginators import AllProjectsPaginator, AllPostsPaginator
 from crow.serializers.project_serializer import *
@@ -29,12 +30,10 @@ from .tasks import send_message_verification_email, create_check_payment_status_
     refund_transaction_task
 from .yookassa_crow.payout import create_payout
 
-# TODO: АВТОВОЗВРАТ
-# TODO: Админы смотрят на просроченные проекты
-# TODO: У админов есть кнопка возврата средств
-# TODO: Создаются объекты обратные объектам транзакции
-# TODO: Деньги летят инвесторам
-# TODO: проект закрывается на статус код 3
+
+
+# TODO: Переделать сортировку новостей ---> менять в модели поле дата на время
+
 
 # TODO: Ограничение 1 мб на фото
 # TODO: Корпоративная почта
@@ -51,10 +50,11 @@ class ProjectViewSet(mixins.ListModelMixin,
                      viewsets.GenericViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    filter_backends = [filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter]
-    search_fields = ['name']
-    filterset_fields = ['category', 'status_code']
-    ordering_fields = ['collected_money', 'views', 'start_date']
+    filter_backends = [DjangoFilterBackend]
+    # search_fields = ['name']
+    # filterset_fields = ['category', 'status_code', ]
+    # ordering_fields = ['collected_money', 'views', 'start_date']
+    filterset_class = ProjectFilter
     lookup_field = 'slug'
     pagination_class = AllProjectsPaginator
 

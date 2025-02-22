@@ -20,20 +20,20 @@ class Home extends Component {
     componentDidMount() {
         //setTimeout(() => this.setState({ showElement: true }), 1000);
 
-        fetch(url + '/projects/?ordering=-views&status_code=2') // замените на URL вашего DRF API и ID проекта
+        fetch(url + '/projects/?ordering=-views_count&status_code__code=1') // замените на URL вашего DRF API и ID проекта
             .then((response) => response.json())
             .then((data) => {
                 this.setState({ project: data.results });
             })
             .catch((error) => console.error('Ошибка:', error));
-        fetch(url + '/projects/?ordering=-views&status_code=4') // замените на URL вашего DRF API и ID проекта
+        fetch(url + '/projects/?ordering=-views_count&status_code__code=3') // замените на URL вашего DRF API и ID проекта
             .then((response) => response.json())
             .then((data) => {
                 this.setState({ project_close: data.results });
                 console.log(this.state.project_close);
             })
             .catch((error) => console.error('Ошибка:', error));
-        fetch(url + '/projects/?ordering=-start_date&status_code=2') // замените на URL вашего DRF API и ID проекта
+        fetch(url + '/projects/?ordering=-start_date&status_code__code=1') // замените на URL вашего DRF API и ID проекта
             .then((response) => response.json())
             .then((data) => {
                 this.setState({ project_new: data.results });

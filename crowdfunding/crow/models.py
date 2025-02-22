@@ -72,7 +72,6 @@ class Project(models.Model):
     category = models.ManyToManyField(Category, related_name='project_category')
     image = models.ImageField(upload_to="project/", default="project/no_image.jpg")
     slug = models.SlugField(max_length=255, unique=True, db_index=True)
-    views = models.IntegerField(default=0)
     confirmed = models.BooleanField(default=False, null=False)
     closure_type = models.CharField(blank=False, null=False, max_length=10, default="BY_AMOUNT",
                                     help_text="Тип закрытия проекта. BY_AMOUNT - закрытие сбора по определенной сумме, BY_TIME - закрытие сбора по истечении времени")
