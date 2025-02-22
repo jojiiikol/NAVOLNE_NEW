@@ -15,10 +15,15 @@ import TransferMoney from '../components/payment/TransferMoney';
 import CreatePost from '../components/forms/CreatePost';
 import PostCard from '../components/cards/PostCard';
 import TopDonaters from '../components/cards/TopDonaters';
+import ModalExpired from '../components/requests/ModalExpired';
 const ProjectPage = () => {
     const [showModalConfirm, setShowModalConfirm] = useState(false); // Состояние для отображения модального окна
     const openModalConfirm = () => setShowModalConfirm(true); // Функция для открытия модального окна
     const closeModalConfirm = () => setShowModalConfirm(false); // Функция для закрытия модального окна
+
+    const [showModalExpired, setShowModalExpired] = useState(false); // Состояние для отображения модального окна
+    const openModalExpired = () => setShowModalExpired(true); // Функция для открытия модального окна
+    const closeModalExpired = () => setShowModalExpired(false); // Функция для закрытия модального окна
 
     const [showModalClosure, setShowModalClosure] = useState(false); // Состояние для отображения модального окна
     const openModalClosure = () => setShowModalClosure(true); // Функция для открытия модального окна
@@ -299,6 +304,27 @@ const ProjectPage = () => {
                                         )}
                                     </div>
                                 )}
+                                {data.is_admin &&
+                                    data.status_code.code == 2 &&
+                                    data.transfer_allowed == false &&
+                                    data.closure_type == 'BY_TIME' && (
+                                        <div className="mt-1" style={{}}>
+                                            <Button
+                                                size="lg"
+                                                variant="primary"
+                                                onClick={openModalExpired}
+                                            >
+                                                Возврат средств
+                                            </Button>
+                                            {showModalExpired && (
+                                                <ModalExpired
+                                                    show={true}
+                                                    onHide={closeModalExpired}
+                                                    slug={slug}
+                                                />
+                                            )}
+                                        </div>
+                                    )}
                             </div>
                             <div className="d-flex flex-row-reverse">
                                 {' '}
