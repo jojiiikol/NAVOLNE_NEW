@@ -256,7 +256,7 @@ class ProjectViewSet(mixins.ListModelMixin,
             .order_by('-money')[:3]
         )
 
-        
+
         for transaction in transactions:
             transaction['user'] = User.objects.get(id=transaction['user'])
 
@@ -560,7 +560,10 @@ class ResetPassword(APIView):
                    description="Тут юзер должен придумать новый пароль",
                    request=ResetPasswordSerializer)
     def post(self, request, token, *args, **kwargs):
-        token_db = ResetPasswordToken.objects.get(token=token)
+        try:
+            token_db = ResetPasswordToken.objects.get(token=token)
+        except ObjectDoesNotExist:
+            return Response(data={"data": "Токен не действительный"}, status=status.HTTP_400_BAD_REQUEST)
         check_token_timelife(token_db)
         user = token_db.user
         data = ResetPasswordSerializer(user, data=request.data, context={'request': request})

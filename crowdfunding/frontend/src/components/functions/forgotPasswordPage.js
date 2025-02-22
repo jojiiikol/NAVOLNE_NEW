@@ -27,7 +27,7 @@ export default class ForgotPasswordPage extends Component {
         const { password_1, password_2 } = this.state;
 
         this.setState({ errorFlag: false });
-        fetch(url + '/reset_password/' + token + '/', {
+        fetch(url + '/reset_password/' + token, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
