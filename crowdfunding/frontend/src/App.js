@@ -12,9 +12,10 @@ function App() {
     TokenCheck();
     return (
         <div>
-            <SimpleBar style={{ maxHeight: 1000 }}>
-                <Header></Header>
-            </SimpleBar>
+            <Header></Header>
+            {/* <SimpleBar style={{ maxHeight: 1000 }}>
+               
+            </SimpleBar> */}
             {/* <Footer /> */}
         </div>
     );

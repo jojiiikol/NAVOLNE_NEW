@@ -12,12 +12,18 @@ import '../css/home.css';
 import MyCard from '../components/cards/CardComponent.js';
 import PaymentComponent from '../components/payment/PaymentComponent.js';
 import url from '../components/functions/globalURL.js';
+import 'aos/dist/aos.css';
+import AOS from 'aos';
 const PaginationComponent = () => {
     const [data, setData] = useState([]);
     const [nextPage, setNextPage] = useState(null);
     const [prevPage, setPrevPage] = useState(null);
     useEffect(() => {
         fetchData(url + '/projects/');
+        AOS.init({
+            duration: 1000, // продолжительность анимации
+            once: false, // анимация срабатывает каждый раз
+        });
     }, []);
 
     const fetchData = (url) => {
