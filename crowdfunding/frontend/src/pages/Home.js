@@ -9,6 +9,7 @@ import 'aos/dist/aos.css';
 import AOS from 'aos';
 import logo from '../components/logo192.png';
 import nvImage from '../images/nizhnevartovsk-city-russia-8.jpg';
+import About from './About';
 const Home = () => {
     const [project, setProject] = useState(null);
     const [projectClose, setProjectClose] = useState(null);
@@ -253,7 +254,9 @@ const Home = () => {
                     </div>
                 </section>
 
-                <section></section>
+                <section>
+                    <About className="border-0 rounded-5 shadow"></About>
+                </section>
                 <section>
                     {' '}
                     {/* Закрытые проекты */}
