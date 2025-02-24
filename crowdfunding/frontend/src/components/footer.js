@@ -12,7 +12,7 @@ const Footer = () => {
                 boxShadow: '0px 0px 10px #a8a8a8',
             }}
         >
-            <div className="d-flex justify-content-center">
+            <Container className="d-flex justify-content-center">
                 <Navbar.Brand href="/" className="fw-bold">
                     <img
                         src={logo}
@@ -24,7 +24,7 @@ const Footer = () => {
                     NA VOLNE
                 </Navbar.Brand>{' '}
                 <p className="align-text-center">&copy;</p>
-            </div>
+            </Container>
         </Navbar>
     );
 };

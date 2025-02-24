@@ -113,145 +113,198 @@ const Home = () => {
 
             <Container fluid style={{ marginTop: '50px' }}>
                 {/* Популярные проекты */}
-                <div className="mb-5">
-                    <div className="d-flex justify-content-between mt-4 mb-4">
-                        <h1
-                            className="all-projects-h1"
-                            data-aos="fade-right"
-                            data-aos-duration="700" // продолжительность 1 секунда
-                            data-aos-delay="50" // задержка 200ms
-                            data-aos-offset="100" // отступ 150px
-                        >
-                            Популярные проекты
-                        </h1>
-                        <a
-                            href="/projects"
-                            className="all-projects-href-p"
-                            data-aos="fade-left"
-                            data-aos-duration="700" // продолжительность 1 секунда
-                            data-aos-delay="50" // задержка 200ms
-                            data-aos-offset="100" // отступ 150px
-                        >
-                            Все проекты
-                        </a>
-                    </div>
+                <section>
+                    <div className="mb-5">
+                        <div className="d-flex justify-content-between mt-4 mb-4">
+                            <h1
+                                className="all-projects-h1"
+                                data-aos="fade-right"
+                                data-aos-duration="700" // продолжительность 1 секунда
+                                data-aos-delay="50" // задержка 200ms
+                                data-aos-offset="100" // отступ 150px
+                            >
+                                Популярные проекты
+                            </h1>
+                            <a
+                                href="/projects"
+                                className="all-projects-href-p"
+                                data-aos="fade-left"
+                                data-aos-duration="700" // продолжительность 1 секунда
+                                data-aos-delay="50" // задержка 200ms
+                                data-aos-offset="100" // отступ 150px
+                            >
+                                Все проекты
+                            </a>
+                        </div>
 
-                    <Row xs={1} md={3} className="g-4">
-                        {project.map((project) => (
-                            <Col key={project.pk}>
-                                <MyCard
-                                    slug={project.slug}
-                                    collected_money={project.collected_money}
-                                    need_money={project.need_money}
-                                    name={project.name}
-                                    category={project.category}
-                                    small_description={
-                                        project.small_description
-                                    }
-                                    views={project.views}
-                                    image={project.image}
-                                    code={project.status_code.code}
-                                    start_date={project.start_date}
-                                    end_date={project.end_date}
-                                />
-                            </Col>
-                        ))}
-                    </Row>
-                </div>
+                        <Row xs={1} md={3} className="g-4">
+                            {project.map((project) => (
+                                <Col key={project.pk}>
+                                    <MyCard
+                                        slug={project.slug}
+                                        collected_money={
+                                            project.collected_money
+                                        }
+                                        need_money={project.need_money}
+                                        name={project.name}
+                                        category={project.category}
+                                        small_description={
+                                            project.small_description
+                                        }
+                                        views={project.views}
+                                        image={project.image}
+                                        code={project.status_code.code}
+                                        start_date={project.start_date}
+                                        end_date={project.end_date}
+                                    />
+                                </Col>
+                            ))}
+                        </Row>
+                    </div>
+                </section>
+                <section>
+                    <div className="why-us-section" data-aos="fade-up">
+                        <h1 className="why-us-title">Почему именно мы?</h1>
+                        <Container>
+                            {' '}
+                            <div className="why-us-content">
+                                <div
+                                    className="why-us-card"
+                                    data-aos="fade-right"
+                                >
+                                    <h2>Надёжность</h2>
+                                    <p>
+                                        Мы гарантируем безопасность сделок и
+                                        поддерживаем предпринимателей на всех
+                                        этапах.
+                                    </p>
+                                </div>
+                                <div className="why-us-card" data-aos="fade-up">
+                                    <h2>Официальная поддержка</h2>
+                                    <p>
+                                        Поддержаны Нижневартовским
+                                        Государственным Университетом
+                                    </p>
+                                </div>
+                                <div
+                                    className="why-us-card"
+                                    data-aos="fade-left"
+                                >
+                                    <h2>Индивидуальный подход</h2>
+                                    <p>
+                                        Персональные стратегии и поддержка для
+                                        каждого клиента.
+                                    </p>
+                                </div>
+                            </div>
+                        </Container>
+                    </div>
+                </section>
 
                 {/* Новые проекты */}
-                <div className="mb-5">
-                    <div className="d-flex justify-content-between mt-4 mb-4">
-                        <h1
-                            className="all-projects-h1"
-                            data-aos="fade-right"
-                            data-aos-duration="700" // продолжительность 1 секунда
-                            data-aos-delay="50" // задержка 200ms
-                            data-aos-offset="100" // отступ 150px
-                        >
-                            Новые проекты
-                        </h1>
-                        <a
-                            href="/projects"
-                            className="all-projects-href-p"
-                            data-aos="fade-left"
-                            data-aos-duration="700" // продолжительность 1 секунда
-                            data-aos-delay="50" // задержка 200ms
-                            data-aos-offset="100" // отступ 150px
-                        >
-                            Все проекты
-                        </a>
+                <section>
+                    {' '}
+                    <div className="mb-5">
+                        <div className="d-flex justify-content-between mt-4 mb-4">
+                            <h1
+                                className="all-projects-h1"
+                                data-aos="fade-right"
+                                data-aos-duration="700" // продолжительность 1 секунда
+                                data-aos-delay="50" // задержка 200ms
+                                data-aos-offset="100" // отступ 150px
+                            >
+                                Новые проекты
+                            </h1>
+                            <a
+                                href="/projects"
+                                className="all-projects-href-p"
+                                data-aos="fade-left"
+                                data-aos-duration="700" // продолжительность 1 секунда
+                                data-aos-delay="50" // задержка 200ms
+                                data-aos-offset="100" // отступ 150px
+                            >
+                                Все проекты
+                            </a>
+                        </div>
+                        <Row xs={1} md={3} className="g-4">
+                            {projectNew.map((project) => (
+                                <Col key={project.pk}>
+                                    <MyCard
+                                        slug={project.slug}
+                                        collected_money={
+                                            project.collected_money
+                                        }
+                                        need_money={project.need_money}
+                                        name={project.name}
+                                        category={project.category}
+                                        small_description={
+                                            project.small_description
+                                        }
+                                        views={project.views}
+                                        image={project.image}
+                                        code={project.status_code.code}
+                                        start_date={project.start_date}
+                                        end_date={project.end_date}
+                                        data-aos="fade-up" // добавлен атрибут для анимации
+                                    />
+                                </Col>
+                            ))}
+                        </Row>
                     </div>
-                    <Row xs={1} md={3} className="g-4">
-                        {projectNew.map((project) => (
-                            <Col key={project.pk}>
-                                <MyCard
-                                    slug={project.slug}
-                                    collected_money={project.collected_money}
-                                    need_money={project.need_money}
-                                    name={project.name}
-                                    category={project.category}
-                                    small_description={
-                                        project.small_description
-                                    }
-                                    views={project.views}
-                                    image={project.image}
-                                    code={project.status_code.code}
-                                    start_date={project.start_date}
-                                    end_date={project.end_date}
-                                    data-aos="fade-up" // добавлен атрибут для анимации
-                                />
-                            </Col>
-                        ))}
-                    </Row>
-                </div>
+                </section>
 
-                {/* Закрытые проекты */}
-                <div className="mb-5">
-                    <div className="d-flex justify-content-between mt-4 mb-4">
-                        <h1
-                            className="all-projects-h1"
-                            data-aos="fade-right"
-                            data-aos-duration="700" // продолжительность 1 секунда
-                            data-aos-delay="50" // задержка 200ms
-                            data-aos-offset="100" // отступ 150px
-                        >
-                            Сбор окончен
-                        </h1>
-                        <a
-                            href="/projects"
-                            className="all-projects-href-p"
-                            data-aos="fade-left"
-                            data-aos-duration="700" // продолжительность 1 секунда
-                            data-aos-delay="50" // задержка 200ms
-                            data-aos-offset="100" // отступ 150px
-                        >
-                            Все проекты
-                        </a>
+                <section></section>
+                <section>
+                    {' '}
+                    {/* Закрытые проекты */}
+                    <div className="mb-5">
+                        <div className="d-flex justify-content-between mt-4 mb-4">
+                            <h1
+                                className="all-projects-h1"
+                                data-aos="fade-right"
+                                data-aos-duration="700" // продолжительность 1 секунда
+                                data-aos-delay="50" // задержка 200ms
+                                data-aos-offset="100" // отступ 150px
+                            >
+                                Сбор окончен
+                            </h1>
+                            <a
+                                href="/projects"
+                                className="all-projects-href-p"
+                                data-aos="fade-left"
+                                data-aos-duration="700" // продолжительность 1 секунда
+                                data-aos-delay="50" // задержка 200ms
+                                data-aos-offset="100" // отступ 150px
+                            >
+                                Все проекты
+                            </a>
+                        </div>
+                        <Row xs={1} md={3} className="g-4">
+                            {projectClose.map((project) => (
+                                <Col key={project.pk}>
+                                    <MyCard
+                                        slug={project.slug}
+                                        collected_money={
+                                            project.collected_money
+                                        }
+                                        need_money={project.need_money}
+                                        name={project.name}
+                                        category={project.category}
+                                        small_description={
+                                            project.small_description
+                                        }
+                                        views={project.views}
+                                        image={project.image}
+                                        code={project.status_code.code}
+                                        start_date={project.start_date}
+                                        end_date={project.end_date}
+                                        data-aos="fade-up" // добавлен атрибут для анимации
+                                    />
+                                </Col>
+                            ))}
+                        </Row>
                     </div>
-                    <Row xs={1} md={3} className="g-4">
-                        {projectClose.map((project) => (
-                            <Col key={project.pk}>
-                                <MyCard
-                                    slug={project.slug}
-                                    collected_money={project.collected_money}
-                                    need_money={project.need_money}
-                                    name={project.name}
-                                    category={project.category}
-                                    small_description={
-                                        project.small_description
-                                    }
-                                    views={project.views}
-                                    image={project.image}
-                                    code={project.status_code.code}
-                                    start_date={project.start_date}
-                                    end_date={project.end_date}
-                                    data-aos="fade-up" // добавлен атрибут для анимации
-                                />
-                            </Col>
-                        ))}
-                    </Row>
-                </div>
+                </section>
             </Container>
         </>
     );
