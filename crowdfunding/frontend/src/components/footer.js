@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, Navbar, Nav } from 'react-bootstrap';
-import '../css/footer.css';
+
 import logo from '../logo512.png';
 const Footer = () => {
     return (
@@ -12,7 +12,7 @@ const Footer = () => {
                 boxShadow: '0px 0px 10px #a8a8a8',
             }}
         >
-            <Container className="d-flex justify-content-center">
+            <div className="d-flex justify-content-center">
                 <Navbar.Brand href="/" className="fw-bold">
                     <img
                         src={logo}
@@ -24,7 +24,7 @@ const Footer = () => {
                     NA VOLNE
                 </Navbar.Brand>{' '}
                 <p className="align-text-center">&copy;</p>
-            </Container>
+            </div>
         </Navbar>
     );
 };

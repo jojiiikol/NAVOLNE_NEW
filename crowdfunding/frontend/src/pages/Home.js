@@ -7,7 +7,8 @@ import url from '../components/functions/globalURL';
 import { InView } from 'react-intersection-observer';
 import 'aos/dist/aos.css';
 import AOS from 'aos';
-
+import logo from '../components/logo192.png';
+import nvImage from '../images/nizhnevartovsk-city-russia-8.jpg';
 const Home = () => {
     const [project, setProject] = useState(null);
     const [projectClose, setProjectClose] = useState(null);
@@ -86,7 +87,7 @@ const Home = () => {
                                 height: '95vh',
                                 objectFit: 'cover',
                             }}
-                            src="https://russiatrek.org/blog/wp-content/uploads/2020/03/nizhnevartovsk-city-russia-8.jpg"
+                            src={nvImage}
                             className="w-100  d-block d-sm-none"
                         />
                         <div className="float-center">

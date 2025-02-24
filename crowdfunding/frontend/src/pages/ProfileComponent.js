@@ -109,6 +109,7 @@ const ProfileComponent = () => {
                             data-aos-duration="500" // продолжительность 1 секунда
                             data-aos-delay="50" // задержка 200ms
                             data-aos-offset="100" // отступ 150px
+                            data-aos-once="true"
                         >
                             <Card
                                 className="border-0 rounded-5 shadow "
@@ -212,6 +213,7 @@ const ProfileComponent = () => {
                             data-aos-duration="800" // продолжительность 1 секунда
                             data-aos-delay="800" // задержка 200ms
                             data-aos-offset="250" // отступ 150px
+                            data-aos-once="true"
                         >
                             <AboutProfileCard
                                 first_name={data.first_name}
@@ -237,6 +239,7 @@ const ProfileComponent = () => {
                                     data-aos-duration="800" // продолжительность 1 секунда
                                     data-aos-delay="400" // задержка 200ms
                                     data-aos-offset="250" // отступ 150px
+                                    data-aos-once="true"
                                 >
                                     <Card
                                         className="border-0 rounded-5 shadow "
@@ -377,8 +380,9 @@ const ProfileComponent = () => {
                         className="mt-2"
                         data-aos="fade-down"
                         data-aos-duration="1000" // продолжительность 1 секунда
-                        data-aos-delay="1200" // задержка 200ms
+                        data-aos-delay="200" // задержка 200ms
                         data-aos-offset="250" // отступ 150px
+                        data-aos-once="true"
                     >
                         <p className="fs-1 fw-bold mb-0 text-center mt-2">
                             Проекты пользователя:
