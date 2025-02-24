@@ -18,7 +18,18 @@ const PostCard = (props) => {
                         style={{ height: 200, objectFit: 'cover' }}
                     ></Card.Img>
                     <Card.Body>
-                        <span className="fs-3 fw-bolder">{name}</span>
+                        <span
+                            className="fs-3 fw-bolder"
+                            style={{
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                width: '100%', // Ограничение ширины
+                                display: 'block', // Чтобы работали остальные свойства
+                            }}
+                        >
+                            {name}
+                        </span>
                         <div className="d-flex text-secondary justify-content-between fw-bolder">
                             <div>
                                 <span className="me-1">{user.first_name}</span>

@@ -57,7 +57,18 @@ const MyCard = (props) => {
                     )}
 
                     <Card.Body className="d-flex flex-column">
-                        <Card.Title className="fs-1">{name}</Card.Title>
+                        <Card.Title
+                            className="fs-1"
+                            style={{
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                width: '100%', // Ограничение ширины
+                                display: 'block', // Чтобы работали остальные свойства
+                            }}
+                        >
+                            {name}
+                        </Card.Title>
                         {code != 2 && code != 3 && (
                             <div className="d-flex" style={{ height: '40px' }}>
                                 {category[0] && (

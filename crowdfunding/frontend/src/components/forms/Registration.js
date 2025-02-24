@@ -44,7 +44,8 @@ export default class Registration extends Component {
     }
     handleChange = (event) => {
         const { name, value } = event.target;
-        this.setState({ [name]: value });
+
+        this.setState({ [name]: value }, this.validateForm);
     };
 
     handleSubmit = (event) => {
@@ -102,10 +103,33 @@ export default class Registration extends Component {
         this.state.groups.push(value);
     };
     handleCheckboxChange(e) {
-        this.setState({ isChecked: e.target.checked });
+        this.setState({ isChecked: e.target.checked }, this.validateForm);
     }
+    validateForm = () => {
+        const {
+            username,
+            password_1,
+            password_2,
+            email,
+            first_name,
+            last_name,
+            skills,
+            groups,
+            isChecked,
+        } = this.state;
+        const isFormValid =
+            username &&
+            email &&
+            password_1 &&
+            password_2 &&
+            groups &&
+            first_name &&
+            last_name &&
+            isChecked; // Проверяем, заполнены ли все поля
+        this.setState({ isFormValid });
+    };
     render() {
-        const { isChecked } = this.state;
+        const { isChecked, isFormValid } = this.state;
         return (
             <Container style={{}}>
                 <Form onSubmit={this.handleSubmit}>
@@ -287,7 +311,7 @@ export default class Registration extends Component {
                     <Button
                         variant="primary"
                         type="submit"
-                        disabled={!isChecked}
+                        disabled={!isFormValid}
                     >
                         Зарегистрироваться
                     </Button>
@@ -295,48 +319,4 @@ export default class Registration extends Component {
             </Container>
         );
     }
-}
-
-{
-    /* <div
-                            className="registration-pik-and-text"
-                            style={{ display: 'flex', alignItems: 'center' }}
-                        >
-                            <img
-                                src={idea}
-                                height="180"
-                                width="180"
-                                className="d-inline-block align-top"
-                                alt="Logo"
-                                marginRight="15px"
-                            />
-                            <div
-                                className="registration-pik-and-text-rectangle"
-                                style={{
-                                    width: '100%',
-                                    height: '135px',
-                                    border: 'solid',
-                                    borderColor: '#0d6efd',
-                                    borderWidth: 'thin',
-                                    borderRadius: '10px 10px 10px 0',
-                                }}
-                            >
-                                <p
-                                    style={{
-                                        marginLeft: '1em',
-                                        marginTop: '1em',
-                                    }}
-                                >
-                                    Если вы уже зарегистрированы, просто войдите
-                                    в свой аккаунт.
-                                </p>
-                                <Button
-                                    style={{ marginLeft: '1em' }}
-                                    size="sm"
-                                    href="/Login"
-                                >
-                                    Войти в аккаунт
-                                </Button>
-                            </div>
-                        </div> */
 }
