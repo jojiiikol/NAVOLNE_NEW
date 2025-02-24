@@ -217,14 +217,16 @@ export default class Create extends Component {
                                 <Form.Label>
                                     Необходимое количество средств
                                 </Form.Label>
-                                <InputGroup className="mb-3">
+                                <InputGroup className="">
                                     <Form.Control
                                         name="need_money"
                                         value={this.state.need_money}
                                         onChange={this.handleChange}
                                         type="number"
                                     />
+
                                     <InputGroup.Text>₽</InputGroup.Text>
+
                                     {this.state.errorMessage && (
                                         <Form.Text className="text-danger">
                                             {' '}
@@ -235,13 +237,18 @@ export default class Create extends Component {
                                         </Form.Text>
                                     )}
                                 </InputGroup>
+                                <div style={{ display: 'block' }}>
+                                    <Form.Text className="text-muted">
+                                        *введите число без пробелов
+                                    </Form.Text>
+                                </div>
                             </Form.Group>
 
                             <Form.Group className="mb-3">
                                 <Form.Label>
                                     Уже собранное количество средств
                                 </Form.Label>
-                                <InputGroup className="mb-3">
+                                <InputGroup className="">
                                     <Form.Control
                                         name="collected_money"
                                         value={this.state.collected_money}
@@ -259,6 +266,11 @@ export default class Create extends Component {
                                         </Form.Text>
                                     )}
                                 </InputGroup>
+                                <div style={{ display: 'block' }}>
+                                    <Form.Text className="text-muted">
+                                        *введите число без пробелов
+                                    </Form.Text>
+                                </div>
                             </Form.Group>
 
                             <Form.Group className="mb-3">

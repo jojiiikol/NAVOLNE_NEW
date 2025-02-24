@@ -122,18 +122,11 @@ export default class header extends Component {
                                 {!localStorage.getItem('accessToken') && (
                                     <div className="d-flex ">
                                         <Button
-                                            variant="outline-primary"
+                                            variant="primary"
                                             className="me-2 me-lg-2 "
                                             href="/auth"
                                         >
-                                            Войти
-                                        </Button>
-                                        <Button
-                                            variant="primary"
-                                            className="me-sm-2 "
-                                            href="/auth"
-                                        >
-                                            Зарегистрироваться
+                                            Начать инвестировать
                                         </Button>
                                     </div>
                                 )}

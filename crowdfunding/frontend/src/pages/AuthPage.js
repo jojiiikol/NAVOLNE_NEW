@@ -10,6 +10,7 @@ import Registration from '../components/forms/Registration';
 import Login from '../components/forms/Login';
 import { useState } from 'react';
 import footage from '../images/surgut.mp4';
+
 const AuthPage = () => {
     const [authMode, setAuthMode] = useState('login'); // По умолчанию показываем форму авторизации
 
@@ -25,17 +26,22 @@ const AuthPage = () => {
     }
 
     return (
-        <div style={{ marginTop: '60px' }}>
-            <Row md={2} xs={1}>
+        <div style={{ marginTop: '60px', overflowX: 'hidden' }}>
+            {' '}
+            {/* Убираем горизонтальный скролл */}
+            <Row md={2} xs={1} className="g-0">
+                {' '}
+                {/* Убираем отступы между колонками */}
                 <Col
                     style={{
-                        height: '50rem',
+                        height: '54rem',
                         background: '#E0F1EE',
                         borderRadius: '24px',
                         border: '1px solid rgba(0, 0, 0, 0.02)',
+                        padding: '0', // Убираем внутренние отступы
                     }}
                     md={4}
-                    className="ms-4 me-4 mt-2 d-flex justify-content-center align-items-center"
+                    className=" mt-2 d-flex justify-content-center align-items-center"
                 >
                     <Container
                         center
@@ -47,7 +53,7 @@ const AuthPage = () => {
                                 name="auth-mode"
                                 value="login"
                                 variant="outline-primary"
-                                checked={authMode == 'login'}
+                                checked={authMode === 'login'}
                                 onClick={() => handleToggle('login')}
                                 className="fw-bold fs-4"
                                 style={{ height: '3rem' }}
@@ -59,7 +65,7 @@ const AuthPage = () => {
                                 name="auth-mode"
                                 value="register"
                                 variant="outline-primary"
-                                checked={authMode == 'register'}
+                                checked={authMode === 'register'}
                                 className="fw-bold fs-4"
                                 style={{ height: '3rem' }}
                                 onClick={() => handleToggle('register')}
@@ -73,26 +79,24 @@ const AuthPage = () => {
                 </Col>
                 <Col
                     style={{ padding: '0px' }}
-                    className="d-none d-sm-block"
-                    md={7}
+                    className="d-none d-sm-block mt-2"
+                    md={8}
                 >
-                    <section>
-                        <video
-                            style={{
-                                objectFit: 'cover',
-                                borderRadius: '24px',
-                                border: '1px solid rgba(0, 0, 0, 0.02)',
-                                width: '135vh',
-                                height: '50rem',
-                            }}
-                            className=" mt-2 d-md-block"
-                            autoPlay
-                            loop
-                            muted
-                        >
-                            <source src={footage} type="video/mp4" />
-                        </video>
-                    </section>
+                    <video
+                        style={{
+                            objectFit: 'cover',
+                            borderRadius: '24px',
+                            border: '1px solid rgba(0, 0, 0, 0.02)',
+                            width: '100%',
+                            height: '100%', // Занимает всю высоту колонки
+                        }}
+                        className=" ms-2 d-md-block"
+                        autoPlay
+                        loop
+                        muted
+                    >
+                        <source src={footage} type="video/mp4" />
+                    </video>
                 </Col>
             </Row>
         </div>

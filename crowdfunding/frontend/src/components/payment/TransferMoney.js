@@ -21,6 +21,7 @@ const TransferMoney = ({ show, onHide, slug }) => {
                     Authorization: 'Bearer ' + accessToken,
                 },
             });
+            alert('Ожидайте поступления средств на ваш счёт');
             onHide();
             // Закрываем модальное окно после успешного сохранения
         } catch (error) {

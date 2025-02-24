@@ -215,7 +215,12 @@ export default class Registration extends Component {
                             </Form.Text>
                         )}
                     </Form.Group>
-
+                    {this.state.errorMessage && (
+                        <Form.Text className="text-danger">
+                            {' '}
+                            {this.state.errorMessage.password}{' '}
+                        </Form.Text>
+                    )}
                     <Form.Group className="mb-3" controlId="formBasicPassword">
                         {/* <Form.Label>Фамилия</Form.Label> */}
                         <Form.Control

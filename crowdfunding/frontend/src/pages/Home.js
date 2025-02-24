@@ -72,7 +72,7 @@ class Home extends Component {
                             height: '80vh',
                             objectFit: 'cover',
                         }}
-                        className="w-100"
+                        className="w-100  d-none d-sm-block "
                         autoPlay
                         loop
                         muted
@@ -83,6 +83,16 @@ class Home extends Component {
                             allowFullScreen
                         />
                     </video>
+                    <img
+                        style={{
+                            marginTop: '50px',
+                            padding: '0',
+                            height: '80vh',
+                            objectFit: 'cover',
+                        }}
+                        src="https://russiatrek.org/blog/wp-content/uploads/2020/03/nizhnevartovsk-city-russia-8.jpg"
+                        className="w-100  d-block d-sm-none"
+                    ></img>
                     <div className="float-center">
                         <h1 className="video-h1-center">NA VOLNE</h1>
                         <h2 className="video-h2-center">
@@ -91,7 +101,7 @@ class Home extends Component {
                         <h3 className="video-h3-center">
                             Мы помогаем инвесторам, компаниям малого и среднего
                             бизнеса быстро, и безопасно провести сделки по
-                            привлечению капитала в ХМАО
+                            привлечению капитала в ЮГРЕ
                         </h3>
                     </div>
                 </div>
