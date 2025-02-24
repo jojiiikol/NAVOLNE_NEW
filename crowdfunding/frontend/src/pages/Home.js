@@ -65,7 +65,7 @@ const Home = () => {
                             style={{
                                 marginTop: '50px',
                                 padding: '0',
-                                height: '80vh',
+                                height: '95vh',
                                 objectFit: 'cover',
                             }}
                             className="w-100  d-none d-sm-block"
@@ -83,7 +83,7 @@ const Home = () => {
                             style={{
                                 marginTop: '50px',
                                 padding: '0',
-                                height: '80vh',
+                                height: '95vh',
                                 objectFit: 'cover',
                             }}
                             src="https://russiatrek.org/blog/wp-content/uploads/2020/03/nizhnevartovsk-city-russia-8.jpg"
@@ -114,8 +114,23 @@ const Home = () => {
                 {/* Популярные проекты */}
                 <div className="mb-5">
                     <div className="d-flex justify-content-between mt-4 mb-4">
-                        <h1 className="all-projects-h1">Популярные проекты</h1>
-                        <a href="/projects" className="all-projects-href-p">
+                        <h1
+                            className="all-projects-h1"
+                            data-aos="fade-right"
+                            data-aos-duration="700" // продолжительность 1 секунда
+                            data-aos-delay="50" // задержка 200ms
+                            data-aos-offset="100" // отступ 150px
+                        >
+                            Популярные проекты
+                        </h1>
+                        <a
+                            href="/projects"
+                            className="all-projects-href-p"
+                            data-aos="fade-left"
+                            data-aos-duration="700" // продолжительность 1 секунда
+                            data-aos-delay="50" // задержка 200ms
+                            data-aos-offset="100" // отступ 150px
+                        >
                             Все проекты
                         </a>
                     </div>
@@ -145,9 +160,24 @@ const Home = () => {
 
                 {/* Новые проекты */}
                 <div className="mb-5">
-                    <div className="d-flex justify-content-between mt-5 mb-4">
-                        <h1 className="all-projects-h1">Новые проекты</h1>
-                        <a href="/projects" className="all-projects-href-p">
+                    <div className="d-flex justify-content-between mt-4 mb-4">
+                        <h1
+                            className="all-projects-h1"
+                            data-aos="fade-right"
+                            data-aos-duration="700" // продолжительность 1 секунда
+                            data-aos-delay="50" // задержка 200ms
+                            data-aos-offset="100" // отступ 150px
+                        >
+                            Новые проекты
+                        </h1>
+                        <a
+                            href="/projects"
+                            className="all-projects-href-p"
+                            data-aos="fade-left"
+                            data-aos-duration="700" // продолжительность 1 секунда
+                            data-aos-delay="50" // задержка 200ms
+                            data-aos-offset="100" // отступ 150px
+                        >
                             Все проекты
                         </a>
                     </div>
@@ -177,9 +207,24 @@ const Home = () => {
 
                 {/* Закрытые проекты */}
                 <div className="mb-5">
-                    <div className="d-flex justify-content-between mt-5 mb-4">
-                        <h1 className="all-projects-h1">Сбор окончен</h1>
-                        <a href="/projects" className="all-projects-href-p">
+                    <div className="d-flex justify-content-between mt-4 mb-4">
+                        <h1
+                            className="all-projects-h1"
+                            data-aos="fade-right"
+                            data-aos-duration="700" // продолжительность 1 секунда
+                            data-aos-delay="50" // задержка 200ms
+                            data-aos-offset="100" // отступ 150px
+                        >
+                            Сбор окончен
+                        </h1>
+                        <a
+                            href="/projects"
+                            className="all-projects-href-p"
+                            data-aos="fade-left"
+                            data-aos-duration="700" // продолжительность 1 секунда
+                            data-aos-delay="50" // задержка 200ms
+                            data-aos-offset="100" // отступ 150px
+                        >
                             Все проекты
                         </a>
                     </div>

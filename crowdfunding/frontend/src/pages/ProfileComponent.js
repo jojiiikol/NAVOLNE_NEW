@@ -20,6 +20,8 @@ import MoneyWithdrawal from '../components/payment/MoneyWithdrawal';
 import MoneyAdd from '../components/payment/MoneyAdd';
 import AboutProfileCard from '../components/cards/AboutProfileCard';
 import getEmailMessage from '../components/requests/getEmailMessage';
+import 'aos/dist/aos.css';
+import AOS from 'aos';
 const ProfileComponent = () => {
     const { profilename } = useParams();
     const [data, setData] = useState(null);
@@ -46,6 +48,10 @@ const ProfileComponent = () => {
     const openModalMoneyAdd = () => setShowModalMoneyAdd(true); // Функция для открытия модального окна
     const closeModalMoneyAdd = () => setShowModalMoneyAdd(false); // Функция для закрытия модального окна
     useEffect(() => {
+        AOS.init({
+            //duration: 1000, // продолжительность анимации
+            once: false, // анимация срабатывает каждый раз
+        });
         const fetchData = async () => {
             if (localStorage.getItem('accessToken')) {
                 const response = await fetch(
@@ -96,7 +102,14 @@ const ProfileComponent = () => {
                 <div>
                     {/* <MoneyWidget /> */}
                     <Row md={3} sm={1}>
-                        <Col md={3} className="mt-2">
+                        <Col
+                            md={3}
+                            className="mt-2"
+                            data-aos="fade-right"
+                            data-aos-duration="500" // продолжительность 1 секунда
+                            data-aos-delay="50" // задержка 200ms
+                            data-aos-offset="100" // отступ 150px
+                        >
                             <Card
                                 className="border-0 rounded-5 shadow "
                                 style={{ backgroundColor: '#FFFFFF' }}
@@ -192,7 +205,14 @@ const ProfileComponent = () => {
                                 </Card.Body>
                             </Card>
                         </Col>
-                        <Col md={5} className="mt-2">
+                        <Col
+                            md={5}
+                            className="mt-2"
+                            data-aos="fade-up"
+                            data-aos-duration="800" // продолжительность 1 секунда
+                            data-aos-delay="800" // задержка 200ms
+                            data-aos-offset="250" // отступ 150px
+                        >
                             <AboutProfileCard
                                 first_name={data.first_name}
                                 last_name={data.last_name}
@@ -211,7 +231,13 @@ const ProfileComponent = () => {
                             </Row>
                             <div className="d-flex  justify-content-between  "></div>
                             <Row>
-                                <Col className="mt-2">
+                                <Col
+                                    className="mt-2"
+                                    data-aos="fade-left"
+                                    data-aos-duration="800" // продолжительность 1 секунда
+                                    data-aos-delay="400" // задержка 200ms
+                                    data-aos-offset="250" // отступ 150px
+                                >
                                     <Card
                                         className="border-0 rounded-5 shadow "
                                         style={{ backgroundColor: '#FFFFFF' }}
@@ -347,7 +373,13 @@ const ProfileComponent = () => {
                         </Col>
                     </Row>
 
-                    <Row>
+                    <Row
+                        className="mt-2"
+                        data-aos="fade-down"
+                        data-aos-duration="1000" // продолжительность 1 секунда
+                        data-aos-delay="1200" // задержка 200ms
+                        data-aos-offset="250" // отступ 150px
+                    >
                         <p className="fs-1 fw-bold mb-0 text-center mt-2">
                             Проекты пользователя:
                         </p>
