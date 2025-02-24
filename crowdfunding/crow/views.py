@@ -51,9 +51,6 @@ class ProjectViewSet(mixins.ListModelMixin,
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     filter_backends = [DjangoFilterBackend]
-    # search_fields = ['name']
-    # filterset_fields = ['category', 'status_code', ]
-    # ordering_fields = ['collected_money', 'views', 'start_date']
     filterset_class = ProjectFilter
     lookup_field = 'slug'
     pagination_class = AllProjectsPaginator
