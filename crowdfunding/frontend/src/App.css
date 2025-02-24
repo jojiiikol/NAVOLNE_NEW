@@ -1,8 +1,23 @@
 .App {
     text-align: center;
 }
-body {
+
+html,
+body,
+#root {
     background-color: #f7fbfa !important;
+    height: 100%; /* Занимает всю высоту окна */
+    margin: 0; /* Убираем отступы */
+}
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Занимает всю высоту */
+}
+
+.content {
+    flex-grow: 1; /* Контент будет занимать всё оставшееся пространство */
+    padding: 20px;
 }
 .App-logo {
     height: 40vmin;
@@ -46,4 +61,7 @@ body {
     to {
         transform: rotate(360deg);
     }
+}
+footer {
+    margin-top: auto;
 }
