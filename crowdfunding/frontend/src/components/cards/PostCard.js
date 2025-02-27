@@ -2,14 +2,22 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 
 const PostCard = (props) => {
-    const { slug, name, description, image, date, user } = props;
-    let adress = `/posts/${slug}`;
+    const { slug, name, description, image, date, user, onClick } = props;
+    let adress = slug ? `/posts/${slug}` : null; // Если slug пустой, не нужно создавать ссылку
+
+    const handleClick = () => {
+        if (onClick) onClick(); // Вызовем функцию для открытия модального окна
+    };
 
     return (
         <div>
-            <a href={adress} className="text-decoration-none ">
+            <a
+                href={adress || '#'}
+                className="text-decoration-none"
+                onClick={handleClick}
+            >
                 <Card
-                    className="border-0 rounded-5 shadow row g-0 "
+                    className="border-0 rounded-5 shadow row g-0"
                     style={{ backgroundColor: '#FFFFFF' }}
                 >
                     <Card.Img
@@ -36,7 +44,7 @@ const PostCard = (props) => {
                                 <span>{user.last_name}</span>
                             </div>
 
-                            <span>{date}</span>
+                            {date && <span>{date}</span>}
                         </div>
                     </Card.Body>
                 </Card>

@@ -16,6 +16,7 @@ import CreatePost from '../components/forms/CreatePost';
 import PostCard from '../components/cards/PostCard';
 import TopDonaters from '../components/cards/TopDonaters';
 import ModalExpired from '../components/requests/ModalExpired';
+import buttonGif from '../images/button_gif.gif';
 const ProjectPage = () => {
     const [showModalConfirm, setShowModalConfirm] = useState(false); // Состояние для отображения модального окна
     const openModalConfirm = () => setShowModalConfirm(true); // Функция для открытия модального окна
@@ -232,9 +233,34 @@ const ProjectPage = () => {
                                 Новости проекта
                             </span>
                             <Row xs={1} md={2} className="g-4 ">
+                                {data.is_owner &&
+                                    data.status_code.code != 0 && (
+                                        <Col>
+                                            <PostCard
+                                                slug={null}
+                                                name="ДОБАВИТЬ НОВОСТЬ"
+                                                image={buttonGif}
+                                                user={{
+                                                    first_name: 'ЖМИ, ЧТОБЫ',
+                                                    last_name:
+                                                        'ДОБАВИТЬ НОВОСТЬ',
+                                                }}
+                                                onClick={openPostCreate}
+                                            />
+                                            {showPostCreate && (
+                                                <CreatePost
+                                                    show={true}
+                                                    onHide={closePostCreat}
+                                                    slug={slug}
+                                                />
+                                            )}
+                                        </Col>
+                                    )}
+
+                                {/* Вывод остальных новостей */}
                                 {posts &&
                                     posts.map((post) => (
-                                        <Col>
+                                        <Col key={post.pk}>
                                             <PostCard
                                                 slug={post.pk}
                                                 name={post.name}
@@ -245,7 +271,7 @@ const ProjectPage = () => {
                                             />
                                         </Col>
                                     ))}
-                                {posts && posts.length == 0 && (
+                                {posts && posts.length === 0 && (
                                     <span className="ms-2 fs-5 text-secondary fw-bolder">
                                         *У проекта нет новостей
                                     </span>
@@ -291,25 +317,6 @@ const ProjectPage = () => {
                                                 <EditProjectModal
                                                     show={true}
                                                     onHide={closeModal}
-                                                    slug={slug}
-                                                />
-                                            )}
-                                        </div>
-                                    )}
-                                {data.is_owner &&
-                                    data.status_code.code != 0 && (
-                                        <div className="mt-1 me-1" style={{}}>
-                                            <Button
-                                                size="lg"
-                                                variant="secondary"
-                                                onClick={openPostCreate}
-                                            >
-                                                Добавить новость
-                                            </Button>
-                                            {showPostCreate && (
-                                                <CreatePost
-                                                    show={true}
-                                                    onHide={closePostCreat}
                                                     slug={slug}
                                                 />
                                             )}
@@ -411,113 +418,3 @@ const ProjectPage = () => {
 };
 
 export default ProjectPage;
-
-{
-    /* <p className='mb-0 mt-0 fw-bold ' style={{ fontSize: '60px', }}>{data.name}</p>
-						<p className='mt-0 mb-0 fs-5 text-secondary  '>{data.small_description}</p> */
-}
-{
-    /* <div className="d-flex mt-0 mb-2">
-                                {data.category.map((category, index) => (
-                                    <div
-                                        className="badge bg-secondary text-wrap ms-1 mb-1"
-                                        style={{ width: '6rem' }}
-                                        key={index}
-                                    >
-                                        {category}
-                                    </div>
-                                ))}
-                            </div>
-                            <ProgressBar
-                                bgcolor={'#0E7580'}
-                                completed={Math.round(
-                                    (data.collected_money / data.need_money) *
-                                        100
-                                )}
-                                completed_money={data.collected_money}
-                                need_money={data.need_money}
-                            /> */
-}
-{
-    /* {!data.is_owner &&
-							<Button size='lg' className='mt-3' href="#">Поддержать проект</Button>
-						} */
-}
-{
-    /* <div className=" mt-3 d-block">
-                                <span className="text-secondary fs-3 ">
-                                    О проекте:
-                                </span>
-                            </div>
-                            <Row>
-                                <Col
-                                    className="fs-5 mt-3"
-                                    style={{ textAlign: 'justify ' }}
-                                >
-                                    {data.description}
-                                </Col>
-                            </Row> */
-}
-{
-    /* <Image
-                        style={{
-                            width: '100%',
-                            height: '300px',
-                            objectFit: 'cover',
-                            filter: 'brightness(50%)',
-                            position: 'relative',
-                        }}
-                        src="https://avatars.mds.yandex.net/i?id=00258557af4a739f80dc1ca441f6bd48_l-8564741-images-thumbs&n=13"
-                        className="shadow rounded-4"
-                    />
-                    <p
-                        className="mb-0 mt-0 fw-bold text-uppercase"
-                        style={{
-                            fontSize: '5vw',
-                            position: 'absolute',
-                            transform: 'translate(-50%, -50%)',
-                            top: '18%',
-                            left: '50%',
-                            color: 'white',
-                        }}
-                    >
-                        {data.name}
-                    </p>
-
-                    <p
-                        className="mt-2"
-                        style={{
-                            fontSize: '2vw',
-                            position: 'absolute',
-                            transform: 'translate(-50%, -50%)',
-                            top: '25%',
-                            left: '50%',
-                            color: 'white',
-                        }}
-                    >
-                        {data.small_description}
-                    </p>
-                    <Button
-                        size="lg"
-                        className="mt-0"
-                        variant="outline-primarylight"
-                        onClick={openModalPayment}
-                        style={{
-                            position: 'absolute',
-                            transform: 'translate(-50%, -50%)',
-                            top: '33%',
-                            left: '50%',
-                            width: '20%',
-                        }}
-                    >
-                        Поддержать проект
-                    </Button>
-
-                    {showModalPayment && (
-                        <PaymentComponent
-                            show={true}
-                            onHide={closeModalPayment}
-                            slug={slug}
-                        />
-                    )} */
-}
