@@ -3,8 +3,14 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import { useEffect } from 'react';
 import url from '../functions/globalURL';
 
-const EditProfileModal = ({ show, onHide, username }) => {
-    const [formData, setFormData] = useState({}); // Состояние данных формы
+const EditProfileModal = ({ show, onHide, username, profile }) => {
+    const [formData, setFormData] = useState({
+        last_name: profile.last_name,
+        first_name: profile.first_name,
+        about: profile.about,
+        birthday: profile.birthday,
+        company: profile.company,
+    }); // Состояние данных формы
     const [isLoading, setIsLoading] = useState(false); // Состояние загрузки
     const [data, setData] = useState(null);
     const [skills2, setSkills] = useState([]);
@@ -18,6 +24,21 @@ const EditProfileModal = ({ show, onHide, username }) => {
             });
             const data = await response.json();
             setData(data.skills);
+            console.log(data.skills);
+            let defaultSkills = new Set();
+            data.skills.forEach((item) => {
+                if (profile.skill.length != 0) {
+                    profile.skill.forEach((item2) => {
+                        if (item2 == item.name) {
+                            defaultSkills.add(item.id);
+                        }
+                    });
+                }
+            });
+            const uniqueDefaultSkills = Array.from(defaultSkills);
+
+            setSkills(uniqueDefaultSkills);
+            console.log(skills2);
         };
         fetchData();
     }, []);
@@ -84,16 +105,11 @@ const EditProfileModal = ({ show, onHide, username }) => {
     };
 
     const handleChangeSkills = (e) => {
-        const skills = skills2;
-        let index;
-        if (e.target.checked) {
-            skills.push(Number(e.target.name));
-        } else {
-            index = skills.indexOf(Number(e.target.name));
-            skills.splice(index, 1);
-        }
-        setSkills(skills);
-        console.log(skills);
+        const skillId = Number(e.target.name);
+        const updatedSkills = e.target.checked
+            ? [...skills2, skillId]
+            : skills2.filter((id) => id !== skillId);
+        setSkills(updatedSkills);
     };
 
     return (
@@ -112,6 +128,7 @@ const EditProfileModal = ({ show, onHide, username }) => {
                             value={formData.last_name || ''}
                             onChange={handleChange}
                             placeholder="Ваша фамилия"
+                            defaultValue={profile.last_name}
                         />
                     </Form.Group>
 
@@ -158,31 +175,9 @@ const EditProfileModal = ({ show, onHide, username }) => {
                         />
                     </Form.Group>
 
-                    {/* <Form.Group className="mb-2">
-                        <Form.Label>ЕГРЮЛ</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="document"
-                            value={formData.document || ''}
-                            onChange={handleChange}
-                        />
-                    </Form.Group>
-
-                    <Form.Group className="mb-2">
-                        <Form.Label>Паспорт</Form.Label>
-                        <Form.Control
-                            type="number"
-                            name="passport"
-                            value={formData.passport || ''}
-                            onChange={handleChange}
-                        />
-                    </Form.Group> */}
-
                     <Form.Group className="mb-3">
                         <Form.Label>Выберите навыки</Form.Label>
-                        {data === null ? (
-                            <div> No data for collection </div>
-                        ) : (
+                        {data ? (
                             data.map((cat) => (
                                 <div key={cat.id}>
                                     <Form.Check
@@ -190,9 +185,12 @@ const EditProfileModal = ({ show, onHide, username }) => {
                                         name={cat.id}
                                         onChange={handleChangeSkills}
                                         label={cat.name}
+                                        checked={skills2.includes(cat.id)}
                                     />
                                 </div>
                             ))
+                        ) : (
+                            <div>Загрузка навыков...</div>
                         )}
                     </Form.Group>
 

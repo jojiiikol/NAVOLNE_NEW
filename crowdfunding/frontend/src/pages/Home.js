@@ -10,6 +10,9 @@ import AOS from 'aos';
 import logo from '../components/logo192.png';
 import nvImage from '../images/nizhnevartovsk-city-russia-8.jpg';
 import About from './About';
+// import Slider from 'react-slick';
+// import 'slick-carousel/slick/slick.css';
+// import 'slick-carousel/slick/slick-theme.css';
 const Home = () => {
     const [project, setProject] = useState(null);
     const [projectClose, setProjectClose] = useState(null);
@@ -50,6 +53,22 @@ const Home = () => {
     if (!project || !projectClose || !projectNew) {
         return <div>Loading...</div>;
     }
+    // const settings = {
+    //     dots: false,
+    //     infinite: true,
+    //     speed: 500,
+    //     slidesToShow: 3,
+    //     slidesToScroll: 1,
+    //     swipeToSlide: true,
+    //     touchThreshold: 10,
+    //     arrows: true,
+    //     centerMode: true, // Для центрирования слайдов
+    //     centerPadding: '15px', // Добавляет отступы с боков
+    //     responsive: [
+    //         { breakpoint: 1024, settings: { slidesToShow: 2, arrows: false } },
+    //         { breakpoint: 768, settings: { slidesToShow: 1, arrows: false } },
+    //     ],
+    // };
 
     return (
         <>
@@ -88,6 +107,8 @@ const Home = () => {
                                 padding: '0',
                                 height: '95vh',
                                 objectFit: 'cover',
+                                filter: '',
+                                filter: 'blur(1.5px) brightness(75%)',
                             }}
                             src={nvImage}
                             className="w-100  d-block d-sm-none"
@@ -144,162 +165,170 @@ const Home = () => {
                     </Container>
                 </div>
             </section>
+            {/* <Slider {...settings}>
+                {project.map((project) => (
+                    <div className="slick-slide" key={project.pk}>
+                        <MyCard
+                            slug={project.slug}
+                            collected_money={project.collected_money}
+                            need_money={project.need_money}
+                            name={project.name}
+                            category={project.category}
+                            small_description={project.small_description}
+                            views={project.views}
+                            image={project.image}
+                            code={project.status_code.code}
+                            start_date={project.start_date}
+                            end_date={project.end_date}
+                            style={{ padding: '30px', margin: '0 15px' }} // добавление отступов между элементами
+                        />
+                    </div>
+                ))}
+            </Slider> */}
             <Container fluid style={{ marginTop: '50px' }}>
                 {/* Популярные проекты */}
-                <section>
-                    <div className="mb-5">
-                        <div className="d-flex justify-content-between mt-4 mb-4">
-                            <h1
-                                className="all-projects-h1"
-                                data-aos="fade-right"
-                                data-aos-duration="700" // продолжительность 1 секунда
-                                data-aos-delay="50" // задержка 200ms
-                                data-aos-offset="100" // отступ 150px
-                            >
-                                Популярные проекты
-                            </h1>
-                            <a
-                                href="/projects"
-                                className="all-projects-href-p"
-                                data-aos="fade-left"
-                                data-aos-duration="700" // продолжительность 1 секунда
-                                data-aos-delay="50" // задержка 200ms
-                                data-aos-offset="100" // отступ 150px
-                            >
-                                Все проекты
-                            </a>
-                        </div>
-
-                        <Row xs={1} md={3} className="g-4">
-                            {project.map((project) => (
-                                <Col key={project.pk}>
-                                    <MyCard
-                                        slug={project.slug}
-                                        collected_money={
-                                            project.collected_money
-                                        }
-                                        need_money={project.need_money}
-                                        name={project.name}
-                                        category={project.category}
-                                        small_description={
-                                            project.small_description
-                                        }
-                                        views={project.views}
-                                        image={project.image}
-                                        code={project.status_code.code}
-                                        start_date={project.start_date}
-                                        end_date={project.end_date}
-                                    />
-                                </Col>
-                            ))}
-                        </Row>
+                {/* <section> */}
+                <div className="mb-5">
+                    <div className="d-flex justify-content-between mt-4 mb-4">
+                        <h1
+                            className="all-projects-h1"
+                            data-aos="fade-right"
+                            data-aos-duration="700" // продолжительность 1 секунда
+                            data-aos-delay="50" // задержка 200ms
+                            data-aos-offset="100" // отступ 150px
+                        >
+                            Популярные проекты
+                        </h1>
+                        <a
+                            href="/projects"
+                            className="all-projects-href-p"
+                            data-aos="fade-left"
+                            data-aos-duration="700" // продолжительность 1 секунда
+                            data-aos-delay="50" // задержка 200ms
+                            data-aos-offset="100" // отступ 150px
+                        >
+                            Все проекты
+                        </a>
                     </div>
-                </section>
 
+                    <Row xs={1} md={3} className="g-4">
+                        {project.map((project) => (
+                            <Col key={project.pk}>
+                                <MyCard
+                                    slug={project.slug}
+                                    collected_money={project.collected_money}
+                                    need_money={project.need_money}
+                                    name={project.name}
+                                    category={project.category}
+                                    small_description={
+                                        project.small_description
+                                    }
+                                    views={project.views}
+                                    image={project.image}
+                                    code={project.status_code.code}
+                                    start_date={project.start_date}
+                                    end_date={project.end_date}
+                                />
+                            </Col>
+                        ))}
+                    </Row>
+                </div>
+                {/* </section> */}
                 {/* Новые проекты */}
-                <section>
-                    {' '}
-                    <div className="mb-5">
-                        <div className="d-flex justify-content-between mt-4 mb-4">
-                            <h1
-                                className="all-projects-h1"
-                                data-aos="fade-right"
-                                data-aos-duration="700" // продолжительность 1 секунда
-                                data-aos-delay="50" // задержка 200ms
-                                data-aos-offset="100" // отступ 150px
-                            >
-                                Новые проекты
-                            </h1>
-                            <a
-                                href="/projects"
-                                className="all-projects-href-p"
-                                data-aos="fade-left"
-                                data-aos-duration="700" // продолжительность 1 секунда
-                                data-aos-delay="50" // задержка 200ms
-                                data-aos-offset="100" // отступ 150px
-                            >
-                                Все проекты
-                            </a>
-                        </div>
-                        <Row xs={1} md={3} className="g-4">
-                            {projectNew.map((project) => (
-                                <Col key={project.pk}>
-                                    <MyCard
-                                        slug={project.slug}
-                                        collected_money={
-                                            project.collected_money
-                                        }
-                                        need_money={project.need_money}
-                                        name={project.name}
-                                        category={project.category}
-                                        small_description={
-                                            project.small_description
-                                        }
-                                        views={project.views}
-                                        image={project.image}
-                                        code={project.status_code.code}
-                                        start_date={project.start_date}
-                                        end_date={project.end_date}
-                                        data-aos="fade-up" // добавлен атрибут для анимации
-                                    />
-                                </Col>
-                            ))}
-                        </Row>
+                {/* <section> */}{' '}
+                <div className="mb-5">
+                    <div className="d-flex justify-content-between mt-4 mb-4">
+                        <h1
+                            className="all-projects-h1"
+                            data-aos="fade-right"
+                            data-aos-duration="700" // продолжительность 1 секунда
+                            data-aos-delay="50" // задержка 200ms
+                            data-aos-offset="100" // отступ 150px
+                        >
+                            Новые проекты
+                        </h1>
+                        <a
+                            href="/projects"
+                            className="all-projects-href-p"
+                            data-aos="fade-left"
+                            data-aos-duration="700" // продолжительность 1 секунда
+                            data-aos-delay="50" // задержка 200ms
+                            data-aos-offset="100" // отступ 150px
+                        >
+                            Все проекты
+                        </a>
                     </div>
-                </section>
-
-                <section>
-                    {' '}
-                    {/* Закрытые проекты */}
-                    <div className="mb-5">
-                        <div className="d-flex justify-content-between mt-4 mb-4">
-                            <h1
-                                className="all-projects-h1"
-                                data-aos="fade-right"
-                                data-aos-duration="700" // продолжительность 1 секунда
-                                data-aos-delay="50" // задержка 200ms
-                                data-aos-offset="100" // отступ 150px
-                            >
-                                Сбор окончен
-                            </h1>
-                            <a
-                                href="/projects"
-                                className="all-projects-href-p"
-                                data-aos="fade-left"
-                                data-aos-duration="700" // продолжительность 1 секунда
-                                data-aos-delay="50" // задержка 200ms
-                                data-aos-offset="100" // отступ 150px
-                            >
-                                Все проекты
-                            </a>
-                        </div>
-                        <Row xs={1} md={3} className="g-4">
-                            {projectClose.map((project) => (
-                                <Col key={project.pk}>
-                                    <MyCard
-                                        slug={project.slug}
-                                        collected_money={
-                                            project.collected_money
-                                        }
-                                        need_money={project.need_money}
-                                        name={project.name}
-                                        category={project.category}
-                                        small_description={
-                                            project.small_description
-                                        }
-                                        views={project.views}
-                                        image={project.image}
-                                        code={project.status_code.code}
-                                        start_date={project.start_date}
-                                        end_date={project.end_date}
-                                        data-aos="fade-up" // добавлен атрибут для анимации
-                                    />
-                                </Col>
-                            ))}
-                        </Row>
+                    <Row xs={1} md={3} className="g-4">
+                        {projectNew.map((project) => (
+                            <Col key={project.pk}>
+                                <MyCard
+                                    slug={project.slug}
+                                    collected_money={project.collected_money}
+                                    need_money={project.need_money}
+                                    name={project.name}
+                                    category={project.category}
+                                    small_description={
+                                        project.small_description
+                                    }
+                                    views={project.views}
+                                    image={project.image}
+                                    code={project.status_code.code}
+                                    start_date={project.start_date}
+                                    end_date={project.end_date}
+                                    data-aos="fade-up" // добавлен атрибут для анимации
+                                />
+                            </Col>
+                        ))}
+                    </Row>
+                </div>
+                {/* </section> */}
+                {/* <section> */} {/* Закрытые проекты */}
+                <div className="mb-5">
+                    <div className="d-flex justify-content-between mt-4 mb-4">
+                        <h1
+                            className="all-projects-h1"
+                            data-aos="fade-right"
+                            data-aos-duration="700" // продолжительность 1 секунда
+                            data-aos-delay="50" // задержка 200ms
+                            data-aos-offset="100" // отступ 150px
+                        >
+                            Сбор окончен
+                        </h1>
+                        <a
+                            href="/projects"
+                            className="all-projects-href-p"
+                            data-aos="fade-left"
+                            data-aos-duration="700" // продолжительность 1 секунда
+                            data-aos-delay="50" // задержка 200ms
+                            data-aos-offset="100" // отступ 150px
+                        >
+                            Все проекты
+                        </a>
                     </div>
-                </section>
-
+                    <Row xs={1} md={3} className="g-4">
+                        {projectClose.map((project) => (
+                            <Col key={project.pk}>
+                                <MyCard
+                                    slug={project.slug}
+                                    collected_money={project.collected_money}
+                                    need_money={project.need_money}
+                                    name={project.name}
+                                    category={project.category}
+                                    small_description={
+                                        project.small_description
+                                    }
+                                    views={project.views}
+                                    image={project.image}
+                                    code={project.status_code.code}
+                                    start_date={project.start_date}
+                                    end_date={project.end_date}
+                                    data-aos="fade-up" // добавлен атрибут для анимации
+                                />
+                            </Col>
+                        ))}
+                    </Row>
+                </div>
+                {/* </section> */}
                 <section>
                     <About className="border-0 rounded-5 shadow"></About>
                 </section>

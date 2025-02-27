@@ -162,6 +162,7 @@ const ProfileComponent = () => {
                                                         onHide={closeModal}
                                                         username={profilename}
                                                         skills_base={data.skill}
+                                                        profile={data}
                                                     />
                                                 )}
                                             </div>
