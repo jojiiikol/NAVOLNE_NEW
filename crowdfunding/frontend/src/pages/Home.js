@@ -18,7 +18,7 @@ const Home = () => {
     useEffect(() => {
         AOS.init({
             duration: 1000, // продолжительность анимации
-            once: false, // анимация срабатывает каждый раз
+            once: true, // анимация срабатывает каждый раз
         });
 
         // Загружаем данные о проектах
@@ -69,6 +69,7 @@ const Home = () => {
                                 padding: '0',
                                 height: '95vh',
                                 objectFit: 'cover',
+                                filter: 'brightness(75%)',
                             }}
                             className="w-100  d-none d-sm-block"
                             autoPlay
@@ -111,7 +112,38 @@ const Home = () => {
                     </div>
                 </div>
             </InView>
-
+            <section>
+                <div className="why-us-section" data-aos="fade-up">
+                    <h1 className="why-us-title">Почему именно мы?</h1>
+                    <Container>
+                        {' '}
+                        <div className="why-us-content">
+                            <div className="why-us-card" data-aos="fade-right">
+                                <h2>Надёжность</h2>
+                                <p>
+                                    Мы гарантируем безопасность сделок и
+                                    поддерживаем предпринимателей на всех
+                                    этапах.
+                                </p>
+                            </div>
+                            <div className="why-us-card" data-aos="fade-up">
+                                <h2>Официальная поддержка</h2>
+                                <p>
+                                    Поддержаны Нижневартовским Государственным
+                                    Университетом
+                                </p>
+                            </div>
+                            <div className="why-us-card" data-aos="fade-left">
+                                <h2>Индивидуальный подход</h2>
+                                <p>
+                                    Персональные стратегии и поддержка для
+                                    каждого клиента.
+                                </p>
+                            </div>
+                        </div>
+                    </Container>
+                </div>
+            </section>
             <Container fluid style={{ marginTop: '50px' }}>
                 {/* Популярные проекты */}
                 <section>
@@ -161,44 +193,6 @@ const Home = () => {
                                 </Col>
                             ))}
                         </Row>
-                    </div>
-                </section>
-                <section>
-                    <div className="why-us-section" data-aos="fade-up">
-                        <h1 className="why-us-title">Почему именно мы?</h1>
-                        <Container>
-                            {' '}
-                            <div className="why-us-content">
-                                <div
-                                    className="why-us-card"
-                                    data-aos="fade-right"
-                                >
-                                    <h2>Надёжность</h2>
-                                    <p>
-                                        Мы гарантируем безопасность сделок и
-                                        поддерживаем предпринимателей на всех
-                                        этапах.
-                                    </p>
-                                </div>
-                                <div className="why-us-card" data-aos="fade-up">
-                                    <h2>Официальная поддержка</h2>
-                                    <p>
-                                        Поддержаны Нижневартовским
-                                        Государственным Университетом
-                                    </p>
-                                </div>
-                                <div
-                                    className="why-us-card"
-                                    data-aos="fade-left"
-                                >
-                                    <h2>Индивидуальный подход</h2>
-                                    <p>
-                                        Персональные стратегии и поддержка для
-                                        каждого клиента.
-                                    </p>
-                                </div>
-                            </div>
-                        </Container>
                     </div>
                 </section>
 
@@ -255,9 +249,6 @@ const Home = () => {
                 </section>
 
                 <section>
-                    <About className="border-0 rounded-5 shadow"></About>
-                </section>
-                <section>
                     {' '}
                     {/* Закрытые проекты */}
                     <div className="mb-5">
@@ -307,6 +298,10 @@ const Home = () => {
                             ))}
                         </Row>
                     </div>
+                </section>
+
+                <section>
+                    <About className="border-0 rounded-5 shadow"></About>
                 </section>
             </Container>
         </>

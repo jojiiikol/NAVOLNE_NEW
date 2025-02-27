@@ -50,7 +50,7 @@ const ProfileComponent = () => {
     useEffect(() => {
         AOS.init({
             //duration: 1000, // продолжительность анимации
-            once: false, // анимация срабатывает каждый раз
+            once: true, // анимация срабатывает каждый раз
         });
         const fetchData = async () => {
             if (localStorage.getItem('accessToken')) {
@@ -294,7 +294,7 @@ const ProfileComponent = () => {
                                                             }}
                                                         >
                                                             {' '}
-                                                            {projects.length !==
+                                                            {projects.length !=
                                                                 0 &&
                                                                 projects.map(
                                                                     (
@@ -391,37 +391,9 @@ const ProfileComponent = () => {
                         <ListGroup>
                             {data.projects.length === 0 && (
                                 <div>
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            justifyContent: 'center',
-                                        }}
-                                    >
-                                        <dotlottie-player
-                                            src="https://lottie.host/93c95655-d4f2-4d6b-a56a-1da35e7900c1/RoKePYdqpU.lottie"
-                                            background="transparent"
-                                            speed="0.5"
-                                            style={{ width: '250px' }}
-                                            className="fs-3 fw-normal mb-0 text-center"
-                                            loop
-                                            autoplay
-                                        ></dotlottie-player>
-                                        <div className="ms-5">
-                                            <p className="fs-3 fw-normal  ">
-                                                У {data.first_name} еще нет
-                                                проектов... Не будь как{' '}
-                                                {data.first_name}, скорее
-                                                создавай проект
-                                            </p>
-                                            <div
-                                                style={{
-                                                    display: 'flex',
-                                                    justifyContent: 'center',
-                                                }}
-                                                className="mt-3"
-                                            ></div>
-                                        </div>
-                                    </div>
+                                    <p className="text-secondary fw-bolder fs-4">
+                                        *пользователь еще не создавал проекты
+                                    </p>
                                 </div>
                             )}
 

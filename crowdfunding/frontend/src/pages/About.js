@@ -1,6 +1,13 @@
-import { useState } from 'react';
-
+import { useEffect, useState } from 'react';
+import 'aos/dist/aos.css';
+import AOS from 'aos';
 const About = () => {
+    useEffect(() => {
+        AOS.init({
+            duration: 1000, // продолжительность анимации
+            once: true, // анимация срабатывает каждый раз
+        });
+    });
     const [openIndex, setOpenIndex] = useState(null);
 
     const toggleFAQ = (index) => {
@@ -31,7 +38,7 @@ const About = () => {
     ];
 
     return (
-        <div className="faq-section" data-aos="fade-up">
+        <div className="faq-section " data-aos="fade-up">
             <h1 className="faq-title">Часто задаваемые вопросы</h1>
             <div className="faq-container">
                 {faqData.map((item, index) => (
