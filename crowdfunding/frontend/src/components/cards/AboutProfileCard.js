@@ -1,6 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Image, ListGroup, CardBody, Row, Col } from 'react-bootstrap';
+import {
+    Card,
+    Image,
+    ListGroup,
+    CardBody,
+    Row,
+    Col,
+    Badge,
+} from 'react-bootstrap';
 import formatDate from '../functions/formatdate';
 const AboutProfileCard = (props) => {
     const {
@@ -78,33 +86,25 @@ const AboutProfileCard = (props) => {
                             </div>
                             {skills.length > 0 && (
                                 <div
-                                    className="d-flex"
-                                    style={{ height: '40px' }}
+                                //className="d-flex"
+                                //style={{ height: '40px' }}
                                 >
-                                    {skills[0] && (
-                                        <span
-                                            className="badge bg-primary mt-2  d-inline-flex justify-content-center align-items-center"
-                                            style={{}}
-                                        >
-                                            {skills[0]}
-                                        </span>
-                                    )}
-                                    {skills[1] && (
-                                        <div
-                                            className="badge bg-primary  mt-2 ms-1  d-inline-flex justify-content-center align-items-center"
-                                            style={{}}
-                                        >
-                                            {skills[1]}
-                                        </div>
-                                    )}
-                                    {skills[2] && (
-                                        <div
-                                            className="badge bg-primary  mt-2 ms-1  d-inline-flex justify-content-center align-items-center"
-                                            style={{}}
-                                        >
-                                            {skills[2]}
-                                        </div>
-                                    )}
+                                    <Row xs={2} md={2} xl={2}>
+                                        {skills.map((skill, index) => (
+                                            <Col key={index}>
+                                                <span
+                                                    className="badge bg-primary mt-2 d-inline-flex justify-content-center align-items-center"
+                                                    style={{
+                                                        height: '30px',
+                                                        padding: '0.5rem 1rem', // Увеличенные отступы для лучшего восприятия
+                                                        fontSize: '1rem', // Уменьшенный размер шрифта для лучшей читаемости
+                                                    }}
+                                                >
+                                                    {skill}
+                                                </span>
+                                            </Col>
+                                        ))}
+                                    </Row>
                                 </div>
                             )}
                         </ListGroup.Item>

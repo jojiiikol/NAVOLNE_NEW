@@ -62,12 +62,26 @@ const MyCard = (props) => {
                         {code !== 2 && code !== 3 && (
                             <div className="d-flex" style={{ height: '40px' }}>
                                 {category[0] && (
-                                    <span className="badge bg-primary ms-1 mb-1 d-inline-flex justify-content-center align-items-center">
+                                    <span
+                                        style={{
+                                            height: '30px',
+                                            padding: '0.5rem 1rem', // Увеличенные отступы для лучшего восприятия
+                                            fontSize: '1rem', // Уменьшенный размер шрифта для лучшей читаемости
+                                        }}
+                                        className="badge bg-primary ms-1 mb-1 d-inline-flex justify-content-center align-items-center"
+                                    >
                                         {category[0]}
                                     </span>
                                 )}
                                 {category[1] && (
-                                    <div className="badge bg-primary ms-1 mb-1 d-inline-flex justify-content-center align-items-center">
+                                    <div
+                                        style={{
+                                            height: '30px',
+                                            padding: '0.5rem 1rem', // Увеличенные отступы для лучшего восприятия
+                                            fontSize: '1rem', // Уменьшенный размер шрифта для лучшей читаемости
+                                        }}
+                                        className="badge bg-primary ms-1 mb-1 d-inline-flex justify-content-center align-items-center"
+                                    >
                                         {category[1]}
                                     </div>
                                 )}
@@ -76,12 +90,26 @@ const MyCard = (props) => {
                         {code !== 0 && code !== 1 && (
                             <div className="d-flex" style={{ height: '40px' }}>
                                 {category[0] && (
-                                    <span className="badge bg-warning ms-1 mb-1 d-inline-flex justify-content-center align-items-center">
+                                    <span
+                                        style={{
+                                            height: '30px',
+                                            padding: '0.5rem 1rem', // Увеличенные отступы для лучшего восприятия
+                                            fontSize: '1rem', // Уменьшенный размер шрифта для лучшей читаемости
+                                        }}
+                                        className="badge bg-warning ms-1 mb-1 d-inline-flex justify-content-center align-items-center"
+                                    >
                                         {category[0]}
                                     </span>
                                 )}
                                 {category[1] && (
-                                    <div className="badge bg-warning ms-1 mb-1 d-inline-flex justify-content-center align-items-center">
+                                    <div
+                                        style={{
+                                            height: '30px',
+                                            padding: '0.5rem 1rem', // Увеличенные отступы для лучшего восприятия
+                                            fontSize: '1rem', // Уменьшенный размер шрифта для лучшей читаемости
+                                        }}
+                                        className="badge bg-warning ms-1 mb-1 d-inline-flex justify-content-center align-items-center"
+                                    >
                                         {category[1]}
                                     </div>
                                 )}

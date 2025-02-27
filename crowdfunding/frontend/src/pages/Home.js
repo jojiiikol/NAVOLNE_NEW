@@ -10,65 +10,42 @@ import AOS from 'aos';
 import logo from '../components/logo192.png';
 import nvImage from '../images/nizhnevartovsk-city-russia-8.jpg';
 import About from './About';
-// import Slider from 'react-slick';
-// import 'slick-carousel/slick/slick.css';
-// import 'slick-carousel/slick/slick-theme.css';
+
 const Home = () => {
     const [project, setProject] = useState(null);
     const [projectClose, setProjectClose] = useState(null);
     const [projectNew, setProjectNew] = useState(null);
-
+    const fetchProjects = (statusCode) => {
+        return fetch(
+            url +
+                `/projects/?ordering=-views_count&status_code__code=${statusCode}`
+        )
+            .then((response) => response.json())
+            .then((data) => data.results)
+            .catch((error) => console.error('Ошибка:', error));
+    };
     useEffect(() => {
         AOS.init({
             duration: 1000, // продолжительность анимации
             once: true, // анимация срабатывает каждый раз
         });
 
-        // Загружаем данные о проектах
-        fetch(url + '/projects/?ordering=-views_count&status_code__code=1')
-            .then((response) => response.json())
-            .then((data) => {
-                setProject(data.results);
-                AOS.refresh(); // обновляем AOS после загрузки данных
-            })
-            .catch((error) => console.error('Ошибка:', error));
+        const loadData = async () => {
+            const popularProjects = await fetchProjects(1);
+            const closedProjects = await fetchProjects(3);
+            const newProjects = await fetchProjects(1);
 
-        fetch(url + '/projects/?ordering=-views_count&status_code__code=3')
-            .then((response) => response.json())
-            .then((data) => {
-                setProjectClose(data.results);
-                AOS.refresh(); // обновляем AOS после загрузки данных
-            })
-            .catch((error) => console.error('Ошибка:', error));
-
-        fetch(url + '/projects/?ordering=-start_date&status_code__code=1')
-            .then((response) => response.json())
-            .then((data) => {
-                setProjectNew(data.results);
-                AOS.refresh(); // обновляем AOS после загрузки данных
-            })
-            .catch((error) => console.error('Ошибка:', error));
-    }, []); // Пустой массив зависимостей, чтобы вызвать один раз
+            setProject(popularProjects);
+            setProjectClose(closedProjects);
+            setProjectNew(newProjects);
+        };
+        loadData();
+        AOS.refresh();
+    }, []);
 
     if (!project || !projectClose || !projectNew) {
         return <div>Loading...</div>;
     }
-    // const settings = {
-    //     dots: false,
-    //     infinite: true,
-    //     speed: 500,
-    //     slidesToShow: 3,
-    //     slidesToScroll: 1,
-    //     swipeToSlide: true,
-    //     touchThreshold: 10,
-    //     arrows: true,
-    //     centerMode: true, // Для центрирования слайдов
-    //     centerPadding: '15px', // Добавляет отступы с боков
-    //     responsive: [
-    //         { breakpoint: 1024, settings: { slidesToShow: 2, arrows: false } },
-    //         { breakpoint: 768, settings: { slidesToShow: 1, arrows: false } },
-    //     ],
-    // };
 
     return (
         <>
@@ -165,26 +142,7 @@ const Home = () => {
                     </Container>
                 </div>
             </section>
-            {/* <Slider {...settings}>
-                {project.map((project) => (
-                    <div className="slick-slide" key={project.pk}>
-                        <MyCard
-                            slug={project.slug}
-                            collected_money={project.collected_money}
-                            need_money={project.need_money}
-                            name={project.name}
-                            category={project.category}
-                            small_description={project.small_description}
-                            views={project.views}
-                            image={project.image}
-                            code={project.status_code.code}
-                            start_date={project.start_date}
-                            end_date={project.end_date}
-                            style={{ padding: '30px', margin: '0 15px' }} // добавление отступов между элементами
-                        />
-                    </div>
-                ))}
-            </Slider> */}
+
             <Container fluid style={{ marginTop: '50px' }}>
                 {/* Популярные проекты */}
                 {/* <section> */}

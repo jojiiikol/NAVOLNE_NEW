@@ -83,7 +83,7 @@ video {
         font-weight: 500;
         position: absolute;
         left: 50%;
-        top: 45%;
+        top: 46%;
         transform: translate(-50%, -50%);
         color: white;
     }
@@ -99,7 +99,6 @@ video {
         color: white;
     }
 }
-
 
 .why-us-section {
     text-align: center;
