@@ -35,7 +35,7 @@ const AboutProfileCard = (props) => {
                                 О себе
                             </Card.Text>
                         </ListGroup.Item>
-                        <ListGroup.Item>
+                        <ListGroup.Item className="mb-0">
                             <div className="d-flex justify-content-between">
                                 <div className="d-flex align-content-center">
                                     <span className="material-symbols-outlined my-auto text-secondary fs-4">
@@ -89,7 +89,7 @@ const AboutProfileCard = (props) => {
                                 //className="d-flex"
                                 //style={{ height: '40px' }}
                                 >
-                                    <Row xs={2} md={2} xl={2}>
+                                    <Row xs={2} md={2} xl={2} className="mb-0">
                                         {skills.map((skill, index) => (
                                             <Col key={index}>
                                                 <span
@@ -108,10 +108,13 @@ const AboutProfileCard = (props) => {
                                 </div>
                             )}
                         </ListGroup.Item>
-                        <ListGroup.Item>
-                            <CardBody style={{ height: '200px' }}>
+                        <ListGroup.Item className="mt-0">
+                            <div style={{ height: '200px' }}>
+                                <p className="fs-5 fw-bolder text-secondary mt-0 mb-0">
+                                    О себе:
+                                </p>
                                 {about}
-                            </CardBody>
+                            </div>
                         </ListGroup.Item>
                     </ListGroup>
                 </Card.Body>

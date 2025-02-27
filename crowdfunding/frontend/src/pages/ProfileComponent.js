@@ -249,8 +249,8 @@ const ProfileComponent = () => {
                                         <Card.Body>
                                             <ListGroup className="list-group-flush">
                                                 <ListGroup.Item>
-                                                    <Card.Text className=" fs-3 text-center fw-bold">
-                                                        Поддержаные проекты
+                                                    <Card.Text className="fs-3 text-center fw-bold">
+                                                        Поддержанные проекты
                                                     </Card.Text>
                                                 </ListGroup.Item>
                                                 <ListGroup.Item>
