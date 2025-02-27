@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Image, ListGroup, CardBody, Row, Col } from 'react-bootstrap';
-
+import formatDate from '../functions/formatdate';
 const AboutProfileCard = (props) => {
     const {
         first_name,
@@ -64,7 +64,7 @@ const AboutProfileCard = (props) => {
                                     event
                                 </span>
                                 <p className="fs-5 fw-bolder text-secondary  ms-2 mb-0 ">
-                                    {date_joined}
+                                    {formatDate(date_joined)}
                                 </p>
                             </div>
                             <div className="d-flex align-content-center">

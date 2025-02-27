@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
-
+import formatDate from '../functions/formatdate';
 const PostCard = (props) => {
     const { slug, name, description, image, date, user, onClick } = props;
     let adress = slug ? `/posts/${slug}` : null; // Если slug пустой, не нужно создавать ссылку
@@ -44,7 +44,7 @@ const PostCard = (props) => {
                                 <span>{user.last_name}</span>
                             </div>
 
-                            {date && <span>{date}</span>}
+                            {date && <span>{formatDate(date)}</span>}
                         </div>
                     </Card.Body>
                 </Card>

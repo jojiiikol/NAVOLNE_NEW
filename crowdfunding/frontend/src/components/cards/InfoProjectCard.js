@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Image, ListGroup } from 'react-bootstrap';
 import ProgressBar from './progress-bar.component';
+import formatDate from '../functions/formatdate';
 const InfoProjectCard = (props) => {
     const {
         description,
@@ -73,10 +74,10 @@ const InfoProjectCard = (props) => {
                             <div className="d-flex justify-content-between">
                                 {' '}
                                 <span className="fw-bold text-secondary">
-                                    {start_date}
+                                    {formatDate(start_date)}
                                 </span>
                                 <span className="fw-bold text-secondary">
-                                    {end_date}
+                                    {formatDate(end_date)}
                                 </span>
                             </div>
                             {status_code == 2 && (
