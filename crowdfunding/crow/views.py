@@ -31,11 +31,6 @@ from .tasks import send_message_verification_email, create_check_payment_status_
 from .yookassa_crow.payout import create_payout
 
 
-
-# TODO: Переделать сортировку новостей ---> менять в модели поле дата на время
-
-
-# TODO: Ограничение 1 мб на фото
 # TODO: Корпоративная почта
 
 # TODO: ----------ДЕПЛОЙ----------
@@ -476,7 +471,7 @@ class ProfileViewSet(mixins.ListModelMixin,
     def change(self, request, *args, **kwargs):
         self.parser_classes = [MultiPartParser, FormParser]
         self.serializer_class = ChangeProfileRequestSerializer
-        serializer_data = self.serializer_class(data=request.data, context={'request': request})
+        serializer_data = self.serializer_class(data=request.data, context={'request': request, 'profile': self.get_object()})
         if serializer_data.is_valid():
             serializer_data.save(profile=self.get_object())
             return Response(serializer_data.data, status=status.HTTP_200_OK)
