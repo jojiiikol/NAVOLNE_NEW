@@ -175,6 +175,23 @@ class ChangeProfileRequestSerializer(serializers.ModelSerializer):
         representation['create_date'] = instance.create_date
         return representation
 
+    def create(self, validated_data):
+        self.delete_empty_requests()
+
+        change_request = super().create(validated_data)
+        return change_request
+
+    def delete_empty_requests(self):
+        profile = self.context['profile']
+        empty_requests = ProfileChangeRequest.objects.filter(profile=profile,
+                                                             answer_request__isnull=True)
+        if empty_requests.exists():
+            for empty_request in empty_requests:
+                empty_request.delete()
+
+
+
+
 
 class ChangeCategoryAndSkillSerializer(serializers.ModelSerializer):
     class Meta:

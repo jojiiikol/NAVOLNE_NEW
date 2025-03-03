@@ -348,6 +348,8 @@ class ChangeProjectRequestSerializer(serializers.ModelSerializer):
         return reverse('projectchangerequest-detail', kwargs={'pk': obj.pk}, request=self.context.get('request'))
 
     def create(self, validated_data):
+        self.delete_empty_requests()
+
         new_images = validated_data.pop('add_image', [])
         if validated_data.get('name'):
             validated_data['name'] = validated_data['name'].lower().capitalize()
@@ -355,7 +357,16 @@ class ChangeProjectRequestSerializer(serializers.ModelSerializer):
         if new_images:
             for image in new_images:
                 NewImageToProject.objects.create(project_change_request=change_request, image=image['image'])
+
         return change_request
+
+    def delete_empty_requests(self):
+        project = self.context['project']
+        empty_requests = ProjectChangeRequest.objects.filter(project=project,
+                                                             answer_change_requests_project__isnull=True)
+        if empty_requests.exists():
+            for empty_request in empty_requests:
+                empty_request.delete()
 
 
 class ImagePostSerializer(serializers.ModelSerializer):
