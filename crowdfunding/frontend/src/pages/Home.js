@@ -15,31 +15,38 @@ const Home = () => {
     const [project, setProject] = useState(null);
     const [projectClose, setProjectClose] = useState(null);
     const [projectNew, setProjectNew] = useState(null);
-    const fetchProjects = (statusCode) => {
-        return fetch(
-            url +
-                `/projects/?ordering=-views_count&status_code__code=${statusCode}`
-        )
-            .then((response) => response.json())
-            .then((data) => data.results)
-            .catch((error) => console.error('Ошибка:', error));
-    };
+
     useEffect(() => {
         AOS.init({
             duration: 1000, // продолжительность анимации
             once: true, // анимация срабатывает каждый раз
         });
 
-        const loadData = async () => {
-            const popularProjects = await fetchProjects(1);
-            const closedProjects = await fetchProjects(3);
-            const newProjects = await fetchProjects(1);
+        // Загружаем данные о проектах
+        fetch(url + '/projects/?ordering=-views_count&status_code__code=1')
+            .then((response) => response.json())
+            .then((data) => {
+                setProject(data.results);
+                AOS.refresh(); // обновляем AOS после загрузки данных
+            })
+            .catch((error) => console.error('Ошибка:', error));
 
-            setProject(popularProjects);
-            setProjectClose(closedProjects);
-            setProjectNew(newProjects);
-        };
-        loadData();
+        fetch(url + '/projects/?ordering=-views_count&status_code__code=3')
+            .then((response) => response.json())
+            .then((data) => {
+                setProjectClose(data.results);
+                AOS.refresh(); // обновляем AOS после загрузки данных
+            })
+            .catch((error) => console.error('Ошибка:', error));
+
+        fetch(url + '/projects/?ordering=-start_date&status_code__code=1')
+            .then((response) => response.json())
+            .then((data) => {
+                setProjectNew(data.results);
+                AOS.refresh(); // обновляем AOS после загрузки данных
+            })
+            .catch((error) => console.error('Ошибка:', error));
+
         AOS.refresh();
     }, []);
 

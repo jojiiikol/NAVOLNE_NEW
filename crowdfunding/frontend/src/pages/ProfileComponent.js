@@ -216,17 +216,31 @@ const ProfileComponent = () => {
                             data-aos-offset="250" // отступ 150px
                             data-aos-once="true"
                         >
-                            <AboutProfileCard
-                                first_name={data.first_name}
-                                last_name={data.last_name}
-                                money={data.money}
-                                company={data.company}
-                                date_joined={data.date_joined}
-                                total_money_sent={data.total_money_sent}
-                                about={data.about}
-                                skills={data.skill}
-                                is_owner={data.is_owner}
-                            />
+                            {data.date_joined && (
+                                <AboutProfileCard
+                                    first_name={data.first_name}
+                                    last_name={data.last_name}
+                                    money={data.money}
+                                    company={data.company}
+                                    date_joined={data.date_joined}
+                                    total_money_sent={data.total_money_sent}
+                                    about={data.about}
+                                    skills={data.skill}
+                                    is_owner={data.is_owner}
+                                />
+                            )}
+                            {!data.date_joined && (
+                                <AboutProfileCard
+                                    first_name={data.first_name}
+                                    last_name={data.last_name}
+                                    money={data.money}
+                                    company={data.company}
+                                    total_money_sent={data.total_money_sent}
+                                    about={data.about}
+                                    skills={data.skill}
+                                    is_owner={data.is_owner}
+                                />
+                            )}
                         </Col>
                         <Col>
                             <Row className="g-5">

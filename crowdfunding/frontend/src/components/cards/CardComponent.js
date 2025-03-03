@@ -101,18 +101,6 @@ const MyCard = (props) => {
                                         {category[0]}
                                     </span>
                                 )}
-                                {category[1] && (
-                                    <div
-                                        style={{
-                                            height: '30px',
-                                            padding: '0.5rem 1rem', // Увеличенные отступы для лучшего восприятия
-                                            fontSize: '1rem', // Уменьшенный размер шрифта для лучшей читаемости
-                                        }}
-                                        className="badge bg-warning ms-1 mb-1 d-inline-flex justify-content-center align-items-center"
-                                    >
-                                        {category[1]}
-                                    </div>
-                                )}
                             </div>
                         )}
 

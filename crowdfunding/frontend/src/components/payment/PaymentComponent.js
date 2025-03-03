@@ -39,10 +39,12 @@ const PaymentComponent = ({ show, onHide, slug }) => {
 
     const handleChange = (event) => {
         setFormData({ ...formData, [event.target.name]: event.target.value });
-        if (event.target.value > data.money) {
-            setIsLoading(true);
-        } else {
-            setIsLoading(false);
+        if (data) {
+            if (event.target.value > data.money) {
+                setIsLoading(true);
+            } else {
+                setIsLoading(false);
+            }
         }
     };
 
@@ -94,9 +96,11 @@ const PaymentComponent = ({ show, onHide, slug }) => {
                         <span className="text-secondary fw-bolder me-1">
                             Ваш баланс:
                         </span>
-                        <span className="text-primary fw-bolder">
-                            {data.money} ₽
-                        </span>
+                        {data && (
+                            <span className="text-primary fw-bolder">
+                                {data.money} ₽
+                            </span>
+                        )}
                     </span>
                     <Form.Group className="mb-2 mt-2">
                         <Form.Label>Сумма</Form.Label>
