@@ -189,10 +189,6 @@ class ChangeProfileRequestSerializer(serializers.ModelSerializer):
             for empty_request in empty_requests:
                 empty_request.delete()
 
-
-
-
-
 class ChangeCategoryAndSkillSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

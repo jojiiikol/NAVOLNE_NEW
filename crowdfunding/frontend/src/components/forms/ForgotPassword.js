@@ -28,15 +28,24 @@ const ForgotPasswordModal = ({ show, onHide }) => {
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
+                console.log(data[0]);
+                if (
+                    data[0] ==
+                    'Письмо со сбросом пароля было успешно отправлено'
+                ) {
+                    alert('Проверьте почту');
+                    window.location.href = '/';
+                } else {
+                    alert('Указаной почты не найдено');
+                    onHide();
+                }
             });
 
         // Закрываем модальное окно после успешного сохранения
 
         //console.error('Ошибка при отправке запроса на сервер:', error);
 
-        alert('Проверьте почту');
-        //  onHide();
+        //
     };
 
     return (

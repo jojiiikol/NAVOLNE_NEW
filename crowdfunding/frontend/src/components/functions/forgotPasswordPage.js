@@ -42,6 +42,12 @@ export default class ForgotPasswordPage extends Component {
             .then((data) => {
                 this.setState({ errorMessage: data });
                 console.log(data);
+                if (data[0] == 'Пароль был успешно изменен') {
+                    alert('Пароль был успешно изменен');
+                    window.location.href = '/';
+                } else {
+                    alert('Проверьте корректность введенного пароля');
+                }
             })
             .catch((error) => {
                 console.error(error);
