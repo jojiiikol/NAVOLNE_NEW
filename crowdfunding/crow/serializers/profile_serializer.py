@@ -121,6 +121,7 @@ class AnswerChangeProfileSerializer(serializers.ModelSerializer):
         instance.company = new_data_profile.company or instance.company
         instance.passport = new_data_profile.passport or instance.passport
         instance.document = new_data_profile.document or instance.document
+        instance.birthday = new_data_profile.birthday or instance.birthday
         if new_data_profile.group:
             instance.groups.clear()
             instance.groups.add(new_data_profile.group)
@@ -134,7 +135,7 @@ class ChangeProfileRequestSerializer(serializers.ModelSerializer):
         model = ProfileChangeRequest
         fields = (
             'pk', 'username', 'image', 'first_name', 'last_name', 'about', 'sex', 'company', 'passport',
-            'document', 'group', 'city', 'description_for_change', 'user', 'create_date', 'url', 'answer_request'
+            'document', 'group', 'city', 'description_for_change', 'user', 'create_date', 'url', 'answer_request', 'birthday'
         )
 
     username = serializers.CharField(required=False, max_length=255, validators=[
@@ -160,6 +161,7 @@ class ChangeProfileRequestSerializer(serializers.ModelSerializer):
     group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(), many=False, required=False,
                                                help_text="Группа пользователя")
     city = serializers.CharField(max_length=255, required=False, help_text="Город")
+    birthday = serializers.DateField(required=False)
     description_for_change = serializers.CharField(max_length=255, required=False, help_text="Описание для заявки")
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     create_date = serializers.HiddenField(default=datetime.datetime.now())

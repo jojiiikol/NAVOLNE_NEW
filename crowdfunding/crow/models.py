@@ -184,6 +184,7 @@ class ProfileChangeRequest(models.Model):
     company = models.CharField(null=True, max_length=255)
     passport = models.CharField(null=True, max_length=10)
     document = models.CharField(null=True, max_length=50)
+    birthday = models.DateField(blank=True, null=True)
     image = models.ImageField(upload_to="users/", blank=True)
     group = models.ForeignKey(Group, on_delete=models.PROTECT, related_name='change_requests_group', null=True)
     description_for_change = models.CharField(max_length=2048, null=True)
