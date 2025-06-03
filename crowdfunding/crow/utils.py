@@ -44,9 +44,9 @@ def get_commission_rate(project):
 
 
 def check_transfer_possibility(project):
-    perecentage = get_sum_percentage(project)
+    percentage = get_sum_percentage(project)
     rule = CommissionRules.objects.order_by('min_percentage').first()
-    if perecentage >= rule.min_percentage:
+    if percentage >= rule.min_percentage:
         return True
     return False
 

@@ -56,6 +56,9 @@ class ProjectViewSet(mixins.ListModelMixin,
         return get_project_view_permissions(self)
 
     # @method_decorator(cache_page(60 * 2, key_prefix='project_page'))
+    @extend_schema(
+        summary="Вывод информации о проекте",
+    )
     def retrieve(self, request, *args, **kwargs):
         project = self.get_object()
         save_ip_view(request, project)
@@ -64,7 +67,7 @@ class ProjectViewSet(mixins.ListModelMixin,
     # Просмотр подтвержденных проектов
     @extend_schema(
         summary="Вывод всех подтвержденных проектов",
-        description="Метод имеет фильтры с помощью которого проекты можно находить по категориям/названиям. Доступно всем"
+        description="Метод имеет фильтры с помощью которого проекты можно находить по категориям/названиям. Доступно всем",
     )
     # @method_decorator(cache_page(60 * 2, key_prefix='all_projects_page'))
     def list(self, request, *args, **kwargs):
@@ -74,7 +77,7 @@ class ProjectViewSet(mixins.ListModelMixin,
     # Создание проекта
     @extend_schema(summary="Создание проекта",
                    request=ProjectSerializerCreate,
-                   description="Данные отправляются в MultiPart\nДля создания проекта нужно быть авторизированным и подтвержденным")
+                   description="Данные отправляются в MultiPart\nДля создания проекта нужно быть авторизированным и подтвержденным",)
     def create(self, request, *args, **kwargs):
         self.parser_classes = [MultiPartParser, FormParser]
         print(self.request.data)
@@ -99,6 +102,7 @@ class ProjectViewSet(mixins.ListModelMixin,
     # Поддать заявку на изменение
     @extend_schema(summary="Создание заявки на изменение проекта",
                    request=ChangeProjectRequestSerializer,
+                   responses=ChangeProjectRequestSerializer,
                    description="Данные отправляются в MultiPart."
                                "Поля необязательные - то есть можно передавать их "
                                "пустыми, если юзер не захочет их менять. Доступ только у админа и у создателя проекта")
@@ -129,6 +133,7 @@ class ProjectViewSet(mixins.ListModelMixin,
     @extend_schema(summary="Подтверждение проекта",
                    description="Необходимо для админов. Подтверждение/отклонение новых проектов",
                    request=ProjectConfirmSerializer,
+                   responses=ProjectConfirmSerializer
                    )
     @action(methods=['POST'], detail=True)
     def confirm_project(self, request, *args, **kwargs):
@@ -167,7 +172,8 @@ class ProjectViewSet(mixins.ListModelMixin,
 
     @extend_schema(summary="Отправка заявки на закрытие сбора",
                    description="Использование возможно тогда, когда поле проекта transfer_allowed = True. Доступ у создателя проекта",
-                   request=ProjectClosureRequestSerializer
+                   request=ProjectClosureRequestSerializer,
+                   responses=ProjectClosureRequestSerializer
                    )
     @action(methods=['POST'], detail=True)
     def close_money_collection(self, request, *args, **kwargs):
@@ -181,6 +187,8 @@ class ProjectViewSet(mixins.ListModelMixin,
 
     @extend_schema(summary="Снятие денег с проекта",
                    description="Оно возможно, если проект имеет статус завершенного и запрос делает создатель проекта",
+                   request=None,
+                   responses=ProjectSerializer
                    )
     @action(methods=['POST'], detail=True)
     def cash_out(self, request, *args, **kwargs):
@@ -193,7 +201,8 @@ class ProjectViewSet(mixins.ListModelMixin,
 
     @extend_schema(summary="Добавление поста к проекту",
                    description="Может делать тольок создатель проекта",
-                   request=PostSerializer
+                   request=PostSerializer,
+                   responses=PostSerializer
                    )
     @action(methods=['POST'], detail=True)
     def add_post(self, request, *args, **kwargs):
@@ -306,7 +315,8 @@ class ProjectChangeRequestViewSet(mixins.ListModelMixin,
     # Подтвердить/отклонить изменение проекта. При подтверждении перезаписывается запись проекта
     @extend_schema(summary="Метод для подтверждения/отклонения изменения проектов",
                    description="Доступ у админов",
-                   request=AnswerChangeProjectRequestSerializer)
+                   request=AnswerChangeProjectRequestSerializer,
+                   responses=AnswerChangeProjectRequestSerializer)
     def update(self, request, *args, **kwargs):
         serializer = AnswerChangeProjectRequestSerializer
         serializer_data = serializer(data=request.data, context={'request': request})
@@ -320,7 +330,8 @@ class ProjectChangeRequestViewSet(mixins.ListModelMixin,
 
     # Показать все свои (по юзеру) заявки на изменения
     @extend_schema(summary="Эндпоинт для отслеживания заявок создателями",
-                   description="Необходимо юзерам для просмотра всех своих созданных заявок")
+                   description="Необходимо юзерам для просмотра всех своих созданных заявок",
+                   responses=ChangeProjectRequestSerializer)
     @action(methods=['GET'], detail=False)
     def show_request(self, request, *args, **kwargs):
         self.queryset = ProjectChangeRequest.objects.filter(user=request.user)
@@ -329,6 +340,7 @@ class ProjectChangeRequestViewSet(mixins.ListModelMixin,
 
     @extend_schema(summary="Просмотр ответа админов на твою заявку",
                    description="Необходимо для юзеров, для того чтобы посмотреть на ответ админа на свою заявку",
+                   responses=AnswerChangeProjectRequestSerializer
                    )
     @action(methods=['GET'], detail=True)
     def see_admin_response(self, request, *args, **kwargs):
@@ -404,7 +416,8 @@ class ProfileViewSet(mixins.ListModelMixin,
 
     @extend_schema(summary="Пополнение баланса",
                    description="Пополнение баланса через ЮКассу. Пользователю необходимо передать с ответа ссылку с поля confirmation_url",
-                   request=AccountReplenishmentSerializer)
+                   request=AccountReplenishmentSerializer,
+                   responses=AccountReplenishmentSerializer)
     @action(methods=['POST'], detail=False)
     def replenishment(self, request, *args, **kwargs):
         data = request.data
@@ -420,7 +433,8 @@ class ProfileViewSet(mixins.ListModelMixin,
 
     @extend_schema(summary="Выплата средств с профиля",
                    description="Выплата баланса через ЮКассу. Необходимо быть авторизированным и подтвержденным",
-                   request=PayoutSerializer)
+                   request=PayoutSerializer,
+                   responses=PayoutSerializer)
     @action(methods=['POST'], detail=False)
     def payout(self, request, *args, **kwargs):
         data = request.data
@@ -503,7 +517,7 @@ class ProfileViewSet(mixins.ListModelMixin,
 
     @extend_schema(summary="Просмотреть ответы админов на подтверждение своего акквунта",
                    description="Юзеры с помощью этого эндпоинта могут посмотреть ответы админов на подтверждение профиля",
-                   request=ConfirmUserSerializer)
+                   request=ConfirmUserSerializer,)
     @action(methods=['GET'], detail=True)
     def see_confirm_status(self, request, *args, **kwargs):
         profile = self.get_object()

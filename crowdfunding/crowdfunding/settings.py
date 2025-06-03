@@ -158,10 +158,9 @@ REST_FRAMEWORK = {
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'NAVOLNE API',
-    'DESCRIPTION': 'Это короче про проекты и вообще лютые деньги',
+    'DESCRIPTION': 'API для краудфандинговой платформы',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
-    # OTHER SETTINGS
 }
 
 SIMPLE_JWT = {
@@ -253,18 +252,24 @@ CACHES = {
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
     'http://127.0.0.1:80',
-    'https://navolnetest.ru'
+    'http://127.0.0.1',
+    'https://navolnetest.ru',
+    'https://127.0.0.1:80',
+    'https://127.0.0.1',
 )
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://127.0.0.1:80',
+    'http://127.0.0.1',
     'https://navolnetest.ru',
+    'https://127.0.0.1:80',
+    'https://127.0.0.1',
 ]
 
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:80', 'https://navolnetest.ru']
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:80', 'https://navolnetest.ru', 'https://127.0.0.1:80',
+                        'https://127.0.0.1', 'http://127.0.0.1', ]
 CORS_ALLOW_ALL_ORIGINS = True
-
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.yandex.ru'  # SMTP server host
