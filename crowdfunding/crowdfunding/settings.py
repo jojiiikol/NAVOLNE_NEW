@@ -34,7 +34,7 @@ if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-ALLOWED_HOSTS = ['navolnetest.ru', '158.255.6.248', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['navolnetest.ru', '158.255.0.77', 'localhost', '127.0.0.1']
 
 # Application definition
 
@@ -268,7 +268,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:80', 'https://navolnetest.ru', 'https://127.0.0.1:80',
-                        'https://127.0.0.1', 'http://127.0.0.1', ]
+                        'https://127.0.0.1', 'http://127.0.0.1', 'http://158.255.0.77', 'https://158.255.0.77' ]
 CORS_ALLOW_ALL_ORIGINS = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
