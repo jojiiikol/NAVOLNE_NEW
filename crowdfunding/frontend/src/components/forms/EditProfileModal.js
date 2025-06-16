@@ -68,7 +68,7 @@ const EditProfileModal = ({ show, onHide, username, profile }) => {
                     method: 'POST',
                     headers: {
                         //'Content-Type': 'multipart/form-data',
-                        Authorization:Bearer ' + accessToken,
+                        Authorization: 'Bearer ' + accessToken,
                     },
 
                     body: formDataObject,
